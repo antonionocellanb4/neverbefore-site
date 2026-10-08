@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chi siamo · Never Before Italia</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400&family=Google+Sans+Flex:wght@300&display=swap" rel="stylesheet">
+<style>
+/* pagina vuota di passaggio: stessi token della home, si apre con la tenda scura che risale (continua il cambio pagina) */
+:root{--bg:#F3EFEA;--ink:#050505;--ink-2:#2E2E2E;--dark:#050505;--pad:clamp(16px,3vw,40px);--energy:cubic-bezier(.32,.72,0,1)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100svh;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font:400 18px/1.5 "Google Sans",system-ui,sans-serif;letter-spacing:-.032em;-webkit-font-smoothing:antialiased}
+header{display:flex;align-items:center;height:88px;padding:0 var(--pad)}
+header img{height:32px;width:auto;display:block}
+main{flex:1;display:grid;place-items:center;text-align:center;padding:0 var(--pad) 88px}
+h1{font-family:"Google Sans Flex","Google Sans",sans-serif;font-size:clamp(72px,16vw,280px);font-weight:300;letter-spacing:-.06em;line-height:.9}
+p{margin:24px 0 32px;color:var(--ink-2)}
+a.home{color:inherit;font-size:18px;text-underline-offset:5px;text-decoration-thickness:1.5px}
+body::after{content:"";position:fixed;inset:0;z-index:9;background:var(--dark);transform-origin:50% 0;animation:open .8s var(--energy) .1s both;pointer-events:none}
+@keyframes open{from{transform:scaleY(1)}to{transform:scaleY(0)}}
+@media (prefers-reduced-motion:reduce){body::after{display:none}}
+</style>
+</head>
+<body>
+<header><a href="index.html" aria-label="Never Before Italia, torna alla home"><img src="assets/logo-never.svg" alt="Never Before Italia"></a></header>
+<main>
+  <div>
+    <h1>Chi siamo</h1>
+    <p>Pagina in costruzione.</p>
+    <a class="home" href="index.html">Torna alla home</a>
+  </div>
+</main>
+</body>
+</html>
