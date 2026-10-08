@@ -162,6 +162,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 
 /* ---------- hero chiara: titolo nero, il reel parte come pillola dentro il titolo e allo scroll cresce fino a tutto schermo (GSAP) ---------- */
 .hero{position:relative;background:var(--bg);color:var(--ink)}
+.hero[hidden]{display:none}
 .hero-pin{position:relative;height:100svh;overflow:hidden;display:flex;align-items:flex-end}
 .hero-pin .wrap{width:100%;padding-bottom:var(--safe-b)}
 .hero .hero-side{position:absolute;bottom:var(--safe-b);right:var(--pad)}
@@ -197,12 +198,82 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .scroll svg{width:14px;height:14px;animation:down 2s var(--ease) infinite}
 @keyframes down{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
 /* intro sotto la hero, sul chiaro */
-.hero-intro{padding:clamp(96px,14vh,170px) 0}
-.hero-intro .wrap{display:grid;grid-template-columns:1fr 1fr}
-.hero-intro .in{grid-column:2}
-.fill{font-size:clamp(24px,2.25vw,36px);font-weight:400;letter-spacing:-.057em;line-height:1.2;margin-bottom:32px}
-.fill .w{opacity:.3;transition:opacity .25s}
-.fill .w.on{opacity:1}
+/* intro: la frase scorre in orizzontale mentre scendi (altezza della sezione = percorso, da JS) */
+.hx{position:relative;height:300svh}
+.hx-pin{position:sticky;top:0;height:100svh;overflow:hidden}
+/* fascia colorata sfocata dietro la frase: si accende man mano che il video si stringe */
+.hx-aura{position:absolute;left:-15%;right:-15%;top:50%;height:30svh;transform:translateY(-50%) rotate(-4deg);border-radius:50%;pointer-events:none;
+  background:linear-gradient(90deg,#A78BFA,#C084FC,#E879F9,#F472B6,#A78BFA,#C084FC,#E879F9,#F472B6,#A78BFA);background-size:200% 100%;
+  filter:blur(34px);opacity:.38;animation:auraFlow 14s linear infinite,auraBreath 7s ease-in-out infinite alternate}
+/* seconda onda, verso opposto: rende visibile il movimento sotto */
+.hx-aura::after{content:"";position:absolute;inset:18% 10%;border-radius:50%;
+  background:linear-gradient(90deg,#E879F9,#A78BFA,#F472B6,#C084FC,#E879F9,#A78BFA,#F472B6,#C084FC,#E879F9);background-size:200% 100%;
+  opacity:.8;animation:auraFlow 10s linear infinite reverse,auraWave 5s ease-in-out infinite alternate}
+@keyframes auraFlow{to{background-position:-200% 0}}
+@keyframes auraBreath{from{transform:translateY(-58%) rotate(-5deg) scaleY(.85)}to{transform:translateY(-42%) rotate(-2deg) scaleY(1.1)}}
+@keyframes auraWave{from{transform:translate(-6%,-14%) scaleY(.7)}to{transform:translate(6%,14%) scaleY(1)}}
+@media (prefers-reduced-motion:reduce){.hx-aura,.hx-aura::after{animation:none}}
+
+.hx-track{position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;z-index:8;will-change:transform} /* sopra il video che si stringe */
+.hx-scroll{z-index:8}
+/* sopra il video i testi sono bianchi, appena ne escono tornano neri (classe .iv dal JS) */
+.hx-claim .cw,.hx-scroll{transition:color .35s}.hx-link path{transition:stroke .35s}
+.hx-claim .cw.iv,.hx-scroll.iv{color:#fff}.hx-link.iv path{stroke:#fff}
+.hx-line .w .c{color:var(--ink)}.hx-line .w .c.iv,.hx-line .w .c.on.iv{color:#fff} /* niente più lettere spente: restano solo i movimenti d'entrata */
+.hx-scroll{position:absolute;left:50%;bottom:var(--safe-b);translate:-50% 0;padding:0}
+.hx-intro{flex:none;width:100vw;height:100%;display:grid;place-items:center;padding:0 var(--pad)}
+/* apertura: il claim grande, centrato e fermo; le parole entrano una alla volta, poi scorrendo esce a sinistra */
+.hx-claim{max-width:11.5em;margin:0;text-align:center;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:clamp(44px,7.4vw,140px);line-height:.98}
+.hx-claim .cw{display:inline-block;animation:claimIn 1s var(--energy) calc(.15s + var(--i) * 70ms) both}
+@keyframes claimIn{from{opacity:0;transform:translateY(.45em) rotate(4deg)}}
+.wf .hx-claim{visibility:hidden}.wf .hx-claim *{animation-play-state:paused} /* aspetta i font come la hero */
+.hx-link{flex:none;width:min(34vw,560px);margin:0 2vw 0 -4vw}
+.hx-link svg{display:block;width:100%;overflow:visible}
+.hx-link path{fill:none;stroke:var(--ink);stroke-width:22;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1} /* si disegna con lo scroll (JS) */
+.hx-line{position:relative;flex:none;margin:0;white-space:nowrap;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:clamp(84px,14vw,260px);line-height:1}
+.hx-line .w{display:inline-block}
+.hx-line .c{display:inline-block;color:#D3CBBF;transition:color .3s,transform .7s var(--energy),filter .6s,opacity .5s,font-weight .6s}
+.hx-line .w .c.on{color:var(--ink);transform:none;filter:none;opacity:1} /* più specifica degli effetti sotto */
+/* ogni parola entra a modo suo: da spenta (grigia e fuori posto) a accesa (nera e al suo posto) */
+.hx-line [data-fx=drop] .c{transform:translateY(-.45em) rotate(calc((var(--i) - 4) * 4deg))}
+.hx-line [data-fx=blur] .c{filter:blur(.12em);opacity:.6}
+.hx-line [data-fx=rise] .c{transform:translateY(.35em)}
+.hx-line [data-fx=pop] .c{transform:scale(.4)}
+.hx-line [data-fx=flip] .c{transform:perspective(600px) rotateX(85deg);transform-origin:50% 80%}
+.hx-line [data-fx=wave] .c{transform:translateY(calc(sin(var(--i) * 1.1rad) * .22em))}
+.hx-line [data-fx=slide] .c{transform:translateX(.35em);opacity:.5}
+.hx-line [data-fx=bold] .c{font-weight:300}.hx-line [data-fx=bold] .c.on{font-weight:700}
+.hx-pill{display:inline-block;width:2.8em;height:.92em;margin:0 .08em;border-radius:99px;overflow:hidden;vertical-align:-.1em;opacity:.35;transition:opacity .5s}
+.hx-pill.on{opacity:1}
+.hx-pill svg{width:100%;height:100%;display:block}
+.hx-pill svg *{animation-play-state:paused}.hx-pill.on svg *{animation-play-state:running} /* le animazioni partono quando la frase arriva */
+/* pillola del video: prima c'è solo il posto vuoto, poi la pillola cade dentro col rimbalzo della hero */
+.hx-vid{overflow:visible;opacity:1;box-shadow:inset 0 0 0 2px var(--line)}
+.hx-drop{display:block;width:100%;height:100%;border-radius:99px;overflow:hidden;background:var(--dark);transform:translateY(-110vh) rotate(-24deg)}
+.hx-vid.on .hx-drop{animation:reelDrop 2.4s both}
+.hx-drop video{width:100%;height:100%;object-fit:cover;display:block}
+/* a fine frase la pillola del video si apre fino a tutto schermo (posizione e misure da JS) */
+.hx-big{position:absolute;z-index:7;overflow:hidden;background:var(--dark);display:none}
+.hx-big video{width:100%;height:100%;object-fit:cover;display:block}
+.hx-big::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.4);pointer-events:none} /* video più scuro: il testo bianco si legge */
+.hx-play{z-index:10;bottom:calc(var(--safe-b) + 18px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}.hx-play.on{opacity:1;visibility:visible}
+.hx-shape{background:#E2DBFF}
+.hx-shape rect{fill:var(--ink);transform-box:fill-box;transform-origin:center;animation:hxShape 3.2s var(--energy) infinite}
+@keyframes hxShape{0%,15%{rx:0;transform:rotate(0)}45%,60%{rx:22px;transform:rotate(90deg)}90%,100%{rx:0;transform:rotate(180deg)}}
+.hx-waves{background:#FFDCCB}
+.hx-waves circle{fill:none;stroke:var(--ink);stroke-width:2.5;opacity:0;animation:hxWave 2.4s ease-out infinite}
+.hx-waves circle.d{fill:var(--ink);stroke:none;opacity:1;animation:none}
+.hx-waves circle:nth-child(3){animation-delay:.8s}.hx-waves circle:nth-child(4){animation-delay:1.6s}
+@keyframes hxWave{0%{r:10px;opacity:1}100%{r:120px;opacity:0}}
+.hx-chart{background:#FFF3B8}
+.hx-chart path{fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:hxDraw 3s var(--ease) infinite}
+.hx-chart circle{fill:var(--ink);opacity:0;animation:hxDot 3s infinite}
+@keyframes hxDraw{0%{stroke-dashoffset:1}45%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:-1}}
+@keyframes hxDot{0%,40%{opacity:0}48%,85%{opacity:1}95%,100%{opacity:0}}
+.hx-sq{background:#D7FFE0}
+.hx-sq svg{width:100%;height:100%;display:block}
+.hx-sq path{fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.1s var(--ease)}
+.hx-sq.on path{stroke-dashoffset:0} /* la freccia si disegna quando la frase la raggiunge */
 
 /* ---------- visione ✕ esecuzione (da Creative Website Manual): riquadro chiaro che si allarga allo scroll ---------- */
 .vx{position:relative;height:220svh;background:var(--dark);margin-top:-1px}
@@ -464,6 +535,12 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .go{text-decoration:none}
 
 
+/* parole in gradiente iridescente sulle sezioni nere (come "Studio"): la sfumatura scorre piano */
+.grad .w>span,.grad.w>span{background:linear-gradient(90deg,#9EC9F0,#B9E8C9,#F7C5A8,#F3A6C8,#9EC9F0);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradMove 9s linear infinite}
+@keyframes gradMove{to{background-position:-300% 0}}
+.grad{text-shadow:none!important}
+.grad .w,.grad.w{padding-bottom:.24em;margin-bottom:-.24em}.grad .w>span{padding-bottom:.24em;margin-bottom:-.24em} /* spazio per le code (g, p): il gradiente non le taglia */ /* col testo trasparente l ombra si vedrebbe attraverso */
+
 /* comparsa morbida allo scroll */
 .rv{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .rv.in{opacity:1;transform:none}
@@ -482,7 +559,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
   .dc{--cw:170px}
   .labs{--R:3000px;--cw:min(76vw,320px)}
   .clients>.rv{grid-template-columns:1fr}.clients>.rv h2{grid-row:auto;margin-bottom:24px}
-  .hero-intro .wrap{grid-template-columns:1fr}.hero-intro .in{grid-column:1}
+
 }
 @media (max-width:720px){
   .vx-w{font-size:15vw;padding:0 calc(var(--pad) + 16px)}
@@ -568,7 +645,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 <main id="top">
 
   <!-- 1. hero chiara: il reel parte dentro il titolo e cresce fino a tutto schermo -->
-  <section class="hero">
+  <section class="hero" hidden> <!-- nascosta per il momento: togliere hidden per rimetterla -->
     <div class="hero-pin">
       <div class="replay" id="replay" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13.5 8A5.5 5.5 0 1 1 11.9 4.1M12.5 1.5v3h-3"/></svg></div>
       <div class="wrap">
@@ -579,16 +656,22 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
     </div>
   </section>
 
-  <section class="hero-intro">
-    <div class="wrap">
-      <div class="in brk">
-        <p class="fill" id="fill">Never Before Italia è un'agenzia di comunicazione e marketing con sede a Bari e Padova. Uniamo strategia ed esecuzione per costruire marchi e campagne che portano risultati concreti, in tempi brevi.</p>
-        <a class="go" href="https://www.neverbeforeitalia.it/about">Il nostro metodo <i><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h12M9 3l5 5-5 5"/></svg></i></a>
+  <!-- 1b. intro: frase gigante che scorre in orizzontale; le lettere passano dal grigio al nero, le pillole si accendono -->
+  <section class="hx" id="hx" aria-label="Chi siamo in breve">
+    <div class="hx-pin">
+      <div class="hx-aura" aria-hidden="true"></div>
+      <div class="hx-track" id="hxTrack">
+        <div class="hx-intro"><h2 class="hx-claim" id="hxClaim">La visione senza esecuzione è solo un'allucinazione.</h2></div>
+        <div class="hx-link" aria-hidden="true"><svg viewBox="0 0 600 300"><path id="hxLinkP" pathLength="1" d="M20,150 H90 C130,150 125,55 175,55 C225,55 215,110 215,175 C215,225 235,250 270,250 C310,250 305,150 360,150 H565 M505,90 L565,150 L505,210"/></svg></div>
+        <p class="hx-line" id="hxLine" aria-label="Uniamo strategia ed esecuzione per marchi e campagne che portano risultati.">Uniamo strategia <span class="hx-pill hx-chart"><svg viewBox="0 0 210 78" aria-hidden="true"><path pathLength="1" d="M34,58 L72,44 L100,50 L134,28 L170,20"/><circle cx="170" cy="20" r="6"/></svg></span> ed esecuzione <span class="hx-pill hx-sq"><svg viewBox="0 0 210 78" aria-hidden="true"><path pathLength="1" d="M30,39 H70 C90,39 88,14 104,14 C120,14 116,64 132,64 C148,64 146,39 166,39 H182 M168,25 L182,39 L168,53"/></svg></span> per marchi <span class="hx-pill hx-shape"><svg viewBox="0 0 210 78" aria-hidden="true"><rect x="83" y="17" width="44" height="44"/></svg></span> e campagne <span class="hx-pill hx-waves"><svg viewBox="0 0 210 78" aria-hidden="true"><circle class="d" cx="62" cy="39" r="7"/><circle cx="62" cy="39" r="10"/><circle cx="62" cy="39" r="10"/><circle cx="62" cy="39" r="10"/></svg></span> che portano risultati <span class="hx-pill hx-vid"><span class="hx-drop"><video autoplay muted loop playsinline preload="none"><source src="assets/reel.mp4" type="video/mp4"></video></span></span></p>
       </div>
+      <div class="hx-big" id="hxBig" aria-hidden="true"><video muted loop playsinline autoplay preload="auto"><source src="assets/reel.mp4" type="video/mp4"></video></div>
+      <button class="reel-btn hx-play" id="hxPlay" type="button">Guarda il reel completo <i><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg></i></button>
+      <a class="scroll hx-scroll" href="#chi-siamo" aria-label="Scorri"><i><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v12M3 9l5 5 5-5"/></svg></i></a>
     </div>
   </section>
 
-  <div class="shutter shutter-out" aria-hidden="true"></div>
+  <div class="shutter shutter-dk" aria-hidden="true"></div> <!-- lamelle scure che si chiudono sul video aperto -->
 
   <!-- 2. visione ✕ esecuzione: il claim in due font, il riquadro si allarga allo scroll -->
   <section class="vx" id="chi-siamo">
@@ -618,7 +701,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
     <div class="bigmq" aria-hidden="true"><div class="bigmq-t" id="bigmq"><span>Strategia</span><i class="dot"></i><span>Creatività</span><i class="dot"></i><span>Esecuzione</span><i class="dot"></i><span>Risultati</span><i class="dot"></i></div></div>
     <div class="wrap">
       <div class="split">
-        <h2 class="h-l lr">Otto discipline.<br>Un solo <em>metodo</em>.</h2>
+        <h2 class="h-l lr">Otto discipline.<br>Un solo <em class="grad">metodo</em>.</h2>
         <div class="rv">
           <p class="lead" style="color:var(--on-dark)">Dalla consulenza strategica all'ufficio stampa, ogni progetto mette insieme le competenze che servono e le porta fino all'esecuzione. Analisi, idea, produzione e misura dei risultati restano nelle stesse mani.</p>
           <a class="go" href="https://www.neverbeforeitalia.it/services">Tutti i servizi <i><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h12M9 3l5 5-5 5"/></svg></i></a>
@@ -671,7 +754,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
   <section class="projects" id="progetti" data-dark aria-label="Progetti">
     <div class="dome-pin" id="domePin">
     <div class="dome-stage" id="dome" aria-hidden="true"></div>
-    <div class="dome-ui"><h2 class="lr" id="domeT">Progetti</h2><p>Trascina per esplorare · clicca una foto per aprirla</p></div>
+    <div class="dome-ui"><h2 class="lr grad" id="domeT">Progetti</h2><p>Trascina per esplorare · clicca una foto per aprirla</p></div>
     </div>
     <ul class="sr"><li><a href="https://www.neverbeforeitalia.it/portfolio/lum">Università LUM</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/le-carose">Le Carose</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica">Borgo Canonica</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/marinobus">MarinoBus</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo">Amaro Mediterraneo</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/cortina-express">Cortina Express</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/hula-bari">Hula Hawaiian Poke</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini">Tenuta Giustini</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/viru">Viru</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/master-italy">Master Italy</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/sneakers-room">Sneakers Room</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria">Produttori di Manduria</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/gt-alarm">GT Alarm</a></li></ul>
   </section>
@@ -807,9 +890,6 @@ reel.addEventListener('click',e=>{if(e.target===reel)closeReel()});
 addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!reel.hidden)closeReel();else setMenu(false)});
 
 // intro della hero: parole che si accendono allo scroll
-const fill=$('fill');
-fill.innerHTML=fill.textContent.trim().split(/\s+/).map(w=>`<span class="w">${w}</span>`).join(' ');
-const words=[...fill.children];
 
 
 const proj=$('progetti');
@@ -845,6 +925,43 @@ document.fonts.load('300 100px "Google Sans Flex"').then(fitEcho,fitEcho);addEve
 // quadrante: 72 tacche, una lunga ogni 6
 $('dial').innerHTML=Array.from({length:72},(_,i)=>{const a=i*5*Math.PI/180,l=i%6?7:13,r=88;return `<line x1="${(Math.sin(a)*r).toFixed(2)}" y1="${(-Math.cos(a)*r).toFixed(2)}" x2="${(Math.sin(a)*(r-l)).toFixed(2)}" y2="${(-Math.cos(a)*(r-l)).toFixed(2)}" stroke="currentColor" stroke-width="${i%6?.5:.8}"/>`}).join('');
 
+// intro orizzontale: lettere divise una per una; la riga entra da destra e scorre a sinistra con lo scroll.
+// Una lettera (o una pillola) si accende quando passa la metà dello schermo
+{const cl=$('hxClaim');cl.innerHTML=cl.textContent.split(' ').map((w,i)=>`<span class="cw" style="--i:${i}">${w}</span>`).join(' ');}
+{const lp=$('hxLinkP'),sec=$('hx'),ln=$('hxLine'),tr=$('hxTrack'),FX=['rise','drop','blur','rise','pop','flip','blur','wave','slide','slide','bold'];let nw=0; // Uniamo, strategia, ed, esecuzione, per, marchi, e, campagne, che, portano, risultati
+  [...ln.childNodes].forEach(n=>{if(n.nodeType!==3)return;const f=document.createDocumentFragment();
+    n.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.append(' ');return}const w=document.createElement('span');w.className='w';w.setAttribute('aria-hidden','true');
+      w.innerHTML=[...t].map((c,i)=>`<span class="c" style="--i:${i}">${c}</span>`).join('');w.dataset.fx=FX[nw++%FX.length];f.append(w)});n.replaceWith(f)});
+  const items=[...ln.querySelectorAll('.c,.hx-pill')];let xs=[],W=0,x0=0,x1=0;
+  // la riga parte a filo del margine sinistro (x0) e finisce col video al centro (x1)
+  const vid=ln.querySelector('.hx-vid'),big=$('hxBig'),bigV=big.querySelector('video'),pin=sec.firstElementChild,hp=$('hxPlay'),au=pin.querySelector('.hx-aura'),ivs=[...pin.querySelectorAll('.hx-claim .cw,.hx-link,.hx-scroll')];hp.onclick=openReel;let run=0,HOLD=0,G=0,dropped=false;const SH=.6; // il video resta pieno per il 60% della corsa, poi si stringe veloce nel suo posto
+  
+  const size=()=>{W=tr.scrollWidth;const vw=innerWidth;xs=items.map(el=>{let x=0,e=el;while(e&&e!==tr){x+=e.offsetLeft;e=e.offsetParent}return x+el.offsetWidth/2});
+    x0=0;x1=vw*.5-xs[xs.length-1];run=(x0-x1)/1.6;HOLD=innerHeight*.45;G=innerHeight*1.2;sec.style.height=(innerHeight+run+HOLD+G+innerHeight*.5)+'px'}; // corsa (la riga va 1,6 volte lo scroll) + pausa (la pillola atterra) + apertura del video
+  const upd=()=>{const d=-sec.getBoundingClientRect().top,p=clamp(d/run),g=clamp((d-run-HOLD)/G),x=x0+(x1-x0)*p,mid=innerWidth*.5;
+    tr.style.transform=`translate3d(${x.toFixed(1)}px,0,0)`;
+    {const lr=lp.parentNode.getBoundingClientRect(),k=clamp((innerWidth*.95-lr.left)/(lr.width+innerWidth*.35));lp.style.strokeDashoffset=(1-k).toFixed(3)}
+    // (sopra: la freccia fra le due frasi si disegna mentre entra)
+    items.forEach((el,i)=>el.classList.toggle('on',x+xs[i]<(el===vid?innerWidth*1.02:innerWidth*.86)));
+    // la pillola del video cade appena entra nello schermo, insieme alle pillole colorate
+    const on=vid.classList.contains('on');if(on&&!dropped&&window.heroRainHx){window.heroRainHx(pin);const v=vid.getBoundingClientRect(),rn=[...pin.querySelectorAll('.rain')].pop();
+      if(rn)[...rn.children].forEach((c,i)=>{c.style.width=v.width+'px';c.style.height=v.height+'px';c.style.fontSize=(v.height*.3)+'px';c.style.setProperty('--t',(1.9+(i%3)*.25)+'s');c.style.setProperty('--d',(i*.14).toFixed(2)+'s');c.style.left=`calc((100% - ${v.width}px) * ${[3,6,0,5,1,7,2,4][i]/7})`})} // le pillole che cadono grandi come quella del video
+    dropped=on;
+    // il video resta per tutto lo scroll: parte a tutto schermo e si stringe man mano che il suo posto nella frase si avvicina;
+    // a fine corsa ci sta dentro, poi si riapre a tutto schermo sopra a tutto
+    const s=vid.getBoundingClientRect(),b=pin.getBoundingClientRect(),sx=s.left-b.left,sy=s.top-b.top,ez=t=>t<.5?2*t*t:1-(-2*t+2)**2/2;
+    let r;
+    if(g>0){const e=ez(g),L=(a,z)=>a+(z-a)*e;r=[L(sx,0),L(sy,0),L(s.width,b.width),L(s.height,b.height),L(s.height/2,0),1.35-.35*e]}
+    else{const e=ez(clamp((p-SH)/(1-SH))),tx=Math.min(sx,b.width-s.width-24),L=(a,z)=>a+(z-a)*e;r=[L(0,tx),L(0,sy),L(b.width,s.width),L(b.height,s.height),L(0,s.height/2),1+.35*e]}
+    big.style.zIndex=g>0?'9':'';
+    // bianco dove c'è il video sotto, nero altrove
+    {const [vl,vt,vw,vh]=r,inV=(cx,cy)=>(vl<=0||cx>vl)&&(vl+vw>=b.width||cx<vl+vw)&&cy>vt&&cy<vt+vh,ly=ln.offsetTop+ln.offsetHeight/2;
+      items.forEach((el,i)=>{if(el.classList.contains('c'))el.classList.toggle('iv',inV(x+xs[i],ly))});
+      ivs.forEach(el=>{const q=el.getBoundingClientRect();el.classList.toggle('iv',inV(q.left+q.width/2-b.left,q.top+q.height/2-b.top))})}au.style.opacity=(.38*(g>0?1-ez(g):ez(clamp((p-SH)/(1-SH))))).toFixed(3);
+    Object.assign(big.style,{display:'block',left:r[0]+'px',top:r[1]+'px',width:r[2]+'px',height:r[3]+'px',borderRadius:r[4]+'px'});
+    bigV.style.transform=`scale(${r[5].toFixed(3)})`;vid.style.visibility='hidden';if(bigV.paused)bigV.play().catch(()=>{});hp.classList.toggle('on',g>.97)};
+  addEventListener('scroll',upd,{passive:true});addEventListener('resize',()=>{size();upd()});document.fonts.ready.then(()=>{size();upd()});size();upd();}
+
 // nastro gigante: il contenuto raddoppiato, scorre col movimento della pagina
 const mq=$('bigmq');mq.innerHTML+=mq.innerHTML;
 const nav=$('nav'),hero=document.querySelector('.hero'),hReel=$('heroReel'),darks=[...document.querySelectorAll('[data-dark]')];
@@ -855,13 +972,12 @@ const onScroll=()=>{
   nav.classList.toggle('on-dark',darks.some(s=>{const r=s.getBoundingClientRect();return r.top<=y&&r.bottom>=y}));
   // il reel cresciuto sotto l'header: logo e bottoni chiari
   const rr=hReel.getBoundingClientRect();if(rr.top<=y&&rr.bottom>=y&&rr.left<innerWidth*.2&&rr.right>innerWidth*.8)nav.classList.add('on-dark');
+  const hb=$('hxBig');if(hb.style.display==='block'){const r=hb.getBoundingClientRect();if(r.top<=y&&r.bottom>=y&&r.left<innerWidth*.2&&r.right>innerWidth*.8)nav.classList.add('on-dark')} // idem per il video che si apre a fine intro
   const hr=hero.getBoundingClientRect();
   // niente fascia dell'header sopra la hero e sopra le sezioni ferme a tutto schermo
   nav.classList.toggle('solid',hr.bottom<y&&![proj,vx,cta].some(s=>{const r=s.getBoundingClientRect();return r.top<=y&&r.bottom>=y}));
 
   // parole accese in base a quanto l'intro è salita nello schermo
-  const fr=fill.getBoundingClientRect(),fp=clamp((vh*.92-fr.top)/(vh*.55));
-  words.forEach((w,i)=>w.classList.toggle('on',i<fp*words.length));
 
   // riquadro visione ✕ esecuzione e chiusura: crescono nel primo 70% del loro tratto fermo
   const grow=(el,end)=>{const r=el.getBoundingClientRect(),k=clamp(-r.top/(el.offsetHeight-vh));el.style.setProperty('--g',clamp(k/end).toFixed(3));return k};
@@ -953,12 +1069,13 @@ fitPills();document.fonts.load('400 20px "Google Sans"').then(fitPills,fitPills)
     else if(c.nodeType===1&&c.tagName!=='BR'&&!c.classList.contains('slot'))walk(c)});walk(t)})();
 
 // apertura: le pillole dei servizi cadono attraverso la hero (copie di quelle del footer), solo se la pagina parte dall'alto
-const heroRain=()=>{const rain=document.createElement('div');rain.className='rain';rain.setAttribute('aria-hidden','true');
+const heroRain=(t=document.querySelector('.hero-pin'))=>{const rain=document.createElement('div');rain.className='rain';rain.setAttribute('aria-hidden','true');
   [...document.querySelectorAll('.ft-drop .fp')].forEach((p,i)=>{const c=p.cloneNode(true);c.style.left=`calc((100% - ${p.offsetWidth}px) * ${[3,6,0,5,1,7,2,4][i]/7})`;c.style.setProperty('--d',(i*.07).toFixed(2)+'s');
     c.style.setProperty('--t',(.8+(i%3)*.1)+'s');c.style.setProperty('--r',((i%2?1:-1)*(20+i*7))+'deg');rain.append(c)});
-  document.querySelector('.hero-pin').append(rain);setTimeout(()=>rain.remove(),3200)};
+  t.append(rain);setTimeout(()=>rain.remove(),5000)};
 window.fontsReady.then(()=>{if(scrollY<innerHeight/2&&!matchMedia('(prefers-reduced-motion:reduce)').matches)heroRain()});
 // "Rifai l'animazione": riparte tutto (lettere, pillola del reel, pioggia di pillole)
+window.heroRainHx=t=>{if(!matchMedia('(prefers-reduced-motion:reduce)').matches)heroRain(t)}; // la usa anche l'intro orizzontale
 const heroReplay=()=>{document.querySelectorAll('#heroT .ch,#heroReel').forEach(el=>{el.style.animation='none';void el.offsetWidth;el.style.animation=''});document.querySelector('.rain')?.remove();heroRain()};
 {const rp=$('replay'),hp=document.querySelector('.hero-pin'),busy=e=>e.target.closest('a,button,.slot');
   hp.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;const b=hp.getBoundingClientRect();rp.style.transform=`translate(${e.clientX-b.left}px,${e.clientY-b.top}px)`;rp.classList.toggle('on',!busy(e)&&scrollY<innerHeight*.3)});
