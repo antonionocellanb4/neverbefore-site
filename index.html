@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400&family=Google+Sans+Flex:wght@300..700&display=swap" rel="stylesheet">
+<script>/* l'intro della hero aspetta i font (max 1,5 s): senza, il titolo si ricompone a metà animazione e la pagina sembra ricaricarsi */
+document.documentElement.classList.add('wf');window.fontsReady=Promise.race([Promise.all(['300 100px "Google Sans Flex"','400 18px "Google Sans"'].map(f=>document.fonts.load(f))),new Promise(r=>setTimeout(r,1500))]).catch(()=>{}).then(()=>document.documentElement.classList.remove('wf'));</script>
 <style>
 :root{
   /* fondo crema caldo come Google Labs (#F3EFEA) e neutri caldi; il bianco puro è in index-pre-crema.html, il verde in index-verde.html */
@@ -170,6 +172,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .hero-reel video{display:block;width:100%;height:100%;object-fit:cover}
 /* apertura: la pillola cade dall'alto, rimbalza e si incastra nel titolo (CSS: parte subito, senza aspettare GSAP) */
 .hero-reel{animation:reelDrop 1.7s .3s both}
+.wf .hero h1,.wf .hero-reel{visibility:hidden}.wf .hero *{animation-play-state:paused} /* finché i font non ci sono */
 /* insieme alla pillola del reel cadono le pillole dei servizi: attraversano la hero ed escono in basso (le ritrovi ammucchiate nel footer) */
 .rain{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:6}
 .rain .fp{position:absolute;top:0;animation:rain var(--t) cubic-bezier(.55,.085,.68,.53) var(--d) both}
@@ -954,7 +957,7 @@ const heroRain=()=>{const rain=document.createElement('div');rain.className='rai
   [...document.querySelectorAll('.ft-drop .fp')].forEach((p,i)=>{const c=p.cloneNode(true);c.style.left=`calc((100% - ${p.offsetWidth}px) * ${[3,6,0,5,1,7,2,4][i]/7})`;c.style.setProperty('--d',(i*.07).toFixed(2)+'s');
     c.style.setProperty('--t',(.8+(i%3)*.1)+'s');c.style.setProperty('--r',((i%2?1:-1)*(20+i*7))+'deg');rain.append(c)});
   document.querySelector('.hero-pin').append(rain);setTimeout(()=>rain.remove(),3200)};
-if(scrollY<innerHeight/2&&!matchMedia('(prefers-reduced-motion:reduce)').matches)heroRain();
+window.fontsReady.then(()=>{if(scrollY<innerHeight/2&&!matchMedia('(prefers-reduced-motion:reduce)').matches)heroRain()});
 // "Rifai l'animazione": riparte tutto (lettere, pillola del reel, pioggia di pillole)
 const heroReplay=()=>{document.querySelectorAll('#heroT .ch,#heroReel').forEach(el=>{el.style.animation='none';void el.offsetWidth;el.style.animation=''});document.querySelector('.rain')?.remove();heroRain()};
 {const rp=$('replay'),hp=document.querySelector('.hero-pin'),busy=e=>e.target.closest('a,button,.slot');
