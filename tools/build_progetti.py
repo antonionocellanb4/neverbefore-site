@@ -31,7 +31,7 @@ PROJECTS = [
         # facoltativo: il percorso che si disegna accanto alla storia (tappe vere del racconto) e il contatore
         route=dict(n=60, unit='anni', since='dal 1957', stops=['Irsina (MT), 1957', 'Altamura', 'Puglia e Basilicata', 'Centro e Nord Italia', 'Estero']),
         # pagina successiva: parola, pillola con foto, parola (come "Chi ⬭ siamo" della home)
-        next=('Altri', 'progetti', 'progetti.html', 'assets/img/never_before_italia_website_amaro_mediterraneo.jpg'),
+        next=('Altri', 'progetti', 'progetti.html', None),
     ),
 ]
 
@@ -218,7 +218,7 @@ const onScroll=()=>{
   nav.classList.toggle('on-dark',darks.some(s=>{const r=s.getBoundingClientRect();return r.top<=y&&r.bottom>=y}));
   nav.classList.toggle('solid',scrollY>40&&!nav.classList.contains('on-dark'));
   // primo media: si allarga fino a tutta larghezza mentre sale
-  {const pr=document.querySelector('.nextp-pill').getBoundingClientRect();if(pr.top<=y&&pr.bottom>=y&&pr.left<innerWidth*.2&&pr.right>innerWidth*.8)nav.classList.add('on-dark')}
+  {const pe=document.querySelector('.nextp-pill'),pr=pe&&pe.getBoundingClientRect();if(pr&&pr.top<=y&&pr.bottom>=y&&pr.left<innerWidth*.2&&pr.right>innerWidth*.8)nav.classList.add('on-dark')}
   nav.classList.toggle('solid',scrollY>40&&!nav.classList.contains('on-dark'));
   if(!still&&pjHero){const r=pjHero.getBoundingClientRect();pjHero.style.setProperty('--k',clamp((r.top-vh*.15)/(vh*.7)).toFixed(3))}
   shutters.forEach(({el,bands,out})=>{const r=el.getBoundingClientRect();if(r.top>vh*1.3||r.top<-vh*.5)return;
@@ -250,10 +250,11 @@ NEXTP_JS
 def tail_html(nxt):
     tail = local(between(SRC, '</main>', '<script>\nconst $='))[len('</main>'):]
     w1, w2, href, pic = nxt
-    return re.sub(r'<section class="nextp".*?</section>', f'''<section class="nextp" id="nextp" data-href="{href}" aria-label="Pagina successiva">
+    pill = f'<span class="nextp-pill" aria-hidden="true"><img src="{pic}" alt="" loading="lazy"></span>' if pic else ''
+    return re.sub(r'<section class="nextp".*?</section>', f'''<section class="nextp{"" if pic else " nt"}" id="nextp" data-href="{href}" aria-label="Pagina successiva">
   <div class="nextp-pin">
     <p class="nextp-k">Pagina successiva</p>
-    <a class="nextp-t" href="{href}" aria-label="{w1} {w2}"><span>{w1}</span><span class="nextp-pill" aria-hidden="true"><img src="{pic}" alt="" loading="lazy"></span><span>{w2}</span></a>
+    <a class="nextp-t" href="{href}" aria-label="{w1} {w2}"><span>{w1}</span>{pill}<span>{w2}</span></a>
     <p class="nextp-h">Continua a scorrere</p>
     <span class="nextp-bar" aria-hidden="true"><i></i></span>
   </div>
@@ -409,6 +410,7 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .vm .ch-k{margin-bottom:14px}
 .vm p:not(.ch-k){font-family:var(--display);font-size:clamp(26px,2.8vw,48px);letter-spacing:-.05em;line-height:1.1}
 @media (max-width:820px){.vm{grid-template-columns:1fr;gap:16px}}
+.cap-big{max-width:22em;margin-bottom:clamp(32px,4vw,56px)}
 .ab-q2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,96px)}
 .ab-q2 p{font-size:17px;line-height:1.5;color:var(--ink-2);max-width:56ch}
 .cap .ab-num{display:flex;justify-content:space-between;gap:24px;margin:clamp(64px,8vw,120px) 0 0;padding-top:16px;border-top:1px solid var(--ink)} /* da bordo a bordo */
@@ -428,6 +430,10 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .ex-c{display:flex;justify-content:space-between;gap:16px;padding-top:12px;font-size:17px}
 .ex-c small{font-size:15px;color:var(--ink-2);text-align:right}
 @media (max-width:820px){.ch-g,.ex{grid-template-columns:1fr}.spec,.ex-side{position:static}}
+/* pagina successiva senza foto: si entra nel testo. Lo zoom parte dall'asta di una lettera (origine messa da JS) e il nero riempie lo schermo */
+.nextp.nt .nextp-t{display:block;transform:scale(calc(1 + var(--ne,0) * var(--ne,0) * var(--ne,0) * 160))} /* senza will-change: il testo si ridisegna nitido mentre cresce */
+.nextp.nt .nextp-t>span{opacity:1}.nextp.nt .nextp-t>span+span{margin-left:.24em}
+.nextp.nt .nextp-pin::after{content:"";position:absolute;inset:0;background:var(--ink);opacity:clamp(0,calc((var(--ne,0) - .8) * 6),1);pointer-events:none}
 /* card a ventaglio (Osmo Stacking Sticky Cards Bounce) */
 .sc{padding:clamp(80px,12vw,160px) var(--pad) 18svh;overflow-x:clip}
 .sc-h{text-align:center;font-size:clamp(44px,6vw,110px);margin-bottom:clamp(40px,6vw,80px)}
@@ -465,6 +471,11 @@ html:has(.pj-dome),body:has(.pj-dome){overflow:hidden;height:100%}
 '''
 
 PAGES_JS = r'''
+// pagina successiva senza foto: l'origine dello zoom va sull'asta di una lettera (i, l, t), così ingrandendo il nero copre lo schermo
+{const t=document.querySelector('.nextp.nt .nextp-t');if(t){const set=()=>{t.style.transform='none';const b=t.getBoundingClientRect(),w=document.createTreeWalker(t,NodeFilter.SHOW_TEXT);let n,hit=null;
+    while((n=w.nextNode())){const i=[...n.textContent].findIndex(c=>'iltI'.includes(c));if(i>=0){hit=[n,i];break}}
+    let ox=b.width/2,oy=b.height/2;if(hit){const r=document.createRange();r.setStart(hit[0],hit[1]);r.setEnd(hit[0],hit[1]+1);const q=r.getBoundingClientRect();ox=q.left+q.width/2-b.left;oy=q.top+q.height*.66-b.top}
+    t.style.transform='';t.style.transformOrigin=ox.toFixed(1)+'px '+oy.toFixed(1)+'px'};document.fonts.ready.then(set);addEventListener('resize',set)}}
 // numeri di Chi siamo: contano da data-from al valore quando entrano nello schermo; le pillole accanto partono insieme
 {const bs=[...document.querySelectorAll('.ab-num b[data-n]')];if(bs.length){const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;io.unobserve(e.target);const b=e.target,n=+b.dataset.n,f=+b.dataset.from,t0=performance.now(),D=still?0:1600;
     b.parentNode.querySelector('.hx-pill')?.classList.add('on');const step=t=>{const k=D?Math.min(1,(t-t0)/D):1;b.textContent=Math.round(f+(n-f)*(1-(1-k)**3));if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}),{threshold:.4});
@@ -621,7 +632,7 @@ def build_servizi():
   </div>
   <div class="pj-end"></div>
 </main>'''
-    page('servizi.html', 'Servizi · Never Before Italia', SERVIZI_INTRO['text'], main, ('I nostri', 'progetti', 'progetti.html', COVER('lum')))
+    page('servizi.html', 'Servizi · Never Before Italia', SERVIZI_INTRO['text'], main, ('I nostri', 'progetti', 'progetti.html', None))
 
 
 def build_servizio(i):
@@ -650,8 +661,7 @@ def build_servizio(i):
   <div class="pj-end"></div>
 </main>'''
     w = plain(n['h3']).rsplit(' ', 1)
-    nr = related(n)
-    page(f"servizio-{s['slug']}.html", f'{name} · Servizi · Never Before Italia', txt, main, (w[0], w[1], f"servizio-{n['slug']}.html", COVER((nr[0] if nr else PJ[0])['slug'])))
+    page(f"servizio-{s['slug']}.html", f'{name} · Servizi · Never Before Italia', txt, main, (w[0], w[1], f"servizio-{n['slug']}.html", None))
 
 
 DOME_JS = r'''
@@ -755,14 +765,14 @@ def build_chi_siamo():
     c = CHI_SIAMO
     main = f'''<main id="top" class="pj">
   {hs('Nuovi modi di comunicare {bubble} per emozionare {pulse} e sorprendere {spark}', 'Chi siamo', 'assets/img/chi-siamo-placeholder.jpg')}
-  {chap(1, 'Il metodo NB4', f'<div class="ch-g">{spec("Never Before Italia", [("Sedi", "Bari · Padova"), ("ISO 9001", "Dicembre 2011"), ("Mediastar", "24 premi"), ("Confindustria", "Delegati Bari e BAT")])}<div class="ch-txt"><p class="pj-big">{esc(c["metodo_big"])}</p>{"".join(f"<p>{esc(t)}</p>" for t in c["metodo"])}</div></div>')}
+  {chap(1, 'Il metodo NB4', f'<p class="pj-big cap-big">{esc(c["metodo_big"])}</p><div class="ab-q2">{"".join(f"<p>{esc(t)}</p>" for t in c["metodo"])}</div>')}
   {chap(2, 'Vision e Mission', ''.join(f'<div class="vm rv"><figure>{svg}</figure><div><p class="ch-k">{k}</p><p>{esc(v)}</p></div></div>' for k, v, svg in (('Vision', c['vision'], _vision()), ('Mission', c['mission'], _mission()))))}
   {chap(3, 'Qualità', f'<div class="ab-q2">{"".join(f"<p>{esc(t)}</p>" for t in c["qualita"])}</div><div class="ab-num">{"".join(f"""<div><b data-n="{n}" data-from="{f}">{n}</b><span>{PILLS[k]}{esc(t)}</span></div>""" for n, f, k, t in ((24, 0, "spark", "Premi Mediastar"), (2011, 2000, "steps", "Certificazione ISO 9001"), (2, 0, "venn", "Sedi, Bari e Padova")))}</div>')}
   <section class="ab-job"><div><h2>Lavora con noi</h2><p>{esc(c['jobs'])}</p></div>
     <a class="go" href="https://www.neverbeforeitalia.it/jobs">Lavora con noi <i><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h12M9 3l5 5-5 5"/></svg></i></a></section>
   <div class="pj-end"></div>
 </main>'''
-    page('chi-siamo.html', 'Chi siamo · Never Before Italia', c['claim'], main, ('I nostri', 'servizi', 'servizi.html', COVER('marinobus')), ABOUT_CSS)
+    page('chi-siamo.html', 'Chi siamo · Never Before Italia', c['claim'], main, ('I nostri', 'servizi', 'servizi.html', None), ABOUT_CSS)
 
 
 for p in PROJECTS:

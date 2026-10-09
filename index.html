@@ -1099,7 +1099,7 @@ addEventListener('load',()=>{
   {const nxEl=$('nextp');new IntersectionObserver((es,o)=>{if(!es[0].isIntersecting)return;o.disconnect();const u=nxEl.dataset.href;
     if(HTMLScriptElement.supports&&HTMLScriptElement.supports('speculationrules')){const s=document.createElement('script');s.type='speculationrules';s.textContent=JSON.stringify({prerender:[{source:'list',urls:[u]}]});document.head.append(s)}
     const l=document.createElement('link');l.rel='prefetch';l.href=u;document.head.append(l); // anche dove il prerender non parte, la pagina è già scaricata
-    const im=new Image();im.src=nxEl.querySelector('.nextp-pill img').src},{rootMargin:'0px 0px 1200px 0px'}).observe(nxEl)}
+    const pi=nxEl.querySelector('.nextp-pill img');if(pi){const im=new Image();im.src=pi.src}},{rootMargin:'0px 0px 1200px 0px'}).observe(nxEl)}
   const nx=$('nextp');let nxGone=false,nxSeen=false; // nxSeen: la sezione va percorsa davvero (non basta riaprire la pagina già in fondo)
   ScrollTrigger.create({trigger:nx,start:'top top',end:'bottom bottom',refreshPriority:-1,onUpdate:s=>{nx.style.setProperty('--np',s.progress.toFixed(3));nx.style.setProperty('--ne',gsap.parseEase('power2.inOut')(clamp((s.progress-.04)/.86)).toFixed(4));if(s.progress<.9)nxSeen=true;
     if(s.progress>.995&&s.direction>0&&nxSeen&&!nxGone&&innerHeight+scrollY>=document.documentElement.scrollHeight-4){nxGone=true;try{sessionStorage.setItem('vt','expand')}catch(e){}location.href=nx.dataset.href}}});
@@ -1132,7 +1132,7 @@ const fitPills=()=>{const ps=[...document.querySelectorAll('.ft-drop .fp')],rg=d
 fitPills();document.fonts.load('400 20px "Google Sans"').then(fitPills,fitPills);addEventListener('resize',fitPills);
 // pagina successiva: parole + pillola centrate come gruppo; mentre la pillola cresce lo spostamento torna a zero e lei finisce al centro esatto.
 // Il corpo si riduce solo se il gruppo non ci sta (margine ai lati come il resto del sito)
-const fitNext=()=>{const n=$('nextp');if(!n)return;const t=n.querySelector('.nextp-t'),[a,,b]=t.children,wd=e=>e.getBoundingClientRect().width;
+const fitNext=()=>{const n=$('nextp');if(!n||n.classList.contains('nt'))return;const t=n.querySelector('.nextp-t'),[a,,b]=t.children,wd=e=>e.getBoundingClientRect().width;
   n.style.removeProperty('--nt');const fs=parseFloat(getComputedStyle(t).fontSize);
   const cw=n.querySelector('.nextp-pin').clientWidth,avail=cw-2*Math.min(80,Math.max(24,cw*.05));
   const k=avail/(wd(a)+wd(b)+fs*(2.1+.24));if(k<1)n.style.setProperty('--nt',(fs*k).toFixed(1)+'px');
