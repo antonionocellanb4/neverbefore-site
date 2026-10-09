@@ -7,9 +7,9 @@
 <meta name="description" content="Never Before Italia: agenzia di comunicazione e marketing a Bari e Padova. Strategia, branding, digital, ufficio stampa.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400&family=Google+Sans+Flex:wght@300..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&display=swap" rel="stylesheet">
 <script>/* l'intro della hero aspetta i font (max 1,5 s): senza, il titolo si ricompone a metà animazione e la pagina sembra ricaricarsi */
-document.documentElement.classList.add('wf');window.fontsReady=Promise.race([Promise.all(['300 100px "Google Sans Flex"','400 18px "Google Sans"'].map(f=>document.fonts.load(f))),new Promise(r=>setTimeout(r,1500))]).catch(()=>{}).then(()=>document.documentElement.classList.remove('wf'));</script>
+document.documentElement.classList.add('wf');window.fontsReady=Promise.race([Promise.all(['400 18px "Google Sans"','700 18px "Google Sans"'].map(f=>document.fonts.load(f))),new Promise(r=>setTimeout(r,1500))]).catch(()=>{}).then(()=>document.documentElement.classList.remove('wf'));</script>
 <style>
 :root{
   /* fondo crema caldo come Google Labs (#F3EFEA) e neutri caldi; il bianco puro è in index-pre-crema.html, il verde in index-verde.html */
@@ -32,8 +32,8 @@ document.documentElement.classList.add('wf');window.fontsReady=Promise.race([Pro
   --pill-h:54px;
   --safe-b:clamp(28px,5vh,56px); /* spazio sotto ai testi appoggiati al fondo dello schermo */
   --sans:"Google Sans",system-ui,sans-serif;   /* un solo font in tutto il sito */
-  --display:"Google Sans Flex",var(--sans);  /* titoli e scritte grandi: la versione variabile di Google Sans, scende fino a 300 */
-  --display-w:300; /* titoli leggeri: al passaggio del mouse le lettere salgono fino a 700 e il cambio si vede */
+  --display:var(--sans);  /* titoli e scritte grandi: la versione variabile di Google Sans, scende fino a 300 */
+  --display-w:400; /* titoli leggeri: al passaggio del mouse le lettere salgono fino a 700 e il cambio si vede */
   --display-ls:-.06em; /* caratteri stretti, chiesto dall utente */
   --serif:var(--sans);  /* niente secondo font: chi usava il serif ora usa il font unico */
   --ease:cubic-bezier(.2,.7,.1,1);
@@ -202,17 +202,14 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .hx{position:relative;height:300svh}
 .hx-pin{position:sticky;top:0;height:100svh;overflow:hidden}
 /* fascia colorata sfocata dietro la frase: si accende man mano che il video si stringe */
-.hx-aura{position:absolute;left:-15%;right:-15%;top:50%;height:30svh;transform:translateY(-50%) rotate(-4deg);border-radius:50%;pointer-events:none;
-  background:linear-gradient(90deg,#A78BFA,#C084FC,#E879F9,#F472B6,#A78BFA,#C084FC,#E879F9,#F472B6,#A78BFA);background-size:200% 100%;
-  filter:blur(34px);opacity:.38;animation:auraFlow 14s linear infinite,auraBreath 7s ease-in-out infinite alternate}
-/* seconda onda, verso opposto: rende visibile il movimento sotto */
-.hx-aura::after{content:"";position:absolute;inset:18% 10%;border-radius:50%;
-  background:linear-gradient(90deg,#E879F9,#A78BFA,#F472B6,#C084FC,#E879F9,#A78BFA,#F472B6,#C084FC,#E879F9);background-size:200% 100%;
-  opacity:.8;animation:auraFlow 10s linear infinite reverse,auraWave 5s ease-in-out infinite alternate}
-@keyframes auraFlow{to{background-position:-200% 0}}
+.hx-aura{position:absolute;left:-15%;right:-15%;top:50%;height:30svh;transform:translateY(-50%) rotate(-4deg);pointer-events:none;opacity:.38;overflow:visible;animation:auraBreath 7s ease-in-out infinite alternate}
+/* due nastri larghi il doppio, gradiente che si ripete: scorrono con translateX (solo compositing, niente ridisegno della sfocatura) */
+.hx-aura::before,.hx-aura::after{content:"";position:absolute;top:0;bottom:0;left:0;width:200%;border-radius:50%;filter:blur(34px);will-change:transform;
+  background:linear-gradient(90deg,#A78BFA,#C084FC,#E879F9,#F472B6,#A78BFA,#C084FC,#E879F9,#F472B6,#A78BFA);animation:auraFlow 14s linear infinite}
+.hx-aura::after{top:18%;bottom:18%;opacity:.8;background:linear-gradient(90deg,#E879F9,#A78BFA,#F472B6,#C084FC,#E879F9,#A78BFA,#F472B6,#C084FC,#E879F9);animation:auraFlow 10s linear infinite reverse}
+@keyframes auraFlow{to{transform:translateX(-50%)}}
 @keyframes auraBreath{from{transform:translateY(-58%) rotate(-5deg) scaleY(.85)}to{transform:translateY(-42%) rotate(-2deg) scaleY(1.1)}}
-@keyframes auraWave{from{transform:translate(-6%,-14%) scaleY(.7)}to{transform:translate(6%,14%) scaleY(1)}}
-@media (prefers-reduced-motion:reduce){.hx-aura,.hx-aura::after{animation:none}}
+@media (prefers-reduced-motion:reduce){.hx-aura,.hx-aura::before,.hx-aura::after{animation:none}}
 
 .hx-track{position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;z-index:8;will-change:transform} /* sopra il video che si stringe */
 .hx-scroll{z-index:8}
@@ -242,7 +239,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .hx-line [data-fx=flip] .c{transform:perspective(600px) rotateX(85deg);transform-origin:50% 80%}
 .hx-line [data-fx=wave] .c{transform:translateY(calc(sin(var(--i) * 1.1rad) * .22em))}
 .hx-line [data-fx=slide] .c{transform:translateX(.35em);opacity:.5}
-.hx-line [data-fx=bold] .c{font-weight:300}.hx-line [data-fx=bold] .c.on{font-weight:700}
+.hx-line [data-fx=bold] .c{font-weight:400}.hx-line [data-fx=bold] .c.on{font-weight:700}
 .hx-pill{display:inline-block;width:2.8em;height:.92em;margin:0 .08em;border-radius:99px;overflow:hidden;vertical-align:-.1em;opacity:.35;transition:opacity .5s}
 .hx-pill.on{opacity:1}
 .hx-pill svg{width:100%;height:100%;display:block}
@@ -360,9 +357,11 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .dome-lb small{font-size:15px;color:var(--ink-2)}
 .dome-lb p{font-size:17px;line-height:1.45;color:var(--ink-2);max-width:36ch}
 .dome-lb .go{align-self:flex-start;margin-top:8px}
-.dome-x{position:absolute;top:16px;right:16px;width:48px;height:48px;border-radius:50%;border:0;background:var(--btn-w);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.dome-lb figure{position:relative}
+.dome-x{position:absolute;z-index:2;top:12px;right:12px;box-shadow:0 4px 18px rgba(0,0,0,.18);width:48px;height:48px;border-radius:50%;border:0;background:var(--btn-w);color:var(--ink);display:grid;place-items:center;cursor:pointer}
 .dome-x svg{width:16px;height:16px}
-@media (max-width:720px){.dome-lb figure{grid-template-columns:1fr;grid-template-rows:45% auto;height:auto;max-height:86svh}.dome-lb figcaption{padding:24px}}
+@media (max-width:720px){.dome-lb figure{grid-template-columns:1fr;grid-template-rows:minmax(0,34svh) minmax(0,auto);height:auto;max-height:88svh}
+  .dome-lb figcaption{padding:20px 22px 24px;gap:10px;overflow-y:auto;min-height:0}.dome-lb h3{font-size:32px}.dome-lb p{font-size:16px}} /* foto alta al massimo un terzo di schermo, il testo scorre se non basta: il bottone non viene più tagliato */
 
 /* passaggio a pixel dallo scuro al chiaro (da Creative Website Manual) */
 /* a cavallo del confine tra due sezioni, senza altezza propria: finita la transizione i quadrati sono trasparenti e non resta spazio vuoto */
@@ -419,6 +418,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .nextp-pin{container-type:size} /* cqw/cqh = misure del riquadro senza la barra di scorrimento */
 .nextp-t{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:calc(.12em*(1 - var(--ne,0)));width:100%;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:var(--nt);line-height:1;white-space:nowrap;text-decoration:none;color:inherit}
 .nextp-t>span:not(.nextp-pill){opacity:calc(1 - var(--ne,0)*1.4)}
+.nextp-t{transform:translateX(calc(var(--nsh,0px)*(1 - var(--ne,0))))}
 .nextp-t>span:first-child{justify-self:end}.nextp-t>span:last-child{justify-self:start} /* la pillola resta al centro esatto, le parole escono ai lati */
 .nextp-pill{width:calc(2.1em + (100cqw - 20px - 2.1em)*var(--ne,0));height:calc(.78em + (100cqh - 20px - .78em)*var(--ne,0));border-radius:calc(99px - 77px*var(--ne,0));overflow:hidden;background:var(--dark)}
 .nextp-pill img{width:100%;height:100%;object-fit:cover;display:block;scale:calc(1.35 - .35*var(--ne,0))}
@@ -562,6 +562,15 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 
 }
 @media (max-width:720px){
+  .labs{--R:1400px;--cw:68vw} /* card più strette e arco più curvo: si vedono le card accanto a destra e a sinistra */
+  /* menu: niente colonne di progetti che scorrono, resta il bottone del reel */
+  .menu-proj{height:auto;display:block;overflow:visible;padding:8px 0 4px}.mp-col{display:none}
+  .menu-proj .reel-btn{position:static;transform:none}
+  /* "24 premi" + "Mediastar": più vicini */
+  .echo{height:min(56svh,480px)}
+  /* vetro dell'header: un solo strato (cinque backdrop-filter durante lo scroll pesano troppo sui telefoni) */
+  .nav-blur i:not(:nth-child(4)){display:none}
+  .nav-blur i:nth-child(4){backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);mask:linear-gradient(#000 55%,transparent)}
   .vx-w{font-size:15vw;padding:0 calc(var(--pad) + 16px)}
   .vx-w1{top:22%}.vx-w2{bottom:26%}
   .vx-foot{left:calc(var(--pad) + 16px);right:calc(var(--pad) + 16px);bottom:44px;font-size:15px}
@@ -593,6 +602,17 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
   .ft-col{padding:32px 0 0}
   .ft-legal{padding:28px 0;margin-top:32px}
 }
+
+/* cambio pagina tra home e progetti (View Transitions tra documenti; dove non c'è si naviga e basta):
+   la pagina che lasci arretra e si scurisce, la nuova sale dal basso come un foglio con gli angoli tondi (il gesto del menu); l'header resta fermo */
+@view-transition{navigation:auto}
+::view-transition{background:var(--dark)}
+::view-transition-old(root){animation:vtOld .9s var(--energy) both}
+::view-transition-new(root){animation:vtNew .9s var(--energy) both}
+@keyframes vtOld{to{transform:translateY(-8%) scale(.94);opacity:.3}}
+@keyframes vtNew{from{transform:translateY(100%);clip-path:inset(0 round var(--radius-media) var(--radius-media) 0 0)}to{clip-path:inset(0 round 0)}}
+.nav{view-transition-name:nav}
+@media (prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
@@ -629,7 +649,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
   </div>
   <div class="menu-proj">
     <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/le-carose"><img src="assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg" alt="Le Carose" loading="lazy"><span>Le Carose</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica"><img src="assets/img/never_before_italia_borgo_canonica_branding.png" alt="Borgo Canonica" loading="lazy"><span>Borgo Canonica</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/lum"><img src="assets/img/never_before_italia_video_lum.jpg" alt="Università LUM" loading="lazy"><span>Università LUM</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="Amaro Mediterraneo" loading="lazy"><span>Amaro Mediterraneo</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/cortina-express"><img src="assets/img/cortina-express-006.jpg" alt="Cortina Express" loading="lazy"><span>Cortina Express</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/hula-bari"><img src="assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg" alt="Hula Hawaiian Poke" loading="lazy"><span>Hula Hawaiian Poke</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/le-carose" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg" alt="" loading="lazy"><span>Le Carose</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_borgo_canonica_branding.png" alt="" loading="lazy"><span>Borgo Canonica</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/lum" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_video_lum.jpg" alt="" loading="lazy"><span>Università LUM</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="" loading="lazy"><span>Amaro Mediterraneo</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/cortina-express" aria-hidden="true" tabindex="-1"><img src="assets/img/cortina-express-006.jpg" alt="" loading="lazy"><span>Cortina Express</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/hula-bari" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg" alt="" loading="lazy"><span>Hula Hawaiian Poke</span></a></div></div>
-    <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="Tenuta Giustini" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru"><img src="assets/img/immagine_home_viru.jpg" alt="Viru" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="Master Italy" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/marinobus"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="MarinoBus" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="Sneakers Room" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="Produttori di Manduria" loading="lazy"><span>Produttori di Manduria</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine_home_viru.jpg" alt="" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/marinobus" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="" loading="lazy"><span>Produttori di Manduria</span></a></div></div>
+    <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="Tenuta Giustini" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru"><img src="assets/img/immagine_home_viru.jpg" alt="Viru" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="Master Italy" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="progetto-marinobus.html"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="MarinoBus" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="Sneakers Room" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="Produttori di Manduria" loading="lazy"><span>Produttori di Manduria</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine_home_viru.jpg" alt="" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="progetto-marinobus.html" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="" loading="lazy"><span>Produttori di Manduria</span></a></div></div>
     <button class="reel-btn" id="reelOpen" type="button">Guarda il reel <i><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg></i></button>
   </div>
 </nav>
@@ -649,7 +669,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
     <div class="hero-pin">
       <div class="replay" id="replay" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13.5 8A5.5 5.5 0 1 1 11.9 4.1M12.5 1.5v3h-3"/></svg></div>
       <div class="wrap">
-        <h1 id="heroT">La <em>visione</em> senza<br> <em>esecuzione</em> <span class="slot" aria-hidden="true"><span class="hero-reel" id="heroReel"><video autoplay muted loop playsinline preload="auto"><source src="assets/reel.mp4" type="video/mp4"></video></span></span> è solo<br> un'<em>allucinazione</em>.</h1>
+        <h1 id="heroT">La <em>visione</em> senza<br> <em>esecuzione</em> <span class="slot" aria-hidden="true"><span class="hero-reel" id="heroReel"><video muted loop playsinline preload="none"><!-- hero nascosta: rimettere autoplay preload="auto" quando torna --><source src="assets/reel.mp4" type="video/mp4"></video></span></span> è solo<br> un'<em>allucinazione</em>.</h1>
         <div class="hero-side"><a class="scroll" href="#chi-siamo" aria-label="Scorri"><i><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v12M3 9l5 5 5-5"/></svg></i></a></div>
       </div>
       <button class="reel-btn hero-play" id="heroPlay" type="button">Guarda il reel con l'audio <i><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg></i></button>
@@ -662,8 +682,8 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
       <div class="hx-aura" aria-hidden="true"></div>
       <div class="hx-track" id="hxTrack">
         <div class="hx-intro"><h2 class="hx-claim" id="hxClaim">La visione senza esecuzione è solo un'allucinazione.</h2></div>
-        <div class="hx-link" aria-hidden="true"><svg viewBox="0 0 600 300"><path id="hxLinkP" pathLength="1" d="M20,150 H90 C130,150 125,55 175,55 C225,55 215,110 215,175 C215,225 235,250 270,250 C310,250 305,150 360,150 H565 M505,90 L565,150 L505,210"/></svg></div>
-        <p class="hx-line" id="hxLine" aria-label="Uniamo strategia ed esecuzione per marchi e campagne che portano risultati.">Uniamo strategia <span class="hx-pill hx-chart"><svg viewBox="0 0 210 78" aria-hidden="true"><path pathLength="1" d="M34,58 L72,44 L100,50 L134,28 L170,20"/><circle cx="170" cy="20" r="6"/></svg></span> ed esecuzione <span class="hx-pill hx-sq"><svg viewBox="0 0 210 78" aria-hidden="true"><path pathLength="1" d="M30,39 H70 C90,39 88,14 104,14 C120,14 116,64 132,64 C148,64 146,39 166,39 H182 M168,25 L182,39 L168,53"/></svg></span> per marchi <span class="hx-pill hx-shape"><svg viewBox="0 0 210 78" aria-hidden="true"><rect x="83" y="17" width="44" height="44"/></svg></span> e campagne <span class="hx-pill hx-waves"><svg viewBox="0 0 210 78" aria-hidden="true"><circle class="d" cx="62" cy="39" r="7"/><circle cx="62" cy="39" r="10"/><circle cx="62" cy="39" r="10"/><circle cx="62" cy="39" r="10"/></svg></span> che portano risultati <span class="hx-pill hx-vid"><span class="hx-drop"><video autoplay muted loop playsinline preload="none"><source src="assets/reel.mp4" type="video/mp4"></video></span></span></p>
+        <div class="hx-link" aria-hidden="true"><svg viewBox="0 0 600 300"><path id="hxLinkP" pathLength="1" d="M20,150 H90 C130,150 125,55 175,55 C225,55 215,110 215,175 C215,225 235,250 270,250 C310,250 305,150 360,150 H565"/><path id="hxLinkH" pathLength="1" d="M505,90 L565,150 L505,210"/></svg></div>
+        <p class="hx-line" id="hxLine" aria-label="Uniamo strategia ed esecuzione per marchi e campagne che portano risultati.">Uniamo strategia <span class="hx-pill hx-chart"><svg viewBox="0 0 210 78" aria-hidden="true"><path pathLength="1" d="M34,58 L72,44 L100,50 L134,28 L170,20"/><circle cx="170" cy="20" r="6"/></svg></span> ed esecuzione <span class="hx-pill hx-sq"><svg viewBox="0 0 210 78" aria-hidden="true"><path pathLength="1" d="M30,39 H70 C90,39 88,14 104,14 C120,14 116,64 132,64 C148,64 146,39 166,39 H182 M168,25 L182,39 L168,53"/></svg></span> per marchi <span class="hx-pill hx-shape"><svg viewBox="0 0 210 78" aria-hidden="true"><rect x="83" y="17" width="44" height="44"/></svg></span> e campagne <span class="hx-pill hx-waves"><svg viewBox="0 0 210 78" aria-hidden="true"><circle class="d" cx="62" cy="39" r="7"/><circle cx="62" cy="39" r="10"/><circle cx="62" cy="39" r="10"/><circle cx="62" cy="39" r="10"/></svg></span> che portano risultati <span class="hx-pill hx-vid"><span class="hx-drop"></span></span></p>
       </div>
       <div class="hx-big" id="hxBig" aria-hidden="true"><video muted loop playsinline autoplay preload="auto"><source src="assets/reel.mp4" type="video/mp4"></video></div>
       <button class="reel-btn hx-play" id="hxPlay" type="button">Guarda il reel completo <i><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg></i></button>
@@ -756,11 +776,10 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
     <div class="dome-stage" id="dome" aria-hidden="true"></div>
     <div class="dome-ui"><h2 class="lr grad" id="domeT">Progetti</h2><p>Trascina per esplorare · clicca una foto per aprirla</p></div>
     </div>
-    <ul class="sr"><li><a href="https://www.neverbeforeitalia.it/portfolio/lum">Università LUM</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/le-carose">Le Carose</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica">Borgo Canonica</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/marinobus">MarinoBus</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo">Amaro Mediterraneo</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/cortina-express">Cortina Express</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/hula-bari">Hula Hawaiian Poke</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini">Tenuta Giustini</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/viru">Viru</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/master-italy">Master Italy</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/sneakers-room">Sneakers Room</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria">Produttori di Manduria</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/gt-alarm">GT Alarm</a></li></ul>
+    <ul class="sr"><li><a href="https://www.neverbeforeitalia.it/portfolio/lum">Università LUM</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/le-carose">Le Carose</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica">Borgo Canonica</a></li><li><a href="progetto-marinobus.html">MarinoBus</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo">Amaro Mediterraneo</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/cortina-express">Cortina Express</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/hula-bari">Hula Hawaiian Poke</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini">Tenuta Giustini</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/viru">Viru</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/master-italy">Master Italy</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/sneakers-room">Sneakers Room</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria">Produttori di Manduria</a></li><li><a href="https://www.neverbeforeitalia.it/portfolio/gt-alarm">GT Alarm</a></li></ul>
   </section>
   <div class="dome-lb" id="domeLb" role="dialog" aria-modal="true" aria-label="Progetto" hidden>
-    <button class="dome-x" id="domeX" type="button" aria-label="Chiudi"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3 3 13"/></svg></button>
-    <figure><img id="domeImg" src="" alt=""><figcaption><small id="domeC"></small><h3 id="domeN"></h3><small id="domeM"></small><p id="domeD"></p><a class="go" id="domeA" href="#">Vedi il progetto <i><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h12M9 3l5 5-5 5"/></svg></i></a></figcaption></figure>
+    <figure><button class="dome-x" id="domeX" type="button" aria-label="Chiudi"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3 3 13"/></svg></button><img id="domeImg" src="" alt=""><figcaption><small id="domeC"></small><h3 id="domeN"></h3><small id="domeM"></small><p id="domeD"></p><a class="go" id="domeA" href="#">Vedi il progetto <i><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h12M9 3l5 5-5 5"/></svg></i></a></figcaption></figure>
   </div>
 
   <div class="shutter" aria-hidden="true"></div>
@@ -819,7 +838,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
     <div class="ft-msg">
       <span class="mk" aria-hidden="true"></span>
       <div class="box">
-        <div><strong>Hai scrollato <span id="cm">0 cm</span></strong><p id="cmtxt">Un pullman <a href="https://www.neverbeforeitalia.it/portfolio/marinobus">MarinoBus</a> è lungo circa 12 metri.</p></div>
+        <div><strong>Hai scrollato <span id="cm">0 cm</span></strong><p id="cmtxt">Un pullman <a href="progetto-marinobus.html">MarinoBus</a> è lungo circa 12 metri.</p></div>
       </div>
     </div>
     <div class="ft-col">
@@ -909,7 +928,7 @@ lrs.forEach(el=>{const walk=n=>[...n.childNodes].forEach(c=>{if(c.nodeType===3){
   else if(c.nodeType===1&&c.tagName!=='BR'&&!c.classList.contains('slot'))walk(c)});walk(el)}); // la pillola del reel resta fuori: cade per conto suo
 lrs.forEach(el=>el.querySelectorAll('.w>span').forEach(s=>{s.innerHTML=[...s.textContent].map(c=>`<span class="lt">${c}</span>`).join('')})); // lettere singole: servono al peso che cambia col mouse
 const lineUp=()=>lrs.forEach(el=>{let top=null,l=-1;el.querySelectorAll('.w').forEach(w=>{const t=Math.round(w.offsetTop);if(t!==top){top=t;l++}w.style.setProperty('--l',l)})});
-document.fonts.load('300 100px "Google Sans Flex"').then(lineUp,lineUp);addEventListener('resize',lineUp);lineUp();
+document.fonts.load('400 100px "Google Sans"').then(lineUp,lineUp);addEventListener('resize',lineUp);lineUp();
 
 // eco: sei copie del livello sopra all'originale; più sono in alto, più si rimpiccioliscono (passi sempre più corti)
 const echo=$('echo'),ly0=echo.querySelector('.ly'),echoX=echo.querySelector('.echo-x');
@@ -920,7 +939,7 @@ const fitEcho=()=>{const W=document.documentElement.clientWidth,rg=document.crea
     // tre passaggi: misuro il testo vero, regolo, rimisuro (la larghezza non scala in modo perfettamente lineare)
     for(let p=0;p<3;p++){rg.selectNodeContents(s);s.style.fontSize=parseFloat(getComputedStyle(s).fontSize)*W/rg.getBoundingClientRect().width/innerWidth*100+'vw'}
     echo.querySelectorAll('.ly h2').forEach(t=>{t.children[k].style.fontSize=s.style.fontSize})})};
-document.fonts.load('300 100px "Google Sans Flex"').then(fitEcho,fitEcho);addEventListener('load',fitEcho);addEventListener('resize',fitEcho); // fonts.ready può arrivare prima che Google Sans sia richiesto
+document.fonts.load('400 100px "Google Sans"').then(fitEcho,fitEcho);addEventListener('load',fitEcho);addEventListener('resize',fitEcho); // fonts.ready può arrivare prima che Google Sans sia richiesto
 
 // quadrante: 72 tacche, una lunga ogni 6
 $('dial').innerHTML=Array.from({length:72},(_,i)=>{const a=i*5*Math.PI/180,l=i%6?7:13,r=88;return `<line x1="${(Math.sin(a)*r).toFixed(2)}" y1="${(-Math.cos(a)*r).toFixed(2)}" x2="${(Math.sin(a)*(r-l)).toFixed(2)}" y2="${(-Math.cos(a)*(r-l)).toFixed(2)}" stroke="currentColor" stroke-width="${i%6?.5:.8}"/>`}).join('');
@@ -928,7 +947,7 @@ $('dial').innerHTML=Array.from({length:72},(_,i)=>{const a=i*5*Math.PI/180,l=i%6
 // intro orizzontale: lettere divise una per una; la riga entra da destra e scorre a sinistra con lo scroll.
 // Una lettera (o una pillola) si accende quando passa la metà dello schermo
 {const cl=$('hxClaim');cl.innerHTML=cl.textContent.split(' ').map((w,i)=>`<span class="cw" style="--i:${i}">${w}</span>`).join(' ');}
-{const lp=$('hxLinkP'),sec=$('hx'),ln=$('hxLine'),tr=$('hxTrack'),FX=['rise','drop','blur','rise','pop','flip','blur','wave','slide','slide','bold'];let nw=0; // Uniamo, strategia, ed, esecuzione, per, marchi, e, campagne, che, portano, risultati
+{const lp=$('hxLinkP'),lh=$('hxLinkH'),sec=$('hx'),ln=$('hxLine'),tr=$('hxTrack'),FX=['rise','drop','blur','rise','pop','flip','blur','wave','slide','slide','bold'];let nw=0; // Uniamo, strategia, ed, esecuzione, per, marchi, e, campagne, che, portano, risultati
   [...ln.childNodes].forEach(n=>{if(n.nodeType!==3)return;const f=document.createDocumentFragment();
     n.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.append(' ');return}const w=document.createElement('span');w.className='w';w.setAttribute('aria-hidden','true');
       w.innerHTML=[...t].map((c,i)=>`<span class="c" style="--i:${i}">${c}</span>`).join('');w.dataset.fx=FX[nw++%FX.length];f.append(w)});n.replaceWith(f)});
@@ -937,14 +956,18 @@ $('dial').innerHTML=Array.from({length:72},(_,i)=>{const a=i*5*Math.PI/180,l=i%6
   const vid=ln.querySelector('.hx-vid'),big=$('hxBig'),bigV=big.querySelector('video'),pin=sec.firstElementChild,hp=$('hxPlay'),au=pin.querySelector('.hx-aura'),ivs=[...pin.querySelectorAll('.hx-claim .cw,.hx-link,.hx-scroll')];hp.onclick=openReel;let run=0,HOLD=0,G=0,dropped=false;const SH=.6; // il video resta pieno per il 60% della corsa, poi si stringe veloce nel suo posto
   
   const size=()=>{W=tr.scrollWidth;const vw=innerWidth;xs=items.map(el=>{let x=0,e=el;while(e&&e!==tr){x+=e.offsetLeft;e=e.offsetParent}return x+el.offsetWidth/2});
-    x0=0;x1=vw*.5-xs[xs.length-1];run=(x0-x1)/1.6;HOLD=innerHeight*.45;G=innerHeight*1.2;sec.style.height=(innerHeight+run+HOLD+G+innerHeight*.5)+'px'}; // corsa (la riga va 1,6 volte lo scroll) + pausa (la pillola atterra) + apertura del video
-  const upd=()=>{const d=-sec.getBoundingClientRect().top,p=clamp(d/run),g=clamp((d-run-HOLD)/G),x=x0+(x1-x0)*p,mid=innerWidth*.5;
+    x0=0;x1=vw*.5-xs[xs.length-1];run=(x0-x1)/1.3;HOLD=innerHeight*.45;G=innerHeight*1.2;sec.style.height=(innerHeight+run+HOLD+G+innerHeight*.5)+'px'}; // corsa (la riga va 1,3 volte lo scroll: più lenta) + pausa (la pillola atterra) + apertura del video
+  // movimento addolcito: la riga insegue lo scroll invece di seguirlo al pixel (sul telefono lo scroll a dita è più brusco, lì l'inseguimento è più lento)
+  const SM=matchMedia('(pointer:coarse)').matches?.08:.2;let sd=null,raf=0;
+  const tick=()=>{raf=0;const t=-sec.getBoundingClientRect().top;if(sd===null||Math.abs(t-sd)>innerHeight*3)sd=t;sd+=(t-sd)*SM;if(Math.abs(t-sd)<.5)sd=t;upd();if(sd!==t)raf=requestAnimationFrame(tick)};
+  const kick=()=>{if(!raf)raf=requestAnimationFrame(tick)};
+  const upd=()=>{const d=sd===null?-sec.getBoundingClientRect().top:sd,p=clamp(d/run),g=clamp((d-run-HOLD)/G),x=x0+(x1-x0)*p,mid=innerWidth*.5;
     tr.style.transform=`translate3d(${x.toFixed(1)}px,0,0)`;
-    {const lr=lp.parentNode.getBoundingClientRect(),k=clamp((innerWidth*.95-lr.left)/(lr.width+innerWidth*.35));lp.style.strokeDashoffset=(1-k).toFixed(3)}
+    {const lr=lp.parentNode.getBoundingClientRect(),k=clamp((innerWidth*.95-lr.left)/(lr.width+innerWidth*.35));lp.style.strokeDashoffset=(1-clamp(k/.85)).toFixed(3);lh.style.strokeDashoffset=(1-clamp((k-.85)/.15)).toFixed(3)}
     // (sopra: la freccia fra le due frasi si disegna mentre entra)
     items.forEach((el,i)=>el.classList.toggle('on',x+xs[i]<(el===vid?innerWidth*1.02:innerWidth*.86)));
     // la pillola del video cade appena entra nello schermo, insieme alle pillole colorate
-    const on=vid.classList.contains('on');if(on&&!dropped&&window.heroRainHx){window.heroRainHx(pin);const v=vid.getBoundingClientRect(),rn=[...pin.querySelectorAll('.rain')].pop();
+    const on=vid.classList.contains('on'),seen=sec.getBoundingClientRect().bottom>0;if(on&&!dropped&&window.heroRainHx){window.heroRainHx(pin);const v=vid.getBoundingClientRect(),rn=[...pin.querySelectorAll('.rain')].pop();
       if(rn)[...rn.children].forEach((c,i)=>{c.style.width=v.width+'px';c.style.height=v.height+'px';c.style.fontSize=(v.height*.3)+'px';c.style.setProperty('--t',(1.9+(i%3)*.25)+'s');c.style.setProperty('--d',(i*.14).toFixed(2)+'s');c.style.left=`calc((100% - ${v.width}px) * ${[3,6,0,5,1,7,2,4][i]/7})`})} // le pillole che cadono grandi come quella del video
     dropped=on;
     // il video resta per tutto lo scroll: parte a tutto schermo e si stringe man mano che il suo posto nella frase si avvicina;
@@ -959,13 +982,13 @@ $('dial').innerHTML=Array.from({length:72},(_,i)=>{const a=i*5*Math.PI/180,l=i%6
       items.forEach((el,i)=>{if(el.classList.contains('c'))el.classList.toggle('iv',inV(x+xs[i],ly))});
       ivs.forEach(el=>{const q=el.getBoundingClientRect();el.classList.toggle('iv',inV(q.left+q.width/2-b.left,q.top+q.height/2-b.top))})}au.style.opacity=(.38*(g>0?1-ez(g):ez(clamp((p-SH)/(1-SH))))).toFixed(3);
     Object.assign(big.style,{display:'block',left:r[0]+'px',top:r[1]+'px',width:r[2]+'px',height:r[3]+'px',borderRadius:r[4]+'px'});
-    bigV.style.transform=`scale(${r[5].toFixed(3)})`;vid.style.visibility='hidden';if(bigV.paused)bigV.play().catch(()=>{});hp.classList.toggle('on',g>.97)};
-  addEventListener('scroll',upd,{passive:true});addEventListener('resize',()=>{size();upd()});document.fonts.ready.then(()=>{size();upd()});size();upd();}
+    bigV.style.transform=`scale(${r[5].toFixed(3)})`;vid.style.visibility='hidden';if(seen&&bigV.paused)bigV.play().catch(()=>{});if(!seen&&!bigV.paused)bigV.pause();hp.classList.toggle('on',g>.97)};
+  addEventListener('scroll',kick,{passive:true});addEventListener('resize',()=>{size();upd()});document.fonts.ready.then(()=>{size();upd()});size();upd();}
 
 // nastro gigante: il contenuto raddoppiato, scorre col movimento della pagina
 const mq=$('bigmq');mq.innerHTML+=mq.innerHTML;
 const nav=$('nav'),hero=document.querySelector('.hero'),hReel=$('heroReel'),darks=[...document.querySelectorAll('[data-dark]')];
-const mb='Un pullman <a href="https://www.neverbeforeitalia.it/portfolio/marinobus">MarinoBus</a> è lungo circa 12 metri: ';
+const mb='Un pullman <a href="progetto-marinobus.html">MarinoBus</a> è lungo circa 12 metri: ';
 
 const onScroll=()=>{
   const vh=innerHeight,y=nav.offsetHeight/2;
@@ -1016,8 +1039,8 @@ addEventListener('load',()=>{
   // titoli (hero e h2): le lettere vicine al mouse diventano più spesse (300→700), si sgonfiano quando ti allontani
   if(matchMedia('(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference)').matches)[$('heroT'),...lrs].forEach(t=>{
     const chs=[...t.querySelectorAll('.ch,.lt')].map(el=>({el,w:gsap.quickTo(el,'fontWeight',{duration:.5,ease:'power3'})}));
-    t.addEventListener('pointermove',e=>chs.forEach(({el,w})=>{const r=el.getBoundingClientRect();w(300+400*clamp(1-Math.hypot(e.clientX-r.left-r.width/2,e.clientY-r.top-r.height/2)/(r.height*1.6)))}));
-    t.addEventListener('pointerleave',()=>chs.forEach(({w})=>w(300)))});
+    t.addEventListener('pointermove',e=>chs.forEach(({el,w})=>{const r=el.getBoundingClientRect();w(400+300*clamp(1-Math.hypot(e.clientX-r.left-r.width/2,e.clientY-r.top-r.height/2)/(r.height*1.6)))}));
+    t.addEventListener('pointerleave',()=>chs.forEach(({w})=>w(400)))});
   // calamita: CTA e pillola del menu si spostano di pochi pixel verso il mouse quando è vicino
   if(matchMedia('(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference)').matches){
     const mags=[...document.querySelectorAll('.nav .btn,.mpill,.cta-box .btn:not(.ghost)')].map(el=>({el,x:gsap.quickTo(el,'x',{duration:.6,ease:'power3'}),y:gsap.quickTo(el,'y',{duration:.6,ease:'power3'})}));
@@ -1060,6 +1083,14 @@ const fitPills=()=>{const ps=[...document.querySelectorAll('.ft-drop .fp')],rg=d
   const k=Math.min(1,...ps.map(p=>{rg.selectNodeContents(p);const pad=parseFloat(getComputedStyle(p).paddingLeft)*2;return (p.clientWidth-pad)/rg.getBoundingClientRect().width}));
   document.documentElement.style.setProperty('--fpk',k.toFixed(3))};
 fitPills();document.fonts.load('400 20px "Google Sans"').then(fitPills,fitPills);addEventListener('resize',fitPills);
+// pagina successiva: parole + pillola centrate come gruppo; mentre la pillola cresce lo spostamento torna a zero e lei finisce al centro esatto.
+// Il corpo si riduce solo se il gruppo non ci sta (margine ai lati come il resto del sito)
+const fitNext=()=>{const n=$('nextp');if(!n)return;const t=n.querySelector('.nextp-t'),[a,,b]=t.children,wd=e=>e.getBoundingClientRect().width;
+  n.style.removeProperty('--nt');const fs=parseFloat(getComputedStyle(t).fontSize);
+  const cw=n.querySelector('.nextp-pin').clientWidth,avail=cw-2*Math.min(80,Math.max(24,cw*.05));
+  const k=avail/(wd(a)+wd(b)+fs*(2.1+.24));if(k<1)n.style.setProperty('--nt',(fs*k).toFixed(1)+'px');
+  n.style.setProperty('--nsh',((wd(a)-wd(b))/2).toFixed(1)+'px')};
+fitNext();document.fonts.load('400 100px "Google Sans"').then(fitNext,fitNext);addEventListener('resize',fitNext);
 
 // apertura: il titolo della hero lettera per lettera (le parole restano intere per l'a capo; la pillola del reel resta fuori)
 (()=>{const t=$('heroT');t.setAttribute('aria-label',t.textContent.replace(/\s+/g,' ').trim());
@@ -1088,8 +1119,9 @@ if(matchMedia('(prefers-reduced-motion:reduce)').matches)document.querySelectorA
 // servizi: le card girano sul cerchio. Ogni card ha la sua distanza dal centro (--d); quella che passa da un capo all'altro
 // salta senza animazione, tanto è fuori schermo
 const labs=$('labs'),lcs=[...labs.querySelectorAll('.lc')],LN=lcs.length;let lcur=0;const ld=[];
-const LGAP=56; // spazio tra due card nel punto in cui si avvicinano di più (in basso: le card convergono verso il centro del cerchio)
-const lStep=()=>{const R=parseFloat(getComputedStyle(labs).getPropertyValue('--R')),W=lcs[0].offsetWidth,H=Math.max(...lcs.map(c=>c.offsetHeight));
+let LGAP=56; // spazio tra due card nel punto in cui si avvicinano di più (in basso: le card convergono verso il centro del cerchio)
+const lStep=()=>{LGAP=innerWidth<720?8:56;lcs.forEach(c=>c.style.height='');const R=parseFloat(getComputedStyle(labs).getPropertyValue('--R')),W=lcs[0].offsetWidth,H=Math.max(...lcs.map(c=>c.offsetHeight));
+  lcs.forEach(c=>c.style.height=H+'px'); // tutte alte uguali: sull'arco le card accanto scendono simmetriche e i link stanno alla stessa altezza
   const a=(W+LGAP)/(R-H);labs.style.setProperty('--step',(a*180/Math.PI).toFixed(3)+'deg');
   // altezza del palco: fino all'angolo più basso delle card accanto al centro; quelle più lontane scendono ai lati delle frecce (come Google Labs)
   $('labsStage').style.height=Math.ceil(48+R+W/2*Math.sin(a)-(R-H)*Math.cos(a)+16)+'px'};
@@ -1103,7 +1135,7 @@ const stage=$('labsStage');let lx=null,lf=0,moved=false;
 stage.addEventListener('pointerdown',e=>{if(e.button)return;lx=e.clientX;lf=0;moved=false});
 addEventListener('pointermove',e=>{if(lx===null)return;const dx=e.clientX-lx;if(!moved&&Math.abs(dx)<6)return;
   if(!moved){moved=true;stage.classList.add('drag')}lf=dx/(lcs[0].offsetWidth+LGAP);lPlace(lf)});
-const lEnd=()=>{if(lx===null)return;lx=null;stage.classList.remove('drag');if(moved){lcur-=Math.round(lf);lPlace()}};
+const lEnd=()=>{if(lx===null)return;lx=null;stage.classList.remove('drag');if(moved){const a=Math.abs(lf);lcur-=Math.sign(lf)*(a>.15?Math.max(1,Math.round(a)):0);lPlace()}}; // basta un 15% di card per passare alla successiva
 addEventListener('pointerup',lEnd);addEventListener('pointercancel',lEnd);
 stage.addEventListener('click',e=>{if(moved){e.preventDefault();e.stopPropagation();moved=false}},true);
 stage.addEventListener('dragstart',e=>e.preventDefault());
@@ -1121,7 +1153,7 @@ lStep();lPlace();addEventListener('resize',lStep);addEventListener('load',lStep)
 
 // progetti: Infinite Dome Grid. Ogni card ha un posto fisso su una griglia che si ripete senza fine (ox, oy = quanto hai trascinato).
 // La luce: ogni card si accende quanto più è vicina al mouse
-{const PD=[{"h":"https://www.neverbeforeitalia.it/portfolio/lum","n":"Università LUM","m":"Storie Lum · Campagna iscrizioni","i":"assets/img/never_before_italia_video_lum.jpg","c":"Advertising","d":"Nove ex alunni diventati testimonial della campagna iscrizioni: stampa nazionale e locale, radio, un sito dedicato, un canale YouTube con le loro storie e un piano social."},{"h":"https://www.neverbeforeitalia.it/portfolio/le-carose","n":"Le Carose","m":"Born to be Pompon · Brand orafo pugliese","i":"assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg","c":"Branding","d":"Un marchio che in pochi anni è diventato un riferimento nell'accessorio moda: dalle celebri doll alle nuove linee, con un format di comunicazione pensato per crescere insieme al brand."},{"h":"https://www.neverbeforeitalia.it/portfolio/borgo-canonica","n":"Borgo Canonica","m":"Trulli di charme · Struttura ricettiva","i":"assets/img/never_before_italia_borgo_canonica_branding.png","c":"Branding","d":"Un borgo rurale dell'Ottocento fatto quasi solo di trulli, su sei ettari, recuperato e diventato struttura ricettiva. Abbiamo costruito il marchio, il sito e la presenza social."},{"h":"https://www.neverbeforeitalia.it/portfolio/marinobus","n":"MarinoBus","m":"Restyling e storytelling · Trasporti dal 1957","i":"assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg","c":"Branding","d":"Dal 1957 nel trasporto su gomma tra Puglia e Basilicata, oggi realtà di riferimento nazionale. Per i sessant'anni dell'azienda abbiamo ridisegnato il marchio e raccontato la sua storia."},{"h":"https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo","n":"Amaro Mediterraneo","m":"Infuso d'erbe · Distribuito nel mondo","i":"assets/img/never_before_italia_website_amaro_mediterraneo.jpg","c":"Digital","d":"Un amaro di erbe, spezie e radici mediterranee da un'antica ricetta di famiglia, distribuito a marchio Beltion. Abbiamo progettato il sito e la comunicazione digitale."},{"h":"https://www.neverbeforeitalia.it/portfolio/cortina-express","n":"Cortina Express","m":"","i":"assets/img/cortina-express-006.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/hula-bari","n":"Hula Hawaiian Poke","m":"","i":"assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/tenuta-giustini","n":"Tenuta Giustini","m":"","i":"assets/img/never_before_italia_architecture_tenuta_giustini.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/viru","n":"Viru","m":"","i":"assets/img/immagine_home_viru.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/master-italy","n":"Master Italy","m":"","i":"assets/img/never_before_italia_graphics_master_1.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/sneakers-room","n":"Sneakers Room","m":"","i":"assets/img/immagine-home-sneaker-room.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria","n":"Produttori di Manduria","m":"","i":"assets/img/immagine-home-produttori-manduria.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/gt-alarm","n":"GT Alarm","m":"","i":"assets/img/never_before_italia_advertising_gt_alarm.jpg","c":"","d":""}],sec=$('progetti'),stage=$('dome'),COLS=10,ROWS=6;
+{const PD=[{"h":"https://www.neverbeforeitalia.it/portfolio/lum","n":"Università LUM","m":"Storie Lum · Campagna iscrizioni","i":"assets/img/never_before_italia_video_lum.jpg","c":"Advertising","d":"Nove ex alunni diventati testimonial della campagna iscrizioni: stampa nazionale e locale, radio, un sito dedicato, un canale YouTube con le loro storie e un piano social."},{"h":"https://www.neverbeforeitalia.it/portfolio/le-carose","n":"Le Carose","m":"Born to be Pompon · Brand orafo pugliese","i":"assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg","c":"Branding","d":"Un marchio che in pochi anni è diventato un riferimento nell'accessorio moda: dalle celebri doll alle nuove linee, con un format di comunicazione pensato per crescere insieme al brand."},{"h":"https://www.neverbeforeitalia.it/portfolio/borgo-canonica","n":"Borgo Canonica","m":"Trulli di charme · Struttura ricettiva","i":"assets/img/never_before_italia_borgo_canonica_branding.png","c":"Branding","d":"Un borgo rurale dell'Ottocento fatto quasi solo di trulli, su sei ettari, recuperato e diventato struttura ricettiva. Abbiamo costruito il marchio, il sito e la presenza social."},{"h":"progetto-marinobus.html","n":"MarinoBus","m":"Restyling e storytelling · Trasporti dal 1957","i":"assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg","c":"Branding","d":"Dal 1957 nel trasporto su gomma tra Puglia e Basilicata, oggi realtà di riferimento nazionale. Per i sessant'anni dell'azienda abbiamo ridisegnato il marchio e raccontato la sua storia."},{"h":"https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo","n":"Amaro Mediterraneo","m":"Infuso d'erbe · Distribuito nel mondo","i":"assets/img/never_before_italia_website_amaro_mediterraneo.jpg","c":"Digital","d":"Un amaro di erbe, spezie e radici mediterranee da un'antica ricetta di famiglia, distribuito a marchio Beltion. Abbiamo progettato il sito e la comunicazione digitale."},{"h":"https://www.neverbeforeitalia.it/portfolio/cortina-express","n":"Cortina Express","m":"","i":"assets/img/cortina-express-006.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/hula-bari","n":"Hula Hawaiian Poke","m":"","i":"assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/tenuta-giustini","n":"Tenuta Giustini","m":"","i":"assets/img/never_before_italia_architecture_tenuta_giustini.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/viru","n":"Viru","m":"","i":"assets/img/immagine_home_viru.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/master-italy","n":"Master Italy","m":"","i":"assets/img/never_before_italia_graphics_master_1.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/sneakers-room","n":"Sneakers Room","m":"","i":"assets/img/immagine-home-sneaker-room.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria","n":"Produttori di Manduria","m":"","i":"assets/img/immagine-home-produttori-manduria.jpg","c":"","d":""},{"h":"https://www.neverbeforeitalia.it/portfolio/gt-alarm","n":"GT Alarm","m":"","i":"assets/img/never_before_italia_advertising_gt_alarm.jpg","c":"","d":""}],sec=$('progetti'),stage=$('dome'),COLS=10,ROWS=6;
   const cards=[];for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const k=(c*3+r*5)%PD.length,d=PD[k],el=document.createElement('div');el.className='dc';
     el.innerHTML=`<img src="${d.i}" alt="" loading="lazy" draggable="false"><span>${d.n}</span>${d.c?`<span>${d.c}</span>`:''}<i></i>`;el.dataset.k=k;stage.append(el);cards.push({el,c,r,dim:el.lastChild,lo:-1,dl:((c*7+r*13)%11)/11*.45,op:-1})}
   let ox=0,oy=0,vx=-.3,vy=0,drag=null,vis=false,cw=0,ch=0,mx=null,my=null,cx=0,cy=0,D=0;const pin=$('domePin'),still=matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -1136,7 +1168,7 @@ lStep();lPlace();addEventListener('resize',lStep);addEventListener('load',lStep)
     cx+=((mx===null?0:mx-hw)-cx)*.12;cy+=((my===null?0:my-hh)-cy)*.12;D+=((mx===null?0:drag&&drag.m?300:170)-D)*.08;
     const S=Math.max(b.width,b.height)*.32,S2=S*S;
     for(const k of cards){const x=wrapv(k.c*cw+ox,W),y=wrapv(k.r*ch+oy,H),off=Math.abs(x)>hw+cw||Math.abs(y)>hh+ch;
-      k.el.style.visibility=off?'hidden':'';if(off)continue;
+      if(off!==k.off){k.off=off;k.el.style.display=off?'none':''}if(off)continue;
       const dx=x-cx,dy=y-cy,g=Math.exp(-(dx*dx+dy*dy)/S2),gx=2*D*dx*g/S2,gy=2*D*dy*g/S2,e=1-(1-clamp((en-k.dl)/.55))**3,op=e.toFixed(2);
       if(op!==k.op){k.op=op;k.el.style.opacity=op}
       k.el.style.transform=`translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,${(-D*g-(1-e)*2600).toFixed(1)}px) rotateX(${Math.atan(gy).toFixed(4)}rad) rotateY(${(-Math.atan(gx)).toFixed(4)}rad)`;
@@ -1197,6 +1229,10 @@ const pills=()=>{const {Engine,Bodies,Body,Composite,Mouse,MouseConstraint,Sleep
   draw();requestAnimationFrame(tick)};
 if(!matchMedia('(prefers-reduced-motion:reduce)').matches)new IntersectionObserver((es,o)=>{if(!es[0].isIntersecting)return;o.disconnect();
   const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js';s.onload=pills;document.head.append(s)},{rootMargin:'0px 0px 1500px 0px'}).observe(ft); // si prepara prima che il footer arrivi
+
+// SVG con animazioni SMIL: girano solo quando si vedono (fuori schermo consumavano CPU di continuo, pesante sui telefoni)
+{const so=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting?e.target.unpauseAnimations():e.target.pauseAnimations()));
+  document.querySelectorAll('svg').forEach(s=>{if(s.querySelector('animate,animateTransform,animateMotion'))so.observe(s)})}
 
 // comparsa allo scroll
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -10% 0px'});
