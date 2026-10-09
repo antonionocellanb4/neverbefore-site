@@ -203,7 +203,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 /* intro sotto la hero, sul chiaro */
 /* intro: la frase scorre in orizzontale mentre scendi (altezza della sezione = percorso, da JS) */
 .hx{position:relative;height:300svh}
-.hx-pin{position:sticky;top:0;height:100svh;overflow:hidden}
+.hx-pin{position:sticky;top:0;height:100svh;height:100dvh;overflow:hidden} /* dvh: sul telefono segue la barra degli indirizzi, niente striscia crema sotto il video */
 /* fascia colorata sfocata dietro la frase: si accende man mano che il video si stringe */
 .hx-aura{position:absolute;left:-15%;right:-15%;top:50%;height:30svh;transform:translateY(-50%) rotate(-4deg);pointer-events:none;opacity:.38;overflow:visible;animation:auraBreath 7s ease-in-out infinite alternate}
 /* due nastri larghi il doppio, gradiente che si ripete: scorrono con translateX (solo compositing, niente ridisegno della sfocatura) */

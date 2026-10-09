@@ -203,7 +203,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 /* intro sotto la hero, sul chiaro */
 /* intro: la frase scorre in orizzontale mentre scendi (altezza della sezione = percorso, da JS) */
 .hx{position:relative;height:300svh}
-.hx-pin{position:sticky;top:0;height:100svh;overflow:hidden}
+.hx-pin{position:sticky;top:0;height:100svh;height:100dvh;overflow:hidden} /* dvh: sul telefono segue la barra degli indirizzi, niente striscia crema sotto il video */
 /* fascia colorata sfocata dietro la frase: si accende man mano che il video si stringe */
 .hx-aura{position:absolute;left:-15%;right:-15%;top:50%;height:30svh;transform:translateY(-50%) rotate(-4deg);pointer-events:none;opacity:.38;overflow:visible;animation:auraBreath 7s ease-in-out infinite alternate}
 /* due nastri larghi il doppio, gradiente che si ripete: scorrono con translateX (solo compositing, niente ridisegno della sfocatura) */
@@ -992,7 +992,7 @@ $('dial').innerHTML=Array.from({length:72},(_,i)=>{const a=i*5*Math.PI/180,l=i%6
       ivs.forEach(el=>{const q=el.getBoundingClientRect();el.classList.toggle('iv',inV(q.left+q.width/2-b.left,q.top+q.height/2-b.top))})}au.style.opacity=(.38*(g>0?1-ez(g):ez(clamp((p-SH)/(1-SH))))).toFixed(3);
     Object.assign(big.style,{display:'block',left:r[0]+'px',top:r[1]+'px',width:r[2]+'px',height:r[3]+'px',borderRadius:r[4]+'px'});
     bigV.style.transform=`scale(${r[5].toFixed(3)})`;vid.style.visibility='hidden';if(seen&&bigV.paused)bigV.play().catch(()=>{});if(!seen&&!bigV.paused)bigV.pause();hp.classList.toggle('on',g>.97)};
-  addEventListener('scroll',kick,{passive:true});addEventListener('resize',()=>{size();upd()});document.fonts.ready.then(()=>{size();upd()});size();upd();}
+  addEventListener('scroll',kick,{passive:true});let lw=innerWidth;addEventListener('resize',()=>{if(innerWidth!==lw){lw=innerWidth;size()}upd()});document.fonts.ready.then(()=>{size();upd()});size();upd();}
 
 // nastro gigante: il contenuto raddoppiato, scorre col movimento della pagina
 const mq=$('bigmq');mq.innerHTML+=mq.innerHTML;
