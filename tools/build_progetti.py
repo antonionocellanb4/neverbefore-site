@@ -35,11 +35,30 @@ PROJECTS = [
     ),
 ]
 
+ABOUT = dict(
+    file='chi-siamo.html', title='Chi siamo · Never Before Italia', desc='Never Before Italia: chi siamo.',
+    name='Chi siamo', img='assets/img/chi-siamo-placeholder.jpg', note='Pagina in costruzione.',
+    next=('Altri', 'progetti', 'index.html#progetti', 'assets/img/never_before_italia_website_amaro_mediterraneo.jpg'),
+)
+
+ABOUT_CSS = r'''
+/* chi siamo: la foto della pillola "Chi ⬭ siamo" della home, a 10px dai bordi con raggio 22, diventa il fondo della hero */
+.ab-hero{position:relative;height:100svh;color:#fff}
+.ab-bg{position:absolute;inset:10px;border-radius:22px;overflow:hidden;background:var(--dark)}
+.ab-bg img{display:block;width:100%;height:100%;object-fit:cover;view-transition-name:next-hero}
+.ab-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(5,5,5,.55),rgba(5,5,5,0) 60%)} /* scuro neutro in basso: il titolo bianco si legge */
+.ab-txt{position:absolute;left:calc(10px + var(--pad));right:calc(10px + var(--pad));bottom:calc(10px + var(--pad))}
+.ab-txt .pj-ttl{font-size:clamp(64px,13vw,240px);line-height:.9}
+.ab-txt p{margin-top:16px;font-size:17px}
+.nextp-pill img{view-transition-name:none} /* un solo elemento per nome nella pagina */
+'''
+
 CSS = r'''
 /* pagina progetto: struttura da 311labs (titolo enorme, scheda a filetti, media a tutta larghezza, coppie e terne), grammatica della home */
 .pj-head{padding:calc(var(--nav-h) + clamp(60px,12vh,140px)) var(--pad) clamp(48px,7vw,96px)}
 .pj-ttl{font-size:clamp(72px,15vw,280px);margin-left:-.04em}
-.pj-ttl .ch{display:inline-block;animation:pjUp 1.1s var(--energy) calc(.1s + var(--i)*45ms) both}
+.pj-ttl .ch{display:inline-block;opacity:0}
+.shown .pj-ttl .ch{opacity:1;animation:pjUp 1.1s var(--energy) calc(.1s + var(--i)*45ms) both}
 @keyframes pjUp{from{opacity:0;transform:translateY(.5em) rotate(6deg)}}
 .wf .pj-ttl{visibility:hidden}.wf .pj-ttl *{animation-play-state:paused}
 .pj-meta{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:var(--gap,16px);margin-top:clamp(40px,6vw,80px);padding-top:16px;border-top:1px solid var(--ink);font-size:clamp(17px,1.3vw,20px);line-height:1.3}
@@ -170,6 +189,7 @@ def local(s):
 
 
 def script():
+    nextp = between(SRC, '  // la pagina dopo si prepara in anticipo', "e.viewTransition.types.add('expand')});", inc_b=True)
     js = between(SRC, '<script>\nconst $=', '</script>')[len('<script>\n'):]
     head = js[:js.index('// intro della hero')].replace("$('heroPlay').onclick=openReel;", '')
     shut = between(js, '// shutter: 12 lamelle per confine', '// titoli riga per riga')
@@ -192,7 +212,7 @@ def script():
     lenis?lenis.scrollTo(y,{duration:1.2}):scrollTo({top:y,behavior:'smooth'})});
   addEventListener('scroll',go,{passive:true});go()}}
 // titolo lettera per lettera
-{const t=$('pjTtl');t.innerHTML=[...t.textContent].map((c,i)=>`<span class="ch" style="--i:${i}" aria-hidden="true">${c}</span>`).join('')}
+{const t=$('pjTtl');if(t)t.innerHTML=[...t.textContent].map((c,i)=>`<span class="ch" style="--i:${i}" aria-hidden="true">${c===' '?'&nbsp;':c}</span>`).join('')}
 const nav=$('nav'),darks=[...document.querySelectorAll('[data-dark]')],pjHero=$('pjHero'),still=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const mb='Un pullman <a href="progetto-marinobus.html">MarinoBus</a> è lungo circa 12 metri: ';
 const onScroll=()=>{
@@ -200,7 +220,9 @@ const onScroll=()=>{
   nav.classList.toggle('on-dark',darks.some(s=>{const r=s.getBoundingClientRect();return r.top<=y&&r.bottom>=y}));
   nav.classList.toggle('solid',scrollY>40&&!nav.classList.contains('on-dark'));
   // primo media: si allarga fino a tutta larghezza mentre sale
-  if(!still){const r=pjHero.getBoundingClientRect();pjHero.style.setProperty('--k',clamp((r.top-vh*.15)/(vh*.7)).toFixed(3))}
+  {const pr=document.querySelector('.nextp-pill').getBoundingClientRect();if(pr.top<=y&&pr.bottom>=y&&pr.left<innerWidth*.2&&pr.right>innerWidth*.8)nav.classList.add('on-dark')}
+  nav.classList.toggle('solid',scrollY>40&&!nav.classList.contains('on-dark'));
+  if(!still&&pjHero){const r=pjHero.getBoundingClientRect();pjHero.style.setProperty('--k',clamp((r.top-vh*.15)/(vh*.7)).toFixed(3))}
   shutters.forEach(({el,bands,out})=>{const r=el.getBoundingClientRect();if(r.top>vh*1.3||r.top<-vh*.5)return;
     const p=clamp(out?(vh-r.top)/(vh*.85):(vh*.75-r.top)/(vh*.6)),n=bands.length;
     bands.forEach((b,i)=>{const k=clamp(p*2-(n-1-i)/(n-1));b.style.transform='scaleY('+(out?1-k:k).toFixed(3)+')'})});
@@ -220,14 +242,39 @@ addEventListener('load',()=>{
       x(clamp(dx*.25,-10,10)*k);y(clamp(dy*.25,-10,10)*k)}),{passive:true});
   }
   let rT;new ResizeObserver(()=>{clearTimeout(rT);rT=setTimeout(()=>ScrollTrigger.refresh(),200)}).observe(document.body);
-  // pagina successiva: come nella home
-  const nx=$('nextp');let nxGone=false,nxSeen=false;
-  ScrollTrigger.create({trigger:nx,start:'top top',end:'bottom bottom',refreshPriority:-1,onUpdate:s=>{nx.style.setProperty('--np',s.progress.toFixed(3));nx.style.setProperty('--ne',gsap.parseEase('power2.inOut')(clamp((s.progress-.04)/.86)).toFixed(4));if(s.progress<.9)nxSeen=true;
-    if(s.progress>.995&&s.direction>0&&nxSeen&&!nxGone&&innerHeight+scrollY>=document.documentElement.scrollHeight-4){nxGone=true;nx.classList.add('leaving');setTimeout(()=>{location.href=nx.dataset.href},650)}}});
-  addEventListener('pageshow',e=>{if(e.persisted){nxGone=false;nx.classList.remove('leaving')}});
+  // pagina successiva: lo stesso codice della home
+NEXTP_JS
 });
 '''
-    return '<script>\n' + head + shut + mine + roll + foot + '</script>\n'
+    return '<script>\n' + head + shut + mine.replace('NEXTP_JS', nextp) + roll + foot + '</script>\n'
+
+
+def build_about(a):
+    head = SRC[:SRC.index('</head>')]
+    head = re.sub(r'<title>.*?</title>', f"<title>{esc(a['title'])}</title>", head)
+    head = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{esc(a["desc"])}">', head)
+    head += '<style>' + CSS + ABOUT_CSS + '</style>\n</head>\n'
+    top = local(between(SRC, '<body>', '<main id="top">')).replace('href="index.html#top"', 'href="index.html"')
+    main = f'''<main id="top" class="pj">
+  <section class="ab-hero" data-dark><div class="ab-bg"><img src="{a['img']}" alt=""></div>
+    <div class="ab-txt"><h1 class="pj-ttl" id="pjTtl" aria-label="{esc(a['name'])}">{esc(a['name'])}</h1><p>{esc(a['note'])}</p></div></section>
+</main>'''
+    page = head + top + main + '\n' + tail_html(a['next']) + script() + '</body>\n</html>\n'
+    (ROOT / a['file']).write_text(page, encoding='utf8')
+    print('ok', a['file'], len(page))
+
+
+def tail_html(nxt):
+    tail = local(between(SRC, '</main>', '<script>\nconst $='))[len('</main>'):]
+    w1, w2, href, pic = nxt
+    return re.sub(r'<section class="nextp".*?</section>', f'''<section class="nextp" id="nextp" data-href="{href}" aria-label="Pagina successiva">
+  <div class="nextp-pin">
+    <p class="nextp-k">Pagina successiva</p>
+    <a class="nextp-t" href="{href}" aria-label="{w1} {w2}"><span>{w1}</span><span class="nextp-pill" aria-hidden="true"><img src="{pic}" alt="" loading="lazy"></span><span>{w2}</span></a>
+    <p class="nextp-h">Continua a scorrere</p>
+    <span class="nextp-bar" aria-hidden="true"><i></i></span>
+  </div>
+</section>''', tail, flags=re.S)
 
 
 def build(p):
@@ -236,16 +283,7 @@ def build(p):
     head = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{esc(p["lede"])}">', head)
     head += '<style>' + CSS + '</style>\n</head>\n'
     top = local(between(SRC, '<body>', '<main id="top">')).replace('href="index.html#top"', 'href="index.html"')
-    tail = local(between(SRC, '</main>', '<script>\nconst $='))[len('</main>'):]
-    w1, w2, href, pic = p['next']
-    tail = re.sub(r'<section class="nextp".*?</section>', f'''<section class="nextp" id="nextp" data-href="{href}" aria-label="Pagina successiva">
-  <div class="nextp-pin">
-    <p class="nextp-k">Pagina successiva</p>
-    <a class="nextp-t" href="{href}" aria-label="{w1} {w2}"><span>{w1}</span><span class="nextp-pill" aria-hidden="true"><img src="{pic}" alt="" loading="lazy"></span><span>{w2}</span></a>
-    <p class="nextp-h">Continua a scorrere</p>
-    <span class="nextp-bar" aria-hidden="true"><i></i></span>
-  </div>
-</section>''', tail, flags=re.S)
+    tail = tail_html(p['next'])
     page = head + top + main_html(p) + '\n' + tail + script() + '</body>\n</html>\n'
     (ROOT / f"progetto-{p['slug']}.html").write_text(page, encoding='utf8')
     print('ok', p['slug'], len(page))
@@ -253,3 +291,4 @@ def build(p):
 
 for p in PROJECTS:
     build(p)
+build_about(ABOUT)

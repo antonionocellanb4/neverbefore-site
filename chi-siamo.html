@@ -4,34 +4,962 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chi siamo · Never Before Italia</title>
-<meta name="robots" content="noindex">
+<meta name="description" content="Never Before Italia: chi siamo.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&display=swap" rel="stylesheet">
+<script>/* l'intro della hero aspetta i font (max 1,5 s): senza, il titolo si ricompone a metà animazione e la pagina sembra ricaricarsi */
+addEventListener('pagereveal',e=>{let t=null;try{t=sessionStorage.getItem('vt');sessionStorage.removeItem('vt')}catch(_){}if(e.viewTransition&&t==='expand')e.viewTransition.types.add('expand');document.documentElement.classList.add('shown')});
+if(!('onpagereveal' in window))document.documentElement.classList.add('shown');
+// (sopra: il segnale del passaggio 'pagina successiva' vale per un solo cambio pagina)
+document.documentElement.classList.add('wf');window.fontsReady=Promise.race([Promise.all(['400 18px "Google Sans"','700 18px "Google Sans"'].map(f=>document.fonts.load(f))),new Promise(r=>setTimeout(r,1500))]).catch(()=>{}).then(()=>document.documentElement.classList.remove('wf'));</script>
 <style>
-/* pagina vuota di passaggio: stessi token della home, si apre con la tenda scura che risale (continua il cambio pagina) */
-:root{--bg:#F3EFEA;--ink:#050505;--ink-2:#2E2E2E;--dark:#050505;--pad:clamp(16px,3vw,40px);--energy:cubic-bezier(.32,.72,0,1)}
-*{margin:0;padding:0;box-sizing:border-box}
-body{min-height:100svh;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font:400 18px/1.5 "Google Sans",system-ui,sans-serif;letter-spacing:-.032em;-webkit-font-smoothing:antialiased}
-header{display:flex;align-items:center;height:88px;padding:0 var(--pad)}
-header img{height:32px;width:auto;display:block}
-main{flex:1;display:grid;place-items:center;text-align:center;padding:0 var(--pad) 88px}
-h1{font-family:"Google Sans",sans-serif;font-size:clamp(72px,16vw,280px);font-weight:400;letter-spacing:-.06em;line-height:.9}
-p{margin:24px 0 32px;color:var(--ink-2)}
-a.home{color:inherit;font-size:18px;text-underline-offset:5px;text-decoration-thickness:1.5px}
-body::after{content:"";position:fixed;inset:0;z-index:9;background:var(--dark);transform-origin:50% 0;animation:open .8s var(--energy) .1s both;pointer-events:none}
-@keyframes open{from{transform:scaleY(1)}to{transform:scaleY(0)}}
-@media (prefers-reduced-motion:reduce){body::after{display:none}}
+:root{
+  /* fondo crema caldo come Google Labs (#F3EFEA) e neutri caldi; il bianco puro è in index-pre-crema.html, il verde in index-verde.html */
+  --bg:#F3EFEA;        /* fondo chiaro: il crema di Google Labs */
+  --surface:#E9E2D9;   /* tile loghi, card chiare: crema un tono sotto */
+  --ink:#050505;       /* testo */
+  --ink-2:#2E2E2E;     /* paragrafi: scuro di proposito, non grigetto */
+  --line:#DCD4C9;      /* filetti su chiaro, pieno */
+  --dark:#050505;      /* sezioni scure */
+  --dark-2:#141414;    /* card su scuro */
+  --on-dark:#FFFFFF;   /* testo su nero: bianco, il verde solo sulle parti chiare */
+  --on-dark-2:#CCCCCC; /* paragrafi su scuro */
+  --line-dark:#262626;
+  --btn-w:#fff;        /* i bottoni restano neutri: nero con testo bianco, bianco con testo nero */
+  --radius:6px;        /* un solo radius per tutto il sito */
+  --radius-media:22px; /* solo per la foto della chiusura, firma presa da Capsules */
+  --pad:clamp(16px,3vw,40px);
+  --max:100%;          /* full width; 1440px per rimetterlo in gabbia */
+  --nav-h:88px;
+  --pill-h:54px;
+  --safe-b:clamp(28px,5vh,56px); /* spazio sotto ai testi appoggiati al fondo dello schermo */
+  --sans:"Google Sans",system-ui,sans-serif;   /* un solo font in tutto il sito */
+  --display:var(--sans);  /* titoli e scritte grandi: la versione variabile di Google Sans, scende fino a 300 */
+  --display-w:400; /* titoli leggeri: al passaggio del mouse le lettere salgono fino a 700 e il cambio si vede */
+  --display-ls:-.06em; /* caratteri stretti, chiesto dall utente */
+  --serif:var(--sans);  /* niente secondo font: chi usava il serif ora usa il font unico */
+  --ease:cubic-bezier(.2,.7,.1,1);
+  --energy:cubic-bezier(.32,.72,0,1); /* l'ease "energy" del menu di Osmo */
+  --mh:min(84svh,860px);
+  --h1:clamp(44px,9vw,164px); /* titolo della hero: da qui anche la misura della pillola del reel e delle pillole che cadono */              /* quanto scende la pagina quando apri il menu */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scrollbar-gutter:stable} /* niente salto dell'header quando il menu blocca lo scroll */
+/* clip e non hidden: hidden rende il body un contenitore di scorrimento e rompe gli sticky */
+body{background:var(--bg);color:var(--ink);font:400 18px/1.5 var(--sans);letter-spacing:-.032em;overflow-x:clip;-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%}
+a{color:inherit}
+/* un solo peso: le parole in em restano uguali al resto del titolo (niente corsivo) */
+em{font-style:normal;font-weight:inherit}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+.sec{padding:clamp(72px,9vw,120px) 0}
+.dark{background:var(--dark);color:var(--on-dark)}
+
+b,strong,th{font-weight:400}
+h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);line-height:.96}
+.ft-col .big a,.ft-msg strong{font-family:var(--display);font-weight:var(--display-w)}
+.h-xl{font-size:clamp(44px,6.4vw,112px)}
+.h-l{font-size:clamp(40px,5vw,84px)}
+.lead{font-size:clamp(18px,1.45vw,21px);line-height:1.45;color:var(--ink-2);letter-spacing:-.032em}
+.dark .lead{color:var(--on-dark-2)}
+
+/* link testuale con freccia piena, dal riferimento */
+.go{display:inline-flex;align-items:center;gap:12px;font-weight:400;font-size:18px;text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1.5px;white-space:nowrap}
+.go i{display:grid;place-items:center;width:36px;height:24px;border-radius:99px;background:var(--ink);color:var(--bg);transition:transform .4s var(--ease)}
+.dark .go i,.on-media .go i{background:var(--on-dark);color:var(--dark)}
+.go:hover i{transform:translateX(4px)}
+.go svg,.btn svg{width:14px;height:14px}
+
+/* bottone pieno: una sola altezza e un solo radius */
+.btn{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 22px;border-radius:99px;background:var(--ink);color:var(--btn-w);font:400 16px var(--sans);text-decoration:none;white-space:nowrap;border:0;cursor:pointer;transition:background .3s,color .3s} /* fondo e testo cambiano insieme: mai testo scuro su fondo ancora scuro */
+.btn:hover{background:#000}
+.dark .btn{background:var(--btn-w);color:var(--ink)}
+.dark .btn:hover{background:#E6E6E6}
+.dark .btn.ghost{background:transparent;color:var(--btn-w)}
+.btn.ghost{background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px currentColor}
+
+/* ---------- header: logo a sinistra senza fondo, pillola del menu al centro, CTA a destra, tutto su una riga ---------- */
+.nav{position:fixed;inset:0 0 auto;z-index:80;height:var(--nav-h);display:grid;grid-template-columns:1fr auto auto;column-gap:10px;align-items:center;padding:0 var(--pad);color:var(--ink);transition:color .3s}
+.nav.on-dark,.menu-open .nav{color:var(--on-dark)}
+/* vetro sotto l'header (come Google Labs): cinque strati di sfocatura, più forte in alto, ognuno con la sua fascia; in basso sfuma nel trasparente.
+   Compare quando l'header passa sopra il contenuto (classe solid), non sopra la hero e le sezioni a tutto schermo */
+.nav-blur{position:absolute;inset:0 0 auto;height:calc(var(--nav-h) + 24px);z-index:-1;pointer-events:none;opacity:0;transition:opacity .4s}
+.nav.solid .nav-blur{opacity:1}
+.nav-blur i{position:absolute;inset:0}
+.nav-blur i:nth-child(1){backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);mask:linear-gradient(transparent 40%,#000 60%,#000 80%,transparent)}
+.nav-blur i:nth-child(2){backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);mask:linear-gradient(transparent 20%,#000 40%,#000 60%,transparent 80%)}
+.nav-blur i:nth-child(3){backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);mask:linear-gradient(transparent,#000 20%,#000 40%,transparent 60%)}
+.nav-blur i:nth-child(4){backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);mask:linear-gradient(#000 20%,transparent 40%)}
+.nav-blur i:nth-child(5){backdrop-filter:blur(34px);-webkit-backdrop-filter:blur(34px);mask:linear-gradient(#000,transparent 20%)}
+.logo{justify-self:start;display:flex;color:inherit}
+.logo svg{height:32px;width:auto}
+.nav-cta{grid-column:2;grid-row:1}
+.nav .mpill{grid-column:3;grid-row:1}
+.nav .btn{height:48px;background:var(--ink);color:var(--btn-w)}
+.nav.on-dark .btn,.menu-open .nav .btn{background:var(--btn-w);color:var(--ink)}
+.nav .btn .short{display:none}
+/* pillola del menu (da Capsules), stessa altezza della CTA */
+.mpill{display:flex;align-items:center;gap:12px;height:48px;padding:0 5px 0 22px;border:0;border-radius:99px;background:var(--btn-w);color:var(--ink);font:400 16px var(--sans);cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.14)}
+.mpill .lb{position:relative;display:block;height:1.3em;overflow:hidden;line-height:1.3}
+.mpill .lb span{display:block;transition:transform .5s var(--ease)}
+.menu-open .mpill .lb span{transform:translateY(-100%)}
+.mpill i{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--btn-w)}
+.mpill svg{width:16px;height:16px}
+.mpill .x{display:none}.menu-open .mpill .x{display:block}.menu-open .mpill .bars{display:none}
+
+/* ---------- menu sotto la pagina (movimento da Osmo, Fixed Underlay Navigation): il menu è fermo in alto,
+   all'apertura la pagina intera scende e lo scopre, con angoli arrotondati e velo scuro; le voci scendono una dopo l'altra ---------- */
+.page{position:relative;z-index:2;background:var(--bg);transition:transform .8s var(--energy),clip-path .8s var(--energy)}
+.menu-open .page{transform:translateY(var(--mh))}
+/* la parte sopra lo scroll non deve comparire sopra il menu */
+.page.clip{clip-path:inset(var(--sy,0px) 0 0 0 round 0 0 0 0)}
+.menu-open .page.clip{clip-path:inset(var(--sy,0px) 0 0 0 round var(--radius-media) var(--radius-media) 0 0)}
+.page-shade{position:fixed;inset:0;z-index:3;border-radius:var(--radius-media) var(--radius-media) 0 0;background:rgba(5,5,5,.5);opacity:0;visibility:hidden;cursor:pointer;
+  transition:transform .8s var(--energy),opacity .6s,visibility 0s .8s}
+.menu-open .page-shade{opacity:1;visibility:visible;transform:translateY(var(--mh));transition:transform .8s var(--energy),opacity .6s}
+.menu{position:fixed;inset:0;z-index:1;background:var(--dark);color:var(--on-dark);overflow:hidden;
+  display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:24px;padding:calc(var(--nav-h) + 4px) var(--pad) calc(100svh - var(--mh) + 28px); /* il contenuto resta nella parte scoperta */
+  visibility:hidden;transition:visibility 0s .8s}
+.menu.open{visibility:visible;transition:none}
+.menu-main li,.menu-meta,.menu-proj{opacity:0;transform:translateY(-48px);transition:opacity .3s,transform .5s var(--energy)}
+.menu.open .menu-main li,.menu.open .menu-meta,.menu.open .menu-proj{opacity:1;transform:none;
+  transition:opacity .6s calc(.12s + var(--i,0)*.05s),transform .9s var(--energy) calc(.12s + var(--i,0)*.05s)}
+.menu-main{display:flex;flex-direction:column;justify-content:space-between;gap:40px;padding:8px 0 4px 8px;min-height:0}
+.menu ul{list-style:none}
+/* voci enormi; in hover il testo sale e lascia il posto alla copia sotto (lo span contiene due righe: si sposta di metà) */
+.menu-main li a{display:block;width:max-content;overflow:hidden;height:1.06em;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(44px,6vw,96px);letter-spacing:-.067em;line-height:1.06;color:var(--on-dark-2);text-decoration:none}
+.menu-main li a span{display:block;transition:transform .55s var(--ease)}
+.menu-main li a span::after{content:attr(data-t);display:block;color:var(--on-dark)}
+.menu-main li a:hover span,.menu-main li a:focus-visible span{transform:translateY(-50%)}
+.menu-meta{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:16px;font-weight:400;color:var(--on-dark-2)}
+.menu-meta a{color:var(--on-dark);text-decoration:none}.menu-meta a:hover{text-decoration:underline;text-underline-offset:4px}
+/* a destra i progetti che scendono dall'alto in basso, in due colonne a velocità diverse */
+.menu-proj{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px;min-height:0;overflow:hidden;border-radius:calc(var(--radius-media) - 8px)}
+.mp-col{overflow:hidden;min-height:0}
+/* margine sotto ogni foto, non gap: metà colonna è esattamente un giro */
+.mp-track{display:flex;flex-direction:column;animation:mpdown 46s linear infinite;animation-play-state:paused}
+.mp-col + .mp-col .mp-track{animation-duration:60s;animation-delay:-22s}
+.menu.open .mp-track{animation-play-state:running}
+.menu.open .mp-col:hover .mp-track{animation-play-state:paused}
+@keyframes mpdown{from{transform:translateY(-50%)}to{transform:translateY(0)}}
+.mp-item{position:relative;display:block;margin-bottom:10px;aspect-ratio:4/5;border-radius:10px;overflow:hidden;background:var(--dark-2)}
+.mp-item img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.mp-item:hover img{transform:scale(1.05)}
+.mp-item span{position:absolute;left:10px;bottom:10px;background:var(--dark);color:var(--on-dark);font-size:13px;font-weight:400;padding:5px 10px;border-radius:4px}
+.reel-btn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;height:48px;padding:0 5px 0 22px;border:0;border-radius:99px;background:var(--btn-w);color:var(--ink);font:400 16px var(--sans);cursor:pointer;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,.3)}
+.reel-btn i{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--btn-w)}
+.reel-btn svg{width:14px;height:14px;margin-left:2px}
+@media (prefers-reduced-motion:reduce){
+  .mp-track{animation:none}}
+
+/* reel: il video verticale del sito attuale, si apre sopra a tutto */
+.reel{position:fixed;inset:0;z-index:95;background:rgba(5,5,5,.88);display:grid;place-items:center;opacity:0;transition:opacity .4s var(--ease)}
+.reel[hidden]{display:none}
+.reel.on{opacity:1}
+.reel-box{position:relative;height:min(88svh,920px);aspect-ratio:9/16;max-width:92vw;border-radius:var(--radius-media);overflow:hidden;background:#000;transform:scale(.94);transition:transform .5s var(--ease)}
+.reel.on .reel-box{transform:none}
+.reel video{width:100%;height:100%;object-fit:contain;background:#000}
+.reel-x{position:absolute;top:12px;right:12px;width:44px;height:44px;border:0;border-radius:50%;background:var(--btn-w);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.reel-x svg{width:16px;height:16px}
+
+/* ---------- hero chiara: titolo nero, il reel parte come pillola dentro il titolo e allo scroll cresce fino a tutto schermo (GSAP) ---------- */
+.hero{position:relative;background:var(--bg);color:var(--ink)}
+.hero[hidden]{display:none}
+.hero-pin{position:relative;height:100svh;overflow:hidden;display:flex;align-items:flex-end}
+.hero-pin .wrap{width:100%;padding-bottom:var(--safe-b)}
+.hero .hero-side{position:absolute;bottom:var(--safe-b);right:var(--pad)}
+.hero h1{font-size:var(--h1)}
+.hero h1 em{letter-spacing:-.052em}
+.slot{position:relative;display:inline-block;width:2.1em;height:.74em;margin:0 .04em;vertical-align:-.02em}
+.hero-reel{position:absolute;left:0;top:0;width:100%;height:100%;z-index:5;overflow:hidden;border-radius:99px;background:var(--dark)}
+.hero-reel video{display:block;width:100%;height:100%;object-fit:cover}
+/* apertura: la pillola cade dall'alto, rimbalza e si incastra nel titolo (CSS: parte subito, senza aspettare GSAP) */
+.hero-reel{animation:reelDrop 1.7s .3s both}
+.wf .hero h1,.wf .hero-reel{visibility:hidden}.wf .hero *{animation-play-state:paused} /* finché i font non ci sono */
+/* insieme alla pillola del reel cadono le pillole dei servizi: attraversano la hero ed escono in basso (le ritrovi ammucchiate nel footer) */
+.rain{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:6}
+.rain .fp{position:absolute;top:0;animation:rain var(--t) cubic-bezier(.55,.085,.68,.53) var(--d) both}
+@keyframes rain{from{transform:translateY(-130%) rotate(0deg)}to{transform:translateY(calc(100svh + 130%)) rotate(var(--r))}}
+@keyframes reelDrop{
+  0%{transform:translateY(-110vh) rotate(-24deg);animation-timing-function:cubic-bezier(.55,.085,.68,.53)} /* cade accelerando */
+  50%{transform:translateY(0) rotate(0deg);animation-timing-function:cubic-bezier(.25,.46,.45,.94)}     /* tocca e risale rallentando */
+  66%{transform:translateY(-55%) rotate(-4deg);animation-timing-function:cubic-bezier(.55,.085,.68,.53)}
+  80%{transform:translateY(0) rotate(0deg);animation-timing-function:cubic-bezier(.25,.46,.45,.94)}
+  89%{transform:translateY(-18%) rotate(1.5deg);animation-timing-function:cubic-bezier(.55,.085,.68,.53)}
+  100%{transform:none}}
+.hero-play{z-index:6;bottom:calc(var(--safe-b) + 10px);opacity:0;visibility:hidden}
+/* rifai l'animazione: nella hero un tondo con la freccia circolare segue il mouse (il cursore resta quello di sistema); cliccando la hero si rifà tutto */
+.replay{position:absolute;left:0;top:0;z-index:7;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;pointer-events:none;opacity:0;scale:.5;transition:opacity .25s,scale .4s var(--energy)}
+.replay.on{opacity:1;scale:1}
+.replay svg{width:18px;height:18px}
+.replay.spin svg{animation:spin .8s var(--energy)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (hover:none),(prefers-reduced-motion:reduce){.replay{display:none}}
+.scroll{display:flex;align-items:center;gap:12px;font-weight:400;font-size:17px;text-decoration:none;white-space:nowrap;padding-bottom:10px}
+.scroll i{display:grid;place-items:center;width:24px;height:36px;border:1.5px solid currentColor;border-radius:99px}
+.scroll svg{width:14px;height:14px;animation:down 2s var(--ease) infinite}
+@keyframes down{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
+/* intro sotto la hero, sul chiaro */
+/* intro: la frase scorre in orizzontale mentre scendi (altezza della sezione = percorso, da JS) */
+.hx{position:relative;height:300svh}
+.hx-pin{position:sticky;top:0;height:100svh;overflow:hidden}
+/* fascia colorata sfocata dietro la frase: si accende man mano che il video si stringe */
+.hx-aura{position:absolute;left:-15%;right:-15%;top:50%;height:30svh;transform:translateY(-50%) rotate(-4deg);pointer-events:none;opacity:.38;overflow:visible;animation:auraBreath 7s ease-in-out infinite alternate}
+/* due nastri larghi il doppio, gradiente che si ripete: scorrono con translateX (solo compositing, niente ridisegno della sfocatura) */
+.hx-aura::before,.hx-aura::after{content:"";position:absolute;top:0;bottom:0;left:0;width:200%;border-radius:50%;filter:blur(34px);will-change:transform;
+  background:linear-gradient(90deg,#A78BFA,#C084FC,#E879F9,#F472B6,#A78BFA,#C084FC,#E879F9,#F472B6,#A78BFA);animation:auraFlow 14s linear infinite}
+.hx-aura::after{top:18%;bottom:18%;opacity:.8;background:linear-gradient(90deg,#E879F9,#A78BFA,#F472B6,#C084FC,#E879F9,#A78BFA,#F472B6,#C084FC,#E879F9);animation:auraFlow 10s linear infinite reverse}
+@keyframes auraFlow{to{transform:translateX(-50%)}}
+@keyframes auraBreath{from{transform:translateY(-58%) rotate(-5deg) scaleY(.85)}to{transform:translateY(-42%) rotate(-2deg) scaleY(1.1)}}
+@media (prefers-reduced-motion:reduce){.hx-aura,.hx-aura::before,.hx-aura::after{animation:none}}
+
+.hx-track{position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;z-index:8;will-change:transform} /* sopra il video che si stringe */
+.hx-scroll{z-index:8}
+/* sopra il video i testi sono bianchi, appena ne escono tornano neri (classe .iv dal JS) */
+.hx-claim .cw,.hx-scroll{transition:color .35s}.hx-link path{transition:stroke .35s}
+.hx-claim .cw.iv,.hx-scroll.iv{color:#fff}.hx-link.iv path{stroke:#fff}
+.hx-line .w .c{color:var(--ink)}.hx-line .w .c.iv,.hx-line .w .c.on.iv{color:#fff} /* niente più lettere spente: restano solo i movimenti d'entrata */
+.hx-scroll{position:absolute;left:50%;bottom:var(--safe-b);translate:-50% 0;padding:0}
+.hx-intro{flex:none;width:100vw;height:100%;display:grid;place-items:center;padding:0 var(--pad)}
+/* apertura: il claim grande, centrato e fermo; le parole entrano una alla volta, poi scorrendo esce a sinistra */
+.hx-claim{max-width:11.5em;margin:0;text-align:center;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:clamp(44px,7.4vw,140px);line-height:.98}
+.hx-claim .cw{display:inline-block;animation:claimIn 1s var(--energy) calc(.15s + var(--i) * 70ms) both}
+@keyframes claimIn{from{opacity:0;transform:translateY(.45em) rotate(4deg)}}
+.wf .hx-claim{visibility:hidden}.wf .hx-claim *{animation-play-state:paused} /* aspetta i font come la hero */
+.hx-link{flex:none;width:min(34vw,560px);margin:0 2vw 0 -4vw}
+.hx-link svg{display:block;width:100%;overflow:visible}
+.hx-link path{fill:none;stroke:var(--ink);stroke-width:22;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1} /* si disegna con lo scroll (JS) */
+.hx-line{position:relative;flex:none;margin:0;white-space:nowrap;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:clamp(84px,14vw,260px);line-height:1}
+.hx-line .w{display:inline-block}
+.hx-line .c{display:inline-block;color:#D3CBBF;transition:color .3s,transform .7s var(--energy),filter .6s,opacity .5s,font-weight .6s}
+.hx-line .w .c.on{color:var(--ink);transform:none;filter:none;opacity:1} /* più specifica degli effetti sotto */
+/* ogni parola entra a modo suo: da spenta (grigia e fuori posto) a accesa (nera e al suo posto) */
+.hx-line [data-fx=drop] .c{transform:translateY(-.45em) rotate(calc((var(--i) - 4) * 4deg))}
+.hx-line [data-fx=blur] .c{filter:blur(.12em);opacity:.6}
+.hx-line [data-fx=rise] .c{transform:translateY(.35em)}
+.hx-line [data-fx=pop] .c{transform:scale(.4)}
+.hx-line [data-fx=flip] .c{transform:perspective(600px) rotateX(85deg);transform-origin:50% 80%}
+.hx-line [data-fx=wave] .c{transform:translateY(calc(sin(var(--i) * 1.1rad) * .22em))}
+.hx-line [data-fx=slide] .c{transform:translateX(.35em);opacity:.5}
+.hx-line [data-fx=bold] .c{font-weight:400}.hx-line [data-fx=bold] .c.on{font-weight:700}
+.hx-pill{display:inline-block;width:2.8em;height:.92em;margin:0 .08em;border-radius:99px;overflow:hidden;vertical-align:-.1em;opacity:.35;transition:opacity .5s}
+.hx-pill.on{opacity:1}
+.hx-pill svg{width:100%;height:100%;display:block}
+.hx-pill svg *{animation-play-state:paused}.hx-pill.on svg *{animation-play-state:running} /* le animazioni partono quando la frase arriva */
+/* pillola del video: prima c'è solo il posto vuoto, poi la pillola cade dentro col rimbalzo della hero */
+.hx-vid{overflow:visible;opacity:1;box-shadow:inset 0 0 0 2px var(--line)}
+.hx-drop{display:block;width:100%;height:100%;border-radius:99px;overflow:hidden;background:var(--dark);transform:translateY(-110vh) rotate(-24deg)}
+.hx-vid.on .hx-drop{animation:reelDrop 2.4s both}
+.hx-drop video{width:100%;height:100%;object-fit:cover;display:block}
+/* a fine frase la pillola del video si apre fino a tutto schermo (posizione e misure da JS) */
+.hx-big{position:absolute;z-index:7;overflow:hidden;background:var(--dark);display:none}
+.hx-big video{width:100%;height:100%;object-fit:cover;display:block}
+.hx-big::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.4);pointer-events:none} /* video più scuro: il testo bianco si legge */
+.hx-play{z-index:10;bottom:calc(var(--safe-b) + 18px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}.hx-play.on{opacity:1;visibility:visible}
+.hx-shape{background:#E2DBFF}
+.hx-shape rect{fill:var(--ink);transform-box:fill-box;transform-origin:center;animation:hxShape 3.2s var(--energy) infinite}
+@keyframes hxShape{0%,15%{rx:0;transform:rotate(0)}45%,60%{rx:22px;transform:rotate(90deg)}90%,100%{rx:0;transform:rotate(180deg)}}
+.hx-waves{background:#FFDCCB}
+.hx-waves circle{fill:none;stroke:var(--ink);stroke-width:2.5;opacity:0;animation:hxWave 2.4s ease-out infinite}
+.hx-waves circle.d{fill:var(--ink);stroke:none;opacity:1;animation:none}
+.hx-waves circle:nth-child(3){animation-delay:.8s}.hx-waves circle:nth-child(4){animation-delay:1.6s}
+@keyframes hxWave{0%{r:10px;opacity:1}100%{r:120px;opacity:0}}
+.hx-chart{background:#FFF3B8}
+.hx-chart path{fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:hxDraw 3s var(--ease) infinite}
+.hx-chart circle{fill:var(--ink);opacity:0;animation:hxDot 3s infinite}
+@keyframes hxDraw{0%{stroke-dashoffset:1}45%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:-1}}
+@keyframes hxDot{0%,40%{opacity:0}48%,85%{opacity:1}95%,100%{opacity:0}}
+.hx-sq{background:#D7FFE0}
+.hx-sq svg{width:100%;height:100%;display:block}
+.hx-sq path{fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.1s var(--ease)}
+.hx-sq.on path{stroke-dashoffset:0} /* la freccia si disegna quando la frase la raggiunge */
+
+/* ---------- visione ✕ esecuzione (da Creative Website Manual): riquadro chiaro che si allarga allo scroll ---------- */
+.vx{position:relative;height:220svh;background:var(--dark);margin-top:-1px}
+.vx-pin{position:sticky;top:0;height:100svh;overflow:hidden}
+.vx-card{position:absolute;inset:0;background:var(--bg);color:var(--ink);
+  /* a fine corsa si apre a tutto schermo e si salda al manifesto sotto, che ha lo stesso fondo */
+  clip-path:inset(calc((1 - var(--g,0))*22%) calc((1 - var(--g,0))*27%) round calc((1 - var(--g,0))*var(--radius)))}
+.vx-w{position:absolute;left:0;right:0;font-size:clamp(56px,11.5vw,210px);line-height:.9;white-space:nowrap;padding:0 calc(var(--pad) + 32px)}
+.vx-w1{top:24%;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);text-transform:uppercase;transform:translateX(calc((1 - var(--g,0))*-28vw))}
+.vx-w2{bottom:22%;text-align:right;transform:translateX(calc((1 - var(--g,0))*28vw))}
+.vx-w2 em{letter-spacing:-.052em}
+.vx-x{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;transform:rotate(calc(var(--g,0)*180deg))}
+.vx-x svg{width:24px;height:24px}
+.vx-foot{position:absolute;left:calc(var(--pad) + 32px);right:calc(var(--pad) + 32px);bottom:56px;display:flex;justify-content:space-between;font-weight:400;font-size:16px}
+
+/* manifesto: le parole escono da blocchi pieni man mano che scorri */
+.manif{text-align:center;position:relative;margin-top:-2px;background:var(--bg)} /* copre la riga di 1px tra il riquadro aperto e questa sezione */
+.manif p{font-family:var(--display);font-weight:var(--display-w);letter-spacing:-.057em;font-size:clamp(30px,3.6vw,58px);line-height:1.12;max-width:24ch;margin:0 auto 44px}
+.manif .wb{position:relative;display:inline-block;color:transparent;transition:color .35s}
+.manif .wb::after{content:"";position:absolute;inset:.08em -.04em .02em;background:var(--surface);transition:transform .45s var(--ease);transform-origin:right}
+.manif .wb.on{color:var(--ink)}
+.manif .wb.on::after{transform:scaleX(0)}
+
+/* ---------- manifesto ---------- */
+.split{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(32px,6vw,120px);align-items:start}
+.split .lead{max-width:36em;margin-bottom:28px;color:var(--ink)}
+
+/* ---------- servizi ---------- */
+/* servizi come i progetti di labs.google: card bianche su un cerchio enorme, se ne vede solo l'arco in alto;
+   le frecce fanno girare il cerchio di una card. --R raggio, --cw larghezza card, --step angolo tra due card (da JS), --d posizione rispetto al centro */
+.labs{--R:6400px;--cw:clamp(270px,23vw,360px);position:relative;width:100vw;margin:clamp(40px,5vw,72px) 0 0 calc(50% - 50vw);overflow-x:clip} /* solo i lati: le card inclinate non vengono tagliate in alto e in basso */
+.labs-stage{position:relative;height:calc(var(--cw)*.75 + 380px);/* altezza vera da JS: arriva al fondo delle card a due passi dal centro */touch-action:pan-y;cursor:grab;user-select:none}
+.labs-stage.drag{cursor:grabbing}
+.labs-stage.drag .lc{transition:none}
+.lc img{-webkit-user-drag:none}
+.arc{position:absolute;left:50%;top:calc(var(--R) + 48px);width:0;height:0}
+.lc{position:absolute;left:calc(var(--cw)/-2);top:calc(var(--R)*-1);width:var(--cw);transform-origin:50% var(--R);transform:rotate(calc(var(--d,0)*var(--step,9deg)));transition:transform .9s var(--energy);
+  display:flex;flex-direction:column;padding:14px 14px 22px;background:#fff;color:var(--ink);border-radius:22px;text-decoration:none}
+.lc figure{aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:var(--surface);margin-bottom:22px}
+.lc img{width:100%;height:100%;object-fit:cover;transition:scale .8s var(--energy)}
+/* motion design dei servizi: un SVG animato per servizio al posto della foto, stessi colori (nero + pastelli delle pillole), un'idea per servizio.
+   01 canali verso l'obiettivo · 02 l'azienda si organizza e cresce · 03 barre e tendenza · 04 report verso investitori + nastro di borsa
+   05 sole e pianta · 06 interfaccia, clic e interruttore · 07 forma selezionata che cambia · 08 microfono e onde verso i media */
+.mo{display:block;width:100%;height:100%}
+.mo text{font:400 13px var(--sans);letter-spacing:-.02em}
+.mo text:not([fill]){fill:#050505} /* il colore scritto sul testo (bianco sulle pillole nere) vince */
+.mo-lines path{fill:none;stroke:#BDBDBD;stroke-width:1.2;stroke-dasharray:3 6;animation:moFlow 1.2s linear infinite}
+@keyframes moFlow{to{stroke-dashoffset:-18}}
+.lc:hover img{scale:1.04}
+.lc .n{font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums;padding:0 8px}
+.lc h3{font-size:clamp(24px,2vw,32px);line-height:1.05;margin:6px 0 10px;padding:0 8px}
+.lc p{font-size:16px;line-height:1.4;color:var(--ink-2);padding:0 8px;margin-bottom:22px}
+.lc .lk{margin-top:auto;padding:0 8px;font-size:15px;display:inline-flex;align-items:center;gap:8px}
+.lc .lk svg{width:13px;height:13px}
+.labs-nav{position:relative;display:flex;justify-content:center;gap:12px;padding-bottom:8px}
+.labs-nav button{width:56px;height:56px;border-radius:50%;border:1.5px solid var(--btn-w);background:none;color:var(--btn-w);display:grid;place-items:center;cursor:pointer;transition:background .25s,color .25s}
+.labs-nav button:hover{background:var(--btn-w);color:var(--ink)}
+.labs-nav svg{width:16px;height:16px}
+
+/* progetti: Infinite Dome Grid (come Osmo). Card verticali grandi e fitte su una griglia piatta; intorno al mouse lo spazio sprofonda
+   in una conca. Si trascina in ogni direzione senza fine; le card vicine al mouse sono accese, le altre in penombra.
+   Il click apre la modale: foto a sinistra, scheda bianca a destra */
+.projects{position:relative;height:calc(max(100svh,640px) + 130svh);background:var(--dark);color:#fff;user-select:none;touch-action:pan-y;cursor:grab} /* entri sul nero, scorrendo le card arrivano dal fondo */
+.dome-pin{position:sticky;top:0;height:max(100svh,640px);overflow:hidden}
+.projects.drag{cursor:grabbing}
+.dome-stage{position:absolute;inset:0;perspective:1400px}
+.dc{--cw:clamp(210px,23vw,360px);position:absolute;left:50%;top:50%;width:var(--cw);aspect-ratio:3/4;margin:calc(var(--cw)*-.6667) 0 0 calc(var(--cw)/-2);border-radius:12px;overflow:hidden;background:var(--dark-2);backface-visibility:hidden;will-change:transform}
+.dc img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.dc::after{content:"";position:absolute;inset:60% 0 0;background:linear-gradient(transparent,rgba(5,5,5,.55))} /* solo per leggere le scritte in basso */
+.dc span{position:absolute;bottom:12px;z-index:1;font-size:12px;letter-spacing:-.01em;color:#fff}
+.dc span:first-of-type{left:14px}.dc span+span{right:14px;color:rgba(255,255,255,.75)}
+.dc i{position:absolute;inset:0;z-index:2;background:#050505;opacity:.6;pointer-events:none} /* penombra: la luce del mouse la toglie */
+.dome-ui{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:calc(var(--nav-h) + 24px) var(--pad) var(--safe-b)}
+.dome-ui h2{font-size:clamp(44px,5.6vw,96px);text-shadow:0 2px 24px rgba(0,0,0,.4)}
+.dome-ui p{opacity:var(--hint,0);transition:opacity .4s;align-self:center;font-size:15px;color:#fff;background:var(--dark);padding:6px 14px;border-radius:99px}
+.dome-lb{position:fixed;inset:0;z-index:95;display:grid;place-items:center;padding:var(--pad);background:rgba(5,5,5,.7);opacity:0;transition:opacity .35s}
+.dome-lb.on{opacity:1}
+.dome-lb[hidden]{display:none} /* senza questo la modale chiusa, trasparente, copriva la pagina e bloccava i click */
+.dome-lb figure{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);width:min(1100px,100%);height:min(68svh,620px);background:#fff;color:var(--ink);border-radius:22px;overflow:hidden}
+.dome-lb img{width:100%;height:100%;object-fit:cover;display:block;border-radius:22px;transform-origin:0 0}
+.dome-lb figcaption{display:flex;flex-direction:column;justify-content:center;gap:14px;padding:clamp(28px,4vw,64px);opacity:0;transform:translateX(24px);transition:opacity .45s .25s,transform .6s var(--energy) .25s}
+.dome-lb.on figcaption{opacity:1;transform:none}
+.dome-lb h3{font-size:clamp(32px,3.4vw,56px)}
+.dome-lb small{font-size:15px;color:var(--ink-2)}
+.dome-lb p{font-size:17px;line-height:1.45;color:var(--ink-2);max-width:36ch}
+.dome-lb .go{align-self:flex-start;margin-top:8px}
+.dome-lb figure{position:relative}
+.dome-x{position:absolute;z-index:2;top:12px;right:12px;box-shadow:0 4px 18px rgba(0,0,0,.18);width:48px;height:48px;border-radius:50%;border:0;background:var(--btn-w);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.dome-x svg{width:16px;height:16px}
+@media (max-width:720px){.dome-lb figure{grid-template-columns:1fr;grid-template-rows:minmax(0,34svh) minmax(0,auto);height:auto;max-height:88svh}
+  .dome-lb figcaption{padding:20px 22px 24px;gap:10px;overflow-y:auto;min-height:0}.dome-lb h3{font-size:32px}.dome-lb p{font-size:16px}} /* foto alta al massimo un terzo di schermo, il testo scorre se non basta: il bottone non viene più tagliato */
+
+/* passaggio a pixel dallo scuro al chiaro (da Creative Website Manual) */
+/* a cavallo del confine tra due sezioni, senza altezza propria: finita la transizione i quadrati sono trasparenti e non resta spazio vuoto */
+/* shutter allo scroll (come sulla landing LeadWin): 12 lamelle chiare sul confine tra scuro e chiaro, nessuno spazio aggiunto.
+   Entrata: sul fondo della sezione scura sopra, si chiudono dal basso una dopo l'altra. Uscita: in cima alla sezione scura sotto, si ritirano verso l'alto */
+.shutter{position:relative;z-index:3;height:0}
+.shutter-bands{position:absolute;left:0;right:0;bottom:0;height:28vh;display:flex;flex-direction:column;pointer-events:none}
+.shutter-bands i{flex:1;margin-top:-1px;background:var(--bg);transform:scaleY(0);transform-origin:50% 100%;will-change:transform} /* -1px: niente righe tra lamelle chiuse */
+.shutter-out .shutter-bands{top:0;bottom:auto}
+.shutter-out .shutter-bands i{transform:scaleY(1);transform-origin:50% 0}
+/* variante scura: dopo un blocco in movimento (servizi orizzontali) le lamelle stanno nella sezione chiara sotto e si ritirano */
+.shutter-dk .shutter-bands i{background:var(--dark)}
+
+/* ---------- premi ---------- */
+.award{text-align:center;overflow-x:clip}
+.award .wrap{padding:0;max-width:none} /* l'eco va da bordo a bordo */
+.award .sub,.award .certs{padding:0 var(--pad)} /* le copie dell'eco ingrandite non devono allargare la pagina */
+.award h2{font-size:clamp(44px,7vw,120px)}
+.award .sub{font-family:var(--serif);font-size:clamp(24px,3vw,48px);line-height:1.15;letter-spacing:-.052em;max-width:30ch;margin:22px auto 0;text-wrap:balance}
+.certs{display:flex;justify-content:center;align-items:center;gap:clamp(28px,5vw,64px);margin-top:clamp(48px,6vw,72px);flex-wrap:wrap}
+.certs figure{display:flex;align-items:center;gap:12px;font-size:15px;line-height:1.3;text-align:left;color:var(--ink-2)}
+.certs img{height:44px;width:auto;filter:grayscale(1)}
+.certs b{display:block;color:var(--ink);font-weight:400}
+
+/* ---------- progetti: blocco fermo, ogni progetto si apre da sotto con clip-path ---------- */
+
+/* ---------- clienti ---------- */
+/* clienti: testo sopra, sotto la parete dei loghi su griglia a filetti (impostazione da Creative Website Manual).
+   Le celle entrano una dopo l'altra; in hover la cella si riempie di scuro, il logo diventa bianco ed esce il nome */
+.clients>.rv{display:grid;grid-template-columns:1fr 1fr;column-gap:clamp(32px,6vw,120px);align-items:end}
+.clients>.rv h2{grid-row:1/3}
+.clients .lead{margin:0 0 20px;max-width:30em}
+
+/* ---------- chiusura (da Capsules): la foto si allarga, "Parliamone" gigante dietro, poi il box con la CTA ---------- */
+.cta{position:relative;height:230svh;background:var(--dark);color:var(--on-dark)}
+.cta-pin{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center}
+.cta-word{font-family:var(--display);font-weight:var(--display-w);font-size:clamp(64px,13vw,240px);letter-spacing:.12em;text-transform:uppercase;color:#1C1C1C;white-space:nowrap;user-select:none}
+.cta-card{position:absolute;inset:0;
+  clip-path:inset(calc((1 - var(--g,0))*24% + var(--g,0)*28px) calc((1 - var(--g,0))*32% + var(--g,0)*var(--pad)) round var(--radius-media))}
+.cta-card img{width:100%;height:100%;object-fit:cover;transform:scale(calc(1.15 - var(--g,0)*.15))}
+.cta-box{position:absolute;right:calc(var(--pad) + 24px);bottom:var(--safe-b);width:min(620px,calc(100% - 2*var(--pad) - 48px));background:var(--bg);color:var(--ink);border-radius:var(--radius);padding:clamp(24px,3vw,40px);
+  opacity:0;transform:translateY(24px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.cta.done .cta-box{opacity:1;transform:none}
+.cta-box h2{font-size:clamp(32px,3.4vw,56px)}
+.cta-box .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.cta-box .btn.ghost{color:var(--ink)}
+
+/* ---------- pagina successiva dopo il footer: la sezione resta ferma, il titolo sale e la barra si riempie; in fondo si passa a "Chi siamo" ---------- */
+.nextp{height:190svh;background:var(--bg);color:var(--ink)}
+.nextp-pin{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;overflow:hidden}
+.nextp-k,.nextp-h{font-size:17px;font-weight:400;color:var(--ink-2)}
+.nextp{--nt:clamp(56px,14vw,240px)}
+/* come la hero: la pillola col video sta tra le parole; scorrendo cresce fino a tutto schermo e spinge fuori "Chi" e "siamo" (--ne = avanzamento con ease) */
+.nextp-pin{container-type:size} /* cqw/cqh = misure del riquadro senza la barra di scorrimento */
+.nextp-t{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:calc(.12em*(1 - var(--ne,0)));width:100%;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:var(--nt);line-height:1;white-space:nowrap;text-decoration:none;color:inherit}
+.nextp-t>span:not(.nextp-pill){opacity:calc(1 - var(--ne,0)*1.4)}
+.nextp-t{transform:translateX(calc(var(--nsh,0px)*(1 - var(--ne,0))))}
+.nextp-t>span:first-child{justify-self:end}.nextp-t>span:last-child{justify-self:start} /* la pillola resta al centro esatto, le parole escono ai lati */
+.nextp-pill{width:calc(2.1em + (100cqw - 20px - 2.1em)*var(--ne,0));height:calc(.78em + (100cqh - 20px - .78em)*var(--ne,0));border-radius:calc(99px - 77px*var(--ne,0));overflow:hidden;background:var(--dark)}
+.nextp-pill img{width:100%;height:100%;object-fit:cover;display:block;scale:calc(1.35 - .35*var(--ne,0))}
+.nextp-k,.nextp-h{opacity:calc(1 - var(--ne,0)*3)}
+.nextp-k{position:absolute;left:0;right:0;top:calc(50% - var(--nt)*.5 - 56px)}
+.nextp-h{position:absolute;left:0;right:0;top:calc(50% + var(--nt)*.5 + 32px)}
+.nextp-bar{position:absolute;left:50%;bottom:var(--safe-b);width:120px;height:2px;margin-left:-60px;border-radius:2px;background:var(--line);overflow:hidden;opacity:calc(1 - var(--ne,0)*3)}
+.nextp-bar i{display:block;height:100%;background:var(--ink);transform-origin:0 50%;transform:scaleX(var(--np,0))}
+/* a fine corsa lo schermo si chiude dal basso prima di cambiare pagina */
+.nextp::after{content:"";position:fixed;inset:0;z-index:90;background:var(--dark);transform:scaleY(0);transform-origin:50% 100%;transition:transform .6s var(--energy);pointer-events:none}
+.nextp.leaving::after{transform:scaleY(1)}
+
+/* ---------- footer: logo verticale, righello dello scroll, colonne a destra ---------- */
+.ft{--fl:clamp(420px,54vh,580px);--dh:clamp(200px,15.5vw,240px);position:relative;overflow:hidden;background:var(--dark);color:var(--on-dark);border-top:1px solid var(--line-dark)}
+.ft-main{display:grid;grid-template-columns:34px minmax(0,1.35fr) minmax(0,.85fr) minmax(0,.85fr);min-height:var(--fl);padding-left:var(--pad)}
+.ft-ruler{grid-row:1/3;position:relative;height:calc(100% + var(--dh));border-left:1px solid var(--line-dark);background:
+  repeating-linear-gradient(to bottom,var(--on-dark-2) 0 1px,transparent 1px 40px) left top/16px 100% no-repeat,
+  repeating-linear-gradient(to bottom,#707070 0 1px,transparent 1px 8px) left top/8px 100% no-repeat}
+.ft-msg{grid-row:1/3;position:relative;display:flex;align-items:center;padding-right:24px}
+.ft-msg .mk{position:absolute;left:-34px;top:50%;width:70px;height:1px;background:var(--on-dark)}
+.ft-msg .box{display:flex;gap:18px;align-items:center;margin-left:70px}
+.ft-msg strong{display:block;white-space:nowrap;font-size:26px;font-weight:400;letter-spacing:-.057em;line-height:1.1;margin-bottom:6px}
+.ft-msg p{font-size:16px;font-weight:400;line-height:1.35;max-width:22em}
+.ft-msg a{text-underline-offset:3px}
+.ft-col{padding:44px var(--pad) 0 0}
+.ft-col h4{font-family:var(--serif);font-weight:400;font-size:17px;color:var(--on-dark-2);margin-bottom:10px}
+.ft-col p,.ft-col li{font-size:17px;font-weight:400;line-height:1.4}
+.ft-col .blk{margin-bottom:40px}
+.ft-col ul{list-style:none}
+.ft-col a{text-decoration:none}
+.ft-col a:hover{text-decoration:underline;text-underline-offset:4px}
+.ft-col .big a{font-size:clamp(32px,2.8vw,44px);letter-spacing:-.062em;line-height:1.08}
+.ft-legal{grid-column:3/5;align-self:end;border-top:1px solid var(--line-dark);padding:32px var(--pad) 28px 0;list-style:none}
+.ft-legal li{font-size:16px;font-weight:400;line-height:1.6}
+.ft-legal a{text-decoration:none}.ft-legal a:hover{text-decoration:underline}
+/* pillole dei servizi: senza JS (o con movimento ridotto) stanno in fila sul fondo; con Matter.js cadono dall'alto e si ammucchiano, col mouse si trascinano */
+.ft-drop{display:flex;flex-wrap:wrap;align-content:flex-end;justify-content:center;gap:8px;height:var(--dh);padding:24px var(--pad)}
+.fp{display:inline-flex;align-items:center;justify-content:center;width:max(calc(var(--h1)*2.1),132px);height:max(calc(var(--h1)*.74),46px);padding:0 .7em;border-radius:99px;background:var(--c);color:var(--ink);font-size:calc(max(calc(var(--h1)*.19),13px)*var(--fpk,1));line-height:1;letter-spacing:-.045em;white-space:nowrap;user-select:none}
+.ft.phys .fp{position:absolute;left:0;top:0;will-change:transform;cursor:grab}
+.ft.phys .fp:active{cursor:grabbing}
+.ft-bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:22px var(--pad);border-top:1px solid var(--line-dark);font-size:14px;font-weight:400}
+
+/* ---------- effetti presi da Creative Website Manual ---------- */
+/* coordinate del mouse nella hero */
+.hero-side{display:flex;flex-direction:column;align-items:flex-end;gap:20px}
+
+/* angoli a squadra intorno a un blocco */
+.brk{position:relative;padding:28px 32px}
+.brk::before{content:"";position:absolute;inset:0;pointer-events:none;background:
+  linear-gradient(currentColor,currentColor) left top/14px 1.5px no-repeat,linear-gradient(currentColor,currentColor) left top/1.5px 14px no-repeat,
+  linear-gradient(currentColor,currentColor) right top/14px 1.5px no-repeat,linear-gradient(currentColor,currentColor) right top/1.5px 14px no-repeat,
+  linear-gradient(currentColor,currentColor) left bottom/14px 1.5px no-repeat,linear-gradient(currentColor,currentColor) left bottom/1.5px 14px no-repeat,
+  linear-gradient(currentColor,currentColor) right bottom/14px 1.5px no-repeat,linear-gradient(currentColor,currentColor) right bottom/1.5px 14px no-repeat}
+
+/* titoli: ogni riga sale da dietro una maschera, con la curva del menu; --l = numero della riga */
+.lr .w{display:inline-block;vertical-align:top;overflow:hidden;padding:0 .06em .12em 0;margin:0 -.06em -.12em 0}
+.lr .w>span{display:inline-block;transform:translateY(110%);transition:transform 1s var(--energy) calc(var(--l,0)*.09s)}
+.lr.in .w>span,.cta.done .lr .w>span{transform:none}
+/* titolo della hero: le righe salgono mentre la pillola del reel cade, più lente e scalate */
+/* titolo della hero: le lettere cadono una alla volta in ordine sparso e rimbalzano, come le pillole (--d ritardo, --r rotazione di partenza) */
+.hero h1 .wd{display:inline-block;white-space:nowrap}
+.hero h1 .ch{display:inline-block;animation:chDrop .95s var(--d) both}
+@keyframes chDrop{
+  0%{transform:translateY(-110vh) rotate(var(--r));animation-timing-function:cubic-bezier(.55,.085,.68,.53)}
+  58%{transform:translateY(0) rotate(0deg);animation-timing-function:cubic-bezier(.25,.46,.45,.94)}
+  74%{transform:translateY(-.14em) rotate(calc(var(--r)*-.08));animation-timing-function:cubic-bezier(.55,.085,.68,.53)}
+  88%{transform:translateY(0);animation-timing-function:cubic-bezier(.25,.46,.45,.94)}
+  94%{transform:translateY(-.03em)}
+  100%{transform:none}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* nastro gigante che scorre con lo scroll */
+.bigmq{position:relative;overflow:hidden;margin-bottom:clamp(56px,7vw,96px)}
+.bigmq-t{display:flex;width:max-content;white-space:nowrap;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(72px,11vw,200px);letter-spacing:-.067em;line-height:1.05;will-change:transform}
+.bigmq .dot{display:inline-block;width:.6em;height:.6em;border-radius:50%;background:currentColor;margin:0 .32em;align-self:center}
+
+/* griglia a 12 colonne visibile sul fondo scuro */
+#servizi{position:relative;padding-bottom:clamp(48px,5vw,72px)}
+#servizi > .wrap,#servizi > .bigmq{position:relative;z-index:1}
+
+/* eco (da Creative Website Manual, "PRACTICE"): sette livelli uguali con fondo pieno, parola in alto e in basso.
+   Scorrendo i livelli sopra si rimpiccioliscono verso il centro e coprono quelli sotto: dei grandi restano solo le fette ai bordi, come un tunnel */
+.echo{position:relative;height:min(92svh,960px);width:100vw;margin-left:calc(50% - 50vw)}
+.echo .ly{position:absolute;inset:0;background:var(--bg);transform:scale(var(--s,1))}
+.echo h2{height:100%;display:flex;flex-direction:column;justify-content:space-between;align-items:center;font-size:19.5vw;line-height:.78;letter-spacing:-.062em;text-transform:uppercase;white-space:nowrap}
+.echo-x{position:absolute;left:50%;top:50%;z-index:1;width:44px;height:44px;margin:-22px 0 0 -22px;background:linear-gradient(var(--ink),var(--ink)) center/100% 1px no-repeat,linear-gradient(var(--ink),var(--ink)) center/1px 100% no-repeat}
+
+/* clienti: carosello come le card di Google Labs. Card verticali grigie con solo il marchio del cliente a colori; si scorre con le frecce, trascinando o col trackpad (scroll-snap) */
+.gl-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.gl-head .lead{max-width:30em}
+.gl-track{--gap:clamp(16px,2.6vw,48px);display:flex;gap:var(--gap);margin-top:clamp(32px,4vw,56px);padding:0 var(--pad) 4px;scroll-padding:0 var(--pad);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;cursor:grab;user-select:none}
+.gl-track::-webkit-scrollbar{display:none}
+.gl-track.drag{cursor:grabbing;scroll-snap-type:none}
+.gc{flex:0 0 clamp(280px,calc((min(100vw,1600px) - 2*var(--pad) - 2*var(--gap))/3),560px);aspect-ratio:4/3;scroll-snap-align:start;border-radius:22px;background:var(--surface);display:grid;place-items:center;overflow:hidden}
+.gc .mo{pointer-events:none} /* motion design per marchio: scena che gira intorno al logo fermo */
+.gc img{width:66%;height:auto;aspect-ratio:3/2;object-fit:contain;pointer-events:none}
+.gl-nav{display:flex;justify-content:center;gap:12px;margin-top:clamp(32px,4vw,56px)}
+.gl-nav button{width:56px;height:56px;border-radius:50%;border:1.5px solid var(--ink);background:none;color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:background .25s,color .25s,opacity .25s}
+.gl-nav button:hover{background:var(--ink);color:var(--btn-w)}
+.gl-nav button:disabled{opacity:.25;pointer-events:none}
+.gl-nav svg{width:16px;height:16px}
+
+/* quadrante di tacche che ruota dietro al manifesto */
+.manif{height:250svh} /* come la sezione di Creative Website Manual: il blocco resta fermo per circa un'altezza e mezza */
+.manif-pin{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center}
+.manif .wrap{position:relative;z-index:1}
+.dial{position:absolute;left:50%;top:50%;width:min(92vw,82svh);aspect-ratio:1;translate:-50% -50%;color:#D4D4D4;pointer-events:none;rotate:var(--rot,0deg)}
+
+/* bottoni e link: in hover le lettere scorrono a cascata */
+.roll{display:inline-flex;overflow:hidden;vertical-align:top;line-height:1.25}
+.roll > span{display:inline-block;transition:transform .6s cubic-bezier(.87,0,.13,1);transition-delay:calc(var(--d)*14ms);text-shadow:0 1.25em currentColor}
+:is(a,button):hover .roll > span{transform:translateY(-1.25em)}
+.go .roll{border-bottom:1.5px solid currentColor;padding-bottom:1px}
+.go{text-decoration:none}
+
+
+/* parole in gradiente iridescente sulle sezioni nere (come "Studio"): la sfumatura scorre piano */
+.grad .w>span,.grad.w>span{background:linear-gradient(90deg,#9EC9F0,#B9E8C9,#F7C5A8,#F3A6C8,#9EC9F0);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradMove 9s linear infinite}
+@keyframes gradMove{to{background-position:-300% 0}}
+.grad{text-shadow:none!important}
+.grad .w,.grad.w{padding-bottom:.24em;margin-bottom:-.24em}.grad .w>span{padding-bottom:.24em;margin-bottom:-.24em} /* spazio per le code (g, p): il gradiente non le taglia */ /* col testo trasparente l ombra si vedrebbe attraverso */
+
+/* comparsa morbida allo scroll */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.lr .w>span{transform:none}*{animation:none!important;transition:none!important}}
+
+/* ---------- tablet / mobile ---------- */
+@media (max-width:1100px){
+  .ft-main{grid-template-columns:34px minmax(0,1fr) minmax(0,1fr)}
+  .ft-msg{grid-row:auto;grid-column:2/4;padding:40px 0 0}
+  .ft-msg .mk{display:none}.ft-msg .box{margin-left:24px}
+  .ft-col{grid-row:2;padding-left:24px}.ft-col:not(.ex){grid-column:2}.ft-col.ex{grid-column:3}
+  .ft-legal{grid-column:2/4;grid-row:3;padding-left:24px}
+}
+@media (max-width:1000px){
+    .split,.clients{grid-template-columns:1fr}
+  .dc{--cw:170px}
+  .labs{--R:3000px;--cw:min(76vw,320px)}
+  .clients>.rv{grid-template-columns:1fr}.clients>.rv h2{grid-row:auto;margin-bottom:24px}
+
+}
+@media (max-width:720px){
+  .labs{--R:1400px;--cw:68vw} /* card più strette e arco più curvo: si vedono le card accanto a destra e a sinistra */
+  /* menu: niente colonne di progetti che scorrono, resta il bottone del reel */
+  .menu-proj{height:auto;display:block;overflow:visible;padding:8px 0 4px}.mp-col{display:none}
+  .menu-proj .reel-btn{position:static;transform:none}
+  /* "24 premi" + "Mediastar": più vicini */
+  .echo{height:min(56svh,480px)}
+  /* vetro dell'header: un solo strato (cinque backdrop-filter durante lo scroll pesano troppo sui telefoni) */
+  .nav-blur i:not(:nth-child(4)){display:none}
+  .nav-blur i:nth-child(4){backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);mask:linear-gradient(#000 55%,transparent)}
+  .vx-w{font-size:15vw;padding:0 calc(var(--pad) + 16px)}
+  .vx-w1{top:22%}.vx-w2{bottom:26%}
+  .vx-foot{left:calc(var(--pad) + 16px);right:calc(var(--pad) + 16px);bottom:44px;font-size:15px}
+  .cta-box{right:calc(var(--pad) + 12px);width:calc(100% - 2*var(--pad) - 24px)}
+  :root{--nav-h:72px;--pill-h:46px}
+  body{font-size:17px}
+  .nav{grid-template-columns:1fr auto}
+  .nav .mpill{grid-column:2}
+  .nav-cta{display:none}
+  .logo svg{height:24px}
+  .mpill{height:44px;padding-left:18px}.mpill i{width:34px;height:34px}
+  :root{--mh:86svh}
+  .gc{flex-basis:82vw}
+  .menu{grid-template-columns:1fr;grid-template-rows:auto auto;overflow-y:auto;padding:calc(var(--nav-h) + 4px) 16px calc(100svh - var(--mh) + 16px)}
+  .menu-main{padding:4px 0 0 4px;min-height:auto}
+  .menu-proj{height:62svh}
+  .menu-main li a{font-size:13vw}
+  .nav .btn{height:40px;padding:0 16px;font-size:15px}
+  .nav .btn .long{display:none}.nav .btn .short{display:inline}
+  .hero-pin .wrap{display:block}
+  .hero h1 br{display:none}
+  .scroll{display:none}
+  .brk{padding:20px 18px}
+  /* footer: logo orizzontale in fondo, niente righello */
+  .ft-main{display:block;padding:8px var(--pad) 0}
+  .ft-ruler{display:none}
+  .ft{--dh:220px}
+  .ft-msg{padding:40px 0 8px}.ft-msg .box{margin:0}
+  .ft-col{padding:32px 0 0}
+  .ft-legal{padding:28px 0;margin-top:32px}
+}
+
+/* cambio pagina tra home e progetti (View Transitions tra documenti; dove non c'è si naviga e basta):
+   la pagina che lasci arretra e si scurisce, la nuova sale dal basso come un foglio con gli angoli tondi (il gesto del menu); l'header resta fermo */
+@view-transition{navigation:auto}
+::view-transition{background:var(--dark)}
+::view-transition-old(root){animation:vtOld .9s var(--energy) both}
+::view-transition-new(root){animation:vtNew .9s var(--energy) both}
+@keyframes vtOld{to{transform:translateY(-8%) scale(.94);opacity:.3}}
+@keyframes vtNew{from{transform:translateY(100%);clip-path:inset(0 round var(--radius-media) var(--radius-media) 0 0)}to{clip-path:inset(0 round 0)}}
+.nav{view-transition-name:nav}
+/* pagina successiva: la foto della pillola, ormai a tutto schermo, resta ferma e diventa il fondo della hero della nuova pagina (stesso view-transition-name) */
+.nextp-pill img{view-transition-name:next-hero}
+html:active-view-transition-type(expand)::view-transition-old(root){animation:none}
+html:active-view-transition-type(expand)::view-transition-new(root){animation:vtFade .5s ease both}
+html:active-view-transition-type(expand)::view-transition-group(next-hero){animation-duration:.01s}
+@keyframes vtFade{from{opacity:0}}
+@media (prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
+<style>
+/* pagina progetto: struttura da 311labs (titolo enorme, scheda a filetti, media a tutta larghezza, coppie e terne), grammatica della home */
+.pj-head{padding:calc(var(--nav-h) + clamp(60px,12vh,140px)) var(--pad) clamp(48px,7vw,96px)}
+.pj-ttl{font-size:clamp(72px,15vw,280px);margin-left:-.04em}
+.pj-ttl .ch{display:inline-block;opacity:0}
+.shown .pj-ttl .ch{opacity:1;animation:pjUp 1.1s var(--energy) calc(.1s + var(--i)*45ms) both}
+@keyframes pjUp{from{opacity:0;transform:translateY(.5em) rotate(6deg)}}
+.wf .pj-ttl{visibility:hidden}.wf .pj-ttl *{animation-play-state:paused}
+.pj-meta{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:var(--gap,16px);margin-top:clamp(40px,6vw,80px);padding-top:16px;border-top:1px solid var(--ink);font-size:clamp(17px,1.3vw,20px);line-height:1.3}
+.pj-col h2{font:inherit;letter-spacing:inherit;margin-bottom:1.2em}
+.pj-col a{color:inherit;text-underline-offset:4px}
+/* testo a destra: rientro sulla prima riga, sotto un filetto e il rimando al racconto */
+.pj-lede{grid-column:5/7}
+.pj-lede p{text-indent:4em}
+.pj-lede a{display:flex;justify-content:space-between;margin-top:clamp(28px,3vw,48px);padding-top:14px;border-top:1px solid var(--ink);color:inherit;text-decoration:none}
+.pj-lede a span:last-child{transition:transform .4s var(--energy)}.pj-lede a:hover span:last-child{transform:translateX(4px)}
+.pj-m{border-radius:var(--radius-media);overflow:hidden;background:var(--surface)}
+.pj-m img{display:block;width:100%;height:100%;object-fit:cover}
+.pj figure{margin:0}
+.pj figcaption{display:flex;justify-content:space-between;gap:16px;padding-top:12px;font-size:15px;color:var(--ink-2)}
+.pj-full,.pj-wide,.pj-pair,.pj-trio,.pj-bh{padding-left:var(--pad);padding-right:var(--pad)}
+/* il primo media si apre allo scroll: parte stretto e arriva a tutta larghezza */
+.pj-full .pj-m{clip-path:inset(0 calc(var(--k,1)*12%) round var(--radius-media))}
+.pj-full .pj-m img{scale:calc(1 + var(--k,1)*.12)}
+.pj-story{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:clamp(80px,12vw,180px) var(--pad)}
+.pj-story h2{font:400 15px var(--sans);letter-spacing:-.02em;color:var(--ink-2)}
+.pj-big{font-family:var(--display);font-weight:var(--display-w);font-size:clamp(30px,3.4vw,54px);letter-spacing:-.057em;line-height:1.1;margin-bottom:32px}
+.pj-story p+p{margin-top:16px}
+.pj-story p:not(.pj-big){color:var(--ink-2);max-width:56ch}
+.pj-blk{margin-top:clamp(64px,9vw,140px)}
+.pj-bh{padding-bottom:24px}.pj-bh h3{font-size:clamp(40px,5vw,84px)}
+.pj-pair{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.2vw,16px)}
+.pj-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.2vw,16px)}
+.pj-trio .pj-m{aspect-ratio:1}
+.pj .rv{transform:translateY(60px)}.pj .rv.in{transform:none}
+.pj-pair .rv:nth-child(2),.pj-trio .rv:nth-child(2){transition-delay:.08s}.pj-trio .rv:nth-child(3){transition-delay:.16s}
+.pj-end{height:clamp(100px,14vw,200px)}
+/* storia: a sinistra il percorso che si disegna mentre leggi, con le tappe che si accendono e il contatore degli anni */
+.pj-side{position:sticky;top:calc(var(--nav-h) + 24px);align-self:start}
+.pj-route{margin-top:28px}
+.pj-cnt small{display:block;font-size:15px;color:var(--ink-2)}
+.pj-cnt span{font-family:var(--display);font-size:clamp(48px,5vw,88px);letter-spacing:-.06em;line-height:1}
+.pj-cnt b{font-weight:inherit;font-variant-numeric:tabular-nums}
+.pj-map{position:relative;width:min(100%,190px);margin:24px 0 0 40px}
+.pj-map svg{display:block;width:100%;overflow:visible}
+.pj-map path{fill:none;stroke-linecap:round}
+.pj-map .bg{stroke:var(--line);stroke-width:3;stroke-dasharray:2 10}
+.pj-map .ln{stroke:var(--ink);stroke-width:5;stroke-dasharray:1;stroke-dashoffset:1}
+.pj-stop{position:absolute;left:0;top:0;display:flex;align-items:center;gap:10px;white-space:nowrap;transform:translate(-8px,-50%)}
+.pj-stop.l{flex-direction:row-reverse;transform:translate(calc(-100% + 8px),-50%)}
+.pj-stop i{width:16px;height:16px;flex:none;border-radius:50%;background:var(--bg);border:2px solid var(--line);transition:background .4s,border-color .4s,scale .5s var(--energy)}
+.pj-stop b{font-weight:400;font-size:15px;padding:6px 12px;border-radius:99px;color:var(--ink-2);transition:background .5s,color .5s}
+.pj-stop.on i{background:var(--ink);border-color:var(--ink);scale:1.15}
+.pj-stop.on b{background:var(--c);color:var(--ink)}
+/* barra dei servizi: un indice della galleria. Si accende il servizio del lavoro a schermo, cliccando si va al primo lavoro di quel servizio */
+.pj-svc{position:fixed;left:50%;bottom:calc(var(--safe-b) - 8px);z-index:40;display:flex;gap:2px;padding:5px;border-radius:99px;background:var(--dark);box-shadow:0 8px 28px rgba(0,0,0,.18);opacity:0;visibility:hidden;transform:translate(-50%,24px);transition:opacity .4s,visibility .4s,transform .6s var(--energy)}
+.pj-svc.on{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.pj-svc button{border:0;background:none;font:400 15px var(--sans);letter-spacing:-.02em;padding:9px 16px;border-radius:99px;color:var(--on-dark-2);white-space:nowrap;cursor:pointer;transition:background .45s,color .45s}
+.pj-svc button:hover{color:var(--on-dark)}
+.pj-svc button.on{background:var(--c);color:var(--ink)}
+.pj-svc button:disabled{color:#5C5C5C;cursor:default} /* servizio senza immagini in galleria */
+@media (max-width:820px){
+  .pj-story,.pj-pair{grid-template-columns:1fr}
+  .pj-side{position:static}.pj-map{width:min(55%,200px);margin-left:22%}
+  .pj-svc button{font-size:12.5px;padding:7px 10px}.pj-svc{max-width:calc(100vw - 24px)}
+  .pj-meta{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:40px}.pj-lede{grid-column:1/-1}
+  .pj-story{gap:16px}
+  .pj-trio{grid-template-columns:1fr 1fr}.pj-trio .rv:nth-child(3){grid-column:1/-1;aspect-ratio:2/1}
+}
+@media (prefers-reduced-motion:reduce){.pj-full .pj-m{clip-path:inset(0 round var(--radius-media))}.pj-full .pj-m img{scale:1}}
+
+/* chi siamo: la foto della pillola "Chi ⬭ siamo" della home, a 10px dai bordi con raggio 22, diventa il fondo della hero */
+.ab-hero{position:relative;height:100svh;color:#fff}
+.ab-bg{position:absolute;inset:10px;border-radius:22px;overflow:hidden;background:var(--dark)}
+.ab-bg img{display:block;width:100%;height:100%;object-fit:cover;view-transition-name:next-hero}
+.ab-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(5,5,5,.55),rgba(5,5,5,0) 60%)} /* scuro neutro in basso: il titolo bianco si legge */
+.ab-txt{position:absolute;left:calc(10px + var(--pad));right:calc(10px + var(--pad));bottom:calc(10px + var(--pad))}
+.ab-txt .pj-ttl{font-size:clamp(64px,13vw,240px);line-height:.9}
+.ab-txt p{margin-top:16px;font-size:17px}
+.nextp-pill img{view-transition-name:none} /* un solo elemento per nome nella pagina */
 </style>
 </head>
 <body>
-<header><a href="index.html" aria-label="Never Before Italia, torna alla home"><img src="assets/logo-never.svg" alt="Never Before Italia"></a></header>
-<main>
-  <div>
-    <h1>Chi siamo</h1>
-    <p>Pagina in costruzione.</p>
-    <a class="home" href="index.html">Torna alla home</a>
+
+<header class="nav" id="nav">
+  <span class="nav-blur" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+  <a class="logo" href="index.html" aria-label="Never Before Italia, home"><svg viewBox="0 0 842.8 144.2" aria-hidden="true"><use href="#logo"/></svg></a>
+  <button class="mpill" id="mpill" type="button" aria-expanded="false" aria-controls="menu">
+    <span class="lb"><span>Menu</span><span>Chiudi</span></span>
+    <i><svg class="bars" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6.5h12M3 11.5h12"/></svg><svg class="x" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4l10 10M14 4 4 14"/></svg></i>
+  </button>
+  <div class="nav-cta"><a class="btn" href="index.html#contatti"><span class="long">Richiedi una consulenza</span><span class="short">Contatti</span></a></div>
+</header>
+<nav class="menu" id="menu" data-lenis-prevent aria-label="Menu principale">
+  <div class="menu-main">
+    <ul>
+      <li><a href="index.html#chi-siamo" aria-label="Chi siamo"><span data-t="Chi siamo" aria-hidden="true">Chi siamo</span></a></li>
+      <li><a href="index.html#servizi" aria-label="Servizi"><span data-t="Servizi" aria-hidden="true">Servizi</span></a></li>
+      <li><a href="index.html#progetti" aria-label="Progetti"><span data-t="Progetti" aria-hidden="true">Progetti</span></a></li>
+      <li><a href="index.html#clienti" aria-label="Clienti"><span data-t="Clienti" aria-hidden="true">Clienti</span></a></li>
+      <li><a href="https://www.neverbeforeitalia.it/jobs" aria-label="Lavora con noi"><span data-t="Lavora con noi" aria-hidden="true">Lavora con noi</span></a></li>
+      <li><a href="index.html#contatti" aria-label="Contatti"><span data-t="Contatti" aria-hidden="true">Contatti</span></a></li>
+    </ul>
+    <div class="menu-meta">
+      <a href="mailto:info@neverbeforeitalia.it">info@neverbeforeitalia.it</a>
+      <a href="tel:+390804964221">+39 080 496 4221</a>
+      <span>Bari · Padova</span>
+      <a href="https://www.instagram.com/neverbeforeitalia/">Instagram</a>
+      <a href="https://it.linkedin.com/company/never-before-italia">LinkedIn</a>
+    </div>
   </div>
+  <div class="menu-proj">
+    <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/le-carose"><img src="assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg" alt="Le Carose" loading="lazy"><span>Le Carose</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica"><img src="assets/img/never_before_italia_borgo_canonica_branding.png" alt="Borgo Canonica" loading="lazy"><span>Borgo Canonica</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/lum"><img src="assets/img/never_before_italia_video_lum.jpg" alt="Università LUM" loading="lazy"><span>Università LUM</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="Amaro Mediterraneo" loading="lazy"><span>Amaro Mediterraneo</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/cortina-express"><img src="assets/img/cortina-express-006.jpg" alt="Cortina Express" loading="lazy"><span>Cortina Express</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/hula-bari"><img src="assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg" alt="Hula Hawaiian Poke" loading="lazy"><span>Hula Hawaiian Poke</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/le-carose" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg" alt="" loading="lazy"><span>Le Carose</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_borgo_canonica_branding.png" alt="" loading="lazy"><span>Borgo Canonica</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/lum" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_video_lum.jpg" alt="" loading="lazy"><span>Università LUM</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="" loading="lazy"><span>Amaro Mediterraneo</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/cortina-express" aria-hidden="true" tabindex="-1"><img src="assets/img/cortina-express-006.jpg" alt="" loading="lazy"><span>Cortina Express</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/hula-bari" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg" alt="" loading="lazy"><span>Hula Hawaiian Poke</span></a></div></div>
+    <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="Tenuta Giustini" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru"><img src="assets/img/immagine_home_viru.jpg" alt="Viru" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="Master Italy" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="progetto-marinobus.html"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="MarinoBus" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="Sneakers Room" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="Produttori di Manduria" loading="lazy"><span>Produttori di Manduria</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine_home_viru.jpg" alt="" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="progetto-marinobus.html" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="" loading="lazy"><span>Produttori di Manduria</span></a></div></div>
+    <button class="reel-btn" id="reelOpen" type="button">Guarda il reel <i><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg></i></button>
+  </div>
+</nav>
+
+<div class="reel" id="reel" role="dialog" aria-modal="true" aria-label="Reel Never Before Italia 2026" hidden>
+  <div class="reel-box">
+    <video id="reelVideo" playsinline controls preload="none"></video>
+    <button class="reel-x" id="reelClose" type="button" aria-label="Chiudi il reel"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4l10 10M14 4 4 14"/></svg></button>
+  </div>
+</div>
+
+<div class="page" id="page">
+<main id="top" class="pj">
+  <section class="ab-hero" data-dark><div class="ab-bg"><img src="assets/img/chi-siamo-placeholder.jpg" alt=""></div>
+    <div class="ab-txt"><h1 class="pj-ttl" id="pjTtl" aria-label="Chi siamo">Chi siamo</h1><p>Pagina in costruzione.</p></div></section>
 </main>
+
+
+<!-- 8. footer come il riferimento: logo verticale, righello dello scroll, colonne -->
+<footer class="ft" data-dark>
+  <div class="ft-main">
+    <div class="ft-ruler" aria-hidden="true"></div>
+    <div class="ft-msg">
+      <span class="mk" aria-hidden="true"></span>
+      <div class="box">
+        <div><strong>Hai scrollato <span id="cm">0 cm</span></strong><p id="cmtxt">Un pullman <a href="progetto-marinobus.html">MarinoBus</a> è lungo circa 12 metri.</p></div>
+      </div>
+    </div>
+    <div class="ft-col">
+      <div class="blk"><h4>Dove siamo</h4><p>C.da Monopoli, 3<br>70013 Castellana Grotte (BA)</p><p style="margin-top:10px">Via Redipuglia, 20<br>Padova</p></div>
+      <div class="blk"><h4>Scrivici</h4><p><a href="mailto:info@neverbeforeitalia.it">info@neverbeforeitalia.it</a><br><a href="tel:+390804964221">+39 080 496 4221</a></p></div>
+      <div class="blk"><h4>Seguici</h4><ul><li><a href="https://www.instagram.com/neverbeforeitalia/">Instagram</a></li><li><a href="https://it.linkedin.com/company/never-before-italia">LinkedIn</a></li><li><a href="https://www.facebook.com/neverbeforeitalia">Facebook</a></li></ul></div>
+    </div>
+    <div class="ft-col ex">
+      <h4>Esplora</h4>
+      <ul class="big"><li><a href="index.html#chi-siamo">Chi siamo</a></li><li><a href="index.html#servizi">Servizi</a></li><li><a href="index.html#progetti">Progetti</a></li><li><a href="index.html#clienti">Clienti</a></li><li><a href="https://www.neverbeforeitalia.it/jobs">Lavora con noi</a></li><li><a href="index.html#contatti">Contatti</a></li></ul>
+    </div>
+    <ul class="ft-legal">
+      <li><a href="#">Certificazione ISO 9001</a></li>
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Cookie Policy</a></li>
+      <li><a href="#">Note legali</a></li>
+    </ul>
+  </div>
+  <div class="ft-drop" aria-hidden="true"><span class="fp" style="--c:#D7FFE0">Marketing strategy</span><span class="fp" style="--c:#E2DBFF">Business consulting</span><span class="fp" style="--c:#FFDCCB">Data analysis</span><span class="fp" style="--c:#FFF3B8">Financial communication</span><span class="fp" style="--c:#CDEBFF">CSR communication</span><span class="fp" style="--c:#FFD6EA">Digital innovation</span><span class="fp" style="--c:#E2DBFF">Design experience</span><span class="fp" style="--c:#FFF3B8">Media relations</span></div>
+  <div class="ft-bottom"><span>© 2026 Never Before Italia srl · P.IVA 06725810722</span><span>Design e sviluppo Never Before Italia</span></div>
+</footer>
+
+<div class="shutter" aria-hidden="true"></div>
+<section class="nextp" id="nextp" data-href="index.html#progetti" aria-label="Pagina successiva">
+  <div class="nextp-pin">
+    <p class="nextp-k">Pagina successiva</p>
+    <a class="nextp-t" href="index.html#progetti" aria-label="Altri progetti"><span>Altri</span><span class="nextp-pill" aria-hidden="true"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="" loading="lazy"></span><span>progetti</span></a>
+    <p class="nextp-h">Continua a scorrere</p>
+    <span class="nextp-bar" aria-hidden="true"><i></i></span>
+  </div>
+</section>
+</div>
+<div class="page-shade" id="pageShade" aria-hidden="true"></div>
+
+<!-- logo Never Before: tracciati dal file ufficiale, colore ereditato -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="logo" viewBox="0 0 842.8 144.2" fill="currentColor"><g> <g> <path d="M819,43.9c0.9,0,1.6,0.1,2.1,0.3c0.8,0.3,1.2,1,1.2,1.9c0,0.7-0.3,1.2-0.8,1.5c-0.3,0.2-0.6,0.3-1.1,0.4 c0.6,0.1,1,0.3,1.3,0.8c0.3,0.4,0.4,0.8,0.4,1.2v0.6c0,0.2,0,0.3,0,0.6c0,0.2,0,0.3,0.1,0.4l0,0.1H821c0,0,0,0,0-0.1 c0,0,0-0.1,0-0.1l0-0.3v-0.6c0-0.9-0.3-1.5-0.7-1.7c-0.3-0.2-0.8-0.3-1.5-0.3h-1.1v3h-1.3v-7.6H819z M820.4,45.1 c-0.3-0.2-0.9-0.3-1.6-0.3h-1.1v2.7h1.2c0.6,0,1-0.1,1.3-0.2c0.5-0.2,0.8-0.6,0.8-1.2C820.9,45.7,820.8,45.3,820.4,45.1 M824,52.6 c-1.3,1.3-3,2-4.9,2c-1.9,0-3.5-0.7-4.9-2c-1.3-1.3-2-3-2-4.9s0.7-3.5,2-4.9c1.3-1.3,3-2,4.8-2c1.9,0,3.5,0.7,4.9,2 c1.3,1.3,2,3,2,4.9S825.4,51.2,824,52.6 M815,43.5c-1.2,1.2-1.7,2.6-1.7,4.2c0,1.7,0.6,3.1,1.7,4.2c1.1,1.2,2.5,1.8,4.2,1.8 c1.7,0,3-0.6,4.2-1.8c1.2-1.2,1.7-2.6,1.7-4.2c0-1.6-0.6-3-1.7-4.2c-1.2-1.2-2.6-1.8-4.2-1.8C817.5,41.8,816.1,42.4,815,43.5"></path> <path d="M17.2,79.2H0.1C-0.6,82,4,86,7.2,84.1C9.7,82.6,13.2,81,17.2,79.2 M116.2,64.6c-1.8-1.8,4.7-5.8,9.9-8.2h-8.6 l8.6,0c3-1.4,5.6-2.3,5.8-1.8c0.1,0.3-0.4,1-1.3,1.9C127,59.7,117.3,65.7,116.2,64.6 M108.2,64.9h22.1c0.6-0.4,1.3-0.8,2-1.3 c2.9-1.9,5.5-4.3,6.2-7.3h-3.2h3.2c0.3-1.3,0.3-2.6-0.2-4c-1.4-4.3-7.4-3.6-11.6-1.9c-4.6,1.9-7.5,3.1-11.4,5.9 c-0.2,0.1-0.4,0.3-0.6,0.4C111.4,59.2,109.4,61.6,108.2,64.9 M68.8,72.1H44.6c-0.8,1.8-1.3,3.7-1.3,6.1c0,0.4,0,0.7,0.1,1.1 c0.3,1.6,1.4,2.3,3.3,2.3c1.1,0,3.5-0.9,6.7-2.3C57.9,77.3,63.7,74.4,68.8,72.1 M270.5,7.9c-6.6,0-9.9,3-15.8,6 c-3.1,1.6-12.3,15.3-23.1,31h2.5l-2.5,0c-2.6,3.7-5.2,7.6-7.9,11.4h3.1h-3.1c-2,2.9-4.1,5.8-6.1,8.6c-1.8,2.5-3.6,4.9-5.3,7.2h4.6 l-4.6,0c-1.9,2.5-3.8,4.9-5.7,7.1c-11.8,14.3-21.6,21.6-23.2,8.2c-0.3-2.7-0.3-5.4,0-8.2h-3h3c0.2-2.4,0.6-4.8,1.1-7.2 c0.5-2.5,1.1-4.9,1.7-7.1c0.8-3.2,1.6-6.1,2-8.6c0.5-2.9,0.6-5.3-0.1-6.8c-1.1-2.3-2.8-2.8-5.9-0.6c-1,0-2,0.4-2.7,1.4 c-0.4,0.5-2.7,2.9-6.3,6c-3,2.6-6.9,5.6-11.4,8.6h0c-3.9,2.6-8.3,5.1-13,7.2c-6.6,2.9-13.6,4.8-20.7,4.7 c-4.8-0.1-7.9-0.9-12.4-4.6c0.1,0,0.2-0.1,0.3-0.1h0c2-0.8,4.2-1.7,6.6-2.9c3.2-1.6,5.3-2.7,7.9-4.2h-22.1 c-0.3,0.9-0.6,1.9-0.8,2.9c-1.2,0.4-4,2.3-7.2,4.2h5.7h-5.7c-6,3.7-13.5,7.9-15.6,3.8c0.2-1.3,0.5-2.6,0.8-3.8 c0.7-2.2,1.5-4.4,1.6-7.1h0c0-0.2,0-0.4,0-0.7c0-2.3-1.1-3.4-3.4-3.4c-4.4,0-10.9,1.9-16.8,4h1.8h-1.8c-6.6,2.4-12.5,5.2-14,5.9 l0.9-1.7c0.8-1.6,1.9-2.8,2.5-4.2h-5.7h5.7c0.5-1,0.7-2.1,0.2-3.4c-1.4-4.3-7.3-2.6-11.4-1c-2.9,1.2-7,2.7-11.7,4.3 c-6.3,2.2-13.5,4.7-19.9,7.2h15l-15,0c-5,1.9-9.4,3.8-12.4,5.6c-0.7,0.4-1.1,1-1.2,1.6h17.1c5.5-2.4,11.8-4.9,17.5-7.2h0 c4.9-1.9,9.3-3.6,12.4-4.9c-0.9,1.8-1.8,3.3-2.5,4.9h24.2c4.8-2.2,9-3.9,11.1-4.2c-0.3,1.4-0.8,2.7-1.2,4.2h5l-5,0 c-0.7,2.2-1.4,4.6-1.2,7.1h13h-13c0.1,0.7,0.2,1.3,0.4,2c2.4,7.9,14,2.6,22.3-2c4-2.2,7.3-4.3,8.3-4.6c0.9,1.2,2.1,2.3,3.5,3.4 c0.5,0.4,1,0.8,1.5,1.2h16.6h-16.6c3.7,2.8,6.9,4.2,11.9,4.5c7,0.5,14.3-1.5,21.3-4.5c4.7-2,9.2-4.6,13.4-7.2h-5.8h5.8 c3.9-2.4,7.4-4.9,10.5-7.1h0c6.3-4.6,10.4-8.1,10.8-7.7c1-0.4,0.3,3.2-0.9,7.7c-0.6,2.3-1.3,4.8-2,7.2c-1,3.4-1.9,6.2-2.1,7.2 c0,0,0,0,0,0.1c-2.8,12.2-0.2,20.1,5.2,22.8h0c2.8,1.4,6.2,1.4,10.1,0h0c7-2.6,15.4-10,22.9-22.9c0.4-0.8,0.9-1.5,1.3-2.3 c0.6-1.1,1.6-2.8,2.9-4.8c1.3-2,2.8-4.5,4.5-7.1c1.7-2.7,3.6-5.6,5.7-8.6c2.5-3.7,5.2-7.6,7.9-11.4h0c8.5-12,17.1-23.1,20.8-24.9 c4.8-2.4,7.4-5.3,12.7-5.3C275.1,14.7,275.1,7.9,270.5,7.9 M241.2,56.4h7.3H241.2c-1.3,1.4-2.3,2.8-2.9,3.8 c-1,1.7-1.9,3.3-2.6,4.8l7.7,0c0.3-0.4,0.5-0.8,0.8-1.3c1-1.8,3.9-4.8,7.3-7.3c4.2-3,9.4-5.3,13.4-3.3c0.6,0.2,0.4,1.3-0.1,1.7 c-0.6,0.6-1.2,1.1-1.8,1.6c-3.3,2.7-6.1,4-10.3,6.2c-1.7,0.9-3.2,1.7-4.7,2.3h0c-2.1,1-4.1,1.8-6,2.6c0.4-0.8,0.9-1.7,1.4-2.6 h-7.7c-0.8,1.7-1.3,3.3-1.4,5.1c-2.3,0.7-4.8,1.3-7.6,2h22.1c2.2-1,4.5-2.1,7.1-3.5c2.6-1.4,4.7-2.4,6.7-3.7 c2.3-1.4,4.3-2.9,6.8-5.1c1-0.9,1.7-2.1,2-3.5c0.9-3.9-0.9-8.8-4.6-9.8C255.6,43.9,246.2,50.9,241.2,56.4 M224.5,79.7l1.6-0.4 h-4.3C222.5,79.7,223.4,79.9,224.5,79.7 M367.2,79.2h-49.2c1.2,3.1,3.9,5.7,7.2,7c7.3,2.8,34.6-2.9,40.7-5.9 C366.4,80,366.8,79.7,367.2,79.2 M367.2,79.2c1.8-2.5-0.9-6.7-4.4-5c-5.3,2.7-25,5.7-31.1,3.4c-2.3-0.9-4.4-3.1-3.3-5.3 c0-0.1,0.1-0.1,0.1-0.2h-6.3h6.3c1.7-3.1,7-5.1,11.5-7.1l-6.5,0h6.5c4.3-1.9,7.8-4,6.8-7.2c-0.2-0.5-0.4-1-0.7-1.4 c-4.6-6.3-24.7-3.4-31.6,0h23.2h-23.2c-1.7,0.8-2.6,1.7-2.3,2.4c0.7,1.8-0.8,4-3.7,6.1h0c-3.3,2.5-8.7,5-15,7.2h0 c-14,4.7-33,7.7-47.9,4.9c-1.6-0.3-2.6-1.3-3.4-2.2c2.2-0.8,4.3-1.6,6.6-2.7l-22.1,0c-1.2,0.3-2.5,0.6-3.8,0.9 c-3.3,0.8-3.2,4.8-1.1,6.2h4.3l9.3-2.4c0.4,0.8,0.9,1.7,1.4,2.4c1.3,1.8,3.1,3.2,5.6,3.8c12.3,3.3,30.5,0.7,46-3.8h0 c7.1-2.1,13.6-4.6,18.8-7.2c5-2.5,8.6-5,10.2-7.1l-5.4,0h5.4c0.8-1.1,1-2.1,0.7-3c-1-2.6,16.5-6.7,20.8-3.7c1.7,1.2-4,3.9-9.8,6.7 c-5,2.4-10.1,4.9-11,6.6c-0.1,0.2-0.2,0.4-0.3,0.6c-1,2.4-0.9,4.9,0,7.2L367.2,79.2z M384,72.1c-1.8,1.7-3.3,3.2-4.4,4.2 c-0.9,0.9-1.3,2-1.3,3c0.1,2.2,2.4,3.9,5.2,2.5c1.8-0.9,3.4-1.7,4.9-2.5h0c5.3-2.7,9.2-4.8,14.1-7.2H384z M451.2,4.9 c2.4-3.8-4-7.1-6.1-3c-7.4,14.1-20.6,29.7-33.4,43.1h8.4C430.1,33.8,442.2,19.2,451.2,4.9 M411.7,44.9c-3.8,4.1-7.7,7.9-11.3,11.4 l9,0c3-3.1,6.7-7,10.7-11.4H411.7z M473.1,44.9h10.3c0-0.6,0-1.3,0-1.9c-0.9-16.8-26.1-8.5-47.8,1.9h0 c-8.3,3.9-16.1,8.2-21.9,11.4c-5.2,2.9-8.8,5.1-9.7,5.5c1.4-1.4,3.2-3.2,5.4-5.5h-9c-3.2,3.1-6.2,6-8.9,8.6 c-2.9,2.8-5.5,5.2-7.6,7.2h18.6c2-1,4.1-2,6.5-3.1c1-0.5,3.6-2,7.3-4l-14.5,0h14.5c4.2-2.3,9.7-5.4,15.7-8.6h0 c8.4-4.4,17.7-8.9,25.4-11.4h-6.3h6.3C465.4,42.2,471.5,41.6,473.1,44.9 M483.4,44.9h-10.3c0.6,1.3,0.6,3.1-0.3,5.7 c-0.6,2-1.6,3.9-2.7,5.8c-1.9,3.2-4.5,6-7.2,8.6c-3,2.8-6.3,5.2-9.3,7.1H466c2.7-2.3,5.2-4.7,7.4-7.1h0c2.5-2.8,4.6-5.7,6.3-8.6 l-5.6,0h5.6C481.9,52.5,483.3,48.7,483.4,44.9 M550.5,56.4L550.5,56.4c-0.1-0.2-0.2-0.4-0.3-0.6c-3.1-5.3-7.1-7.3-13.1-8.7 c-6.7-1.5-13.4,3.5-18.5,9.3h9c2.8-2.2,5.8-3.3,8.5-1.6c0.9,0.6,1.6,1,2.2,1.6c0.3,0.3,0.5,0.6,0.7,1c1.5,3-3,5.6-8,7.6 c-4.3,1.7-9,2.8-10.8,3.2c-1.3,0.3-1.3,0-2.4,0.3c0-0.1,0.8-1.6,2.2-3.5c1.8-2.7,4.6-6.2,7.7-8.6h-9c-2.6,2.9-4.8,6-6.3,8.6 c-1.6,2.7-2.5,4.7-2.5,5.2c-1.8,0.3-7,1-13.8,1.9h0c-10.5,1.4-24.9,3.4-36.1,4.7c2.1-1.5,4.1-3.1,6.1-4.7l-12.4,0 c-3.9,2.5-7.4,4.3-9,5c-0.5-1.1-1.5-2-3.1-2c-6.6,0-11.2,1.2-16.1,4.1h20.5h-20.5c-1.5,0.9-3,2-4.6,3.2c-1.9,1.5-2.2,3.4-0.4,5 c4.6,4,14.5,2.4,25.1-2.4c8.7-0.5,31.5-3.5,48-5.8h0c8.3-1.2,15-2.1,17.4-2.5c0,0,0.4,1.1,1.6,2.5h5.5h-5.5 c2.2,2.7,7.1,6.8,16.7,7.3c14.3,0.8,30.6-3.6,41.4-7.3h-24.6c-9.3,1.9-17.6,2.3-22.6,0c-1.9-0.9-3.3-2.2-4.1-4 c0,0,5.8-1.1,12.4-3.2h0c5.5-1.8,11.6-4.2,15.5-7.2C550.5,62.5,552.1,59.6,550.5,56.4 M696.4,13c-11.3-2.1-19.4,2.2-28.7,6.8 c-8.2,4.1-26.4,15.4-41.8,25.1h12.3c15.9-11,44.4-27.9,51.2-26.4c7.9,1.8-16.6,16.2-39.6,26.4h0c-8.1,3.6-16,6.6-22.2,8.4 c0.9-1.3,5-4.5,10.7-8.4l-12.3,0c-6.9,4.4-13.3,8.5-17.9,11.4l32.2,0c8.5-3.1,16.9-7.1,24.6-11.4h-2.2h2.2 C689.1,31.4,706.4,14.8,696.4,13 M691.3,56.3c-3.7-2.8-10.7-2.5-15.7,0l8.2,0c0.6-0.1,1.2-0.1,1.8,0L691.3,56.3z M777.6,64.9 L777.6,64.9c-2.6,1-4.6,1.7-4.9,1.9c0.5-0.6,1.1-1.2,1.7-1.8c3.4-3.6,8-7.4,12.6-8.6h0c1.5-0.4,3-0.5,4.5-0.2 c0.2,0,0.4,0.1,0.6,0.2h0C795.9,57.7,784.6,62.3,777.6,64.9 M801.1,56.4L801.1,56.4c0.2-1.2-0.3-2.4-1.9-3.6 c-8.4-6.2-17.4-2.6-24.5,3.6c-2.2,1.9-4.2,4.1-5.9,6.3c-0.6,0.8-1.2,1.6-1.8,2.3c-1,1.5-1.9,3-2.3,4.5c-0.8,0.3-2.5,1.3-4.6,2.6 c-3.5,2.2-8.4,5.1-13.5,7.1h0c-6.1,2.4-12.4,3.5-16.8,0h0c-0.3-0.2-0.5-0.5-0.8-0.7c-1.7-1.7-0.1-4.5,1.6-6.4h0 c0.3-0.3,0.5-0.5,0.8-0.8c3.5-3.1,6.6-3.1,10.6-5.5c0.4-0.3,0.8-0.5,1-0.8l-36.4,0H743c2.3-2.5,0.2-6.3-3.6-5.3 c-4,1-13.5-1.3-19.9-3.2l-9.2,0h9.2c-2.7-0.8-4.9-1.6-5.8-2.1c-2.1-1-7.5-0.6-9.4,2.1c-0.8,1.1-1,2.4-0.4,4.2 c-0.8,1.7-1.8,3.1-2.8,4.3c-2.5,3-5.4,4.8-7.9,5.8c-2.8,1-3.7,0.9-4,0.7c1.9-2.4,3.6-4.5,4.5-6.5c1-2.3,1-4.6-0.9-7.2 c-0.4-0.5-0.9-1-1.4-1.4h-5.8c1.6,0.3,2.9,1.5,3.3,4.2c0.2,1.3,0,2.8-0.4,4.4h4.4h-4.4c-0.7,2.1-1.9,4.3-4.1,6.6 c0.1,0.2-2.6,0.1-4.1-0.6c-2.5-1.1-4.8-3.4-5.1-6l-1,0h1c-0.2-1.7,0.4-3.5,2.3-5.3c1.2-1.2,3.9-2.9,6.4-3.2h-8.2 c-1.2,0.6-2.3,1.4-3.2,2.2c-2.9,1.3-6.2,3.6-9.3,6.3h1.3h-1.3c-2.5,2.2-4.8,4.6-6.9,7.1c-0.1,0.2-0.3,0.3-0.4,0.5 c-4.8,0.9-13.9,2.3-16.6,0.7c0.1-0.4,0.1-0.8,0.1-1.2v0c0.1-2.7-0.6-5.1-1.9-7.1c-1.3-1.9-3.1-3.5-5.4-4.6l-1.6-0.8 c3.3-0.9,6.6-2,9.9-3.2H608c-4.1,2.6-6.8,4.4-7.2,4.6c-1.4,0.5-5.1,2-10.1,3.9h21.1c0,0,0-0.1-0.1-0.1l8.2-2.1 c1.9,0.5,3.8,1.3,5.8,2.2h0c1,0.4,2,0.9,3,1.5c2.3,1.2,3.8,3.1,3.6,5.7h3.2h-3.2c0,0.1,0,0.2,0,0.3l-0.3,1.7 c-1.7-0.2-4.4-0.9-7.4-1.9l-15,0c4,2.7,10.4,5.5,15,7.1c1.9,0.7,3.5,1.1,4.5,1.3c-1,1.5-1.9,2.6-3.2,4.2c-5,6.1-11.1,12-17.6,17.5 h5.8h-5.8c-23.1,19.2-52.4,32.4-62.2,26.9c-7.7-4.3,0.6-15.4,12.9-26.9h-5.8l5.8,0c8.8-8.2,19.5-16.5,28-22.9h0 c3.9-2.9,7.2-5.3,9.8-7.2c0.5-0.3,1-0.7,1.4-1l5.6-3.9l1.5-0.5l0.8,2c0.6,1.1,1.9,2.2,3.7,3.4h15c-5.4-1.9-11.5-4.8-12.9-7.1 h-21.1c-5.3,2.1-12,4.7-19.2,7.1c-8.3,2.8-17.2,5.5-25.3,7.2l24.6,0c7.5-2.6,12.5-4.8,12.5-4.8c-1.1,1-3.2,2.6-6.1,4.8 c-7,5.3-18,13.9-27,22.9c-12.7,12.7-21.3,26.4-8.8,33.7c17.4,10.2,52.8-8.5,77.9-33.7h0c4.5-4.5,8.7-9.3,12.4-14.1 c2-2.6,3.5-4.3,4.8-6.8c3,0.3,9.3-0.3,14.4-1c-2.8,6.7-1.4,12.7,10.8,11.6c4.2-0.4,14.3-4.6,19.6-10.6c0.8,0,4.7,0.7,11.7-2h-11.7 l11.7,0c1.7-0.7,3.6-1.5,5.7-2.6c2.1-1,4.2-2.4,6.2-4.5h-34.3c0.6,2.6,2,5.1,5,7.2c0.3,0.2,0.7,0.5,1.1,0.7 c-4,3.3-19.5,11.5-19.5,1.9c0-0.8,0.1-1.7,0.4-2.6c0.6-2.3,1.9-4.8,3.6-7.2c2-2.8,4.6-5.3,7.4-7.1c0.9-0.6,1.8-1.1,2.7-1.5 c-0.1,0.5-0.3,1-0.4,1.5c-0.5,2.3-0.8,4.8-0.3,7.2H705c1.8-1.8,3.5-4.1,5-7c6.6,2.3,15.7,2.3,15.7,2.3c-1.1,1.3-2.2,3-3,4.7h3.3 h-3.3c-1.1,2.4-1.7,5-1.3,7.2h4.6h-4.6c0.3,1.3,0.9,2.6,2.1,3.5c9.2,7.2,26.4,0.7,35.7-3.5c3-1.4,5.2-2.5,6-2.8 c0.3,1,0.6,1.9,1,2.8l6.5,0c-0.7-1.4-1.1-3.1-1.2-5.2c1.5-0.6,3-1.2,4.6-1.9h0c1.9-0.8,3.9-1.8,6.1-2.9c2.5-1.3,5.6-2.7,8.6-4.3 h-2.7h2.7C796,62.3,800.6,59.3,801.1,56.4z M838.5,65.7c-1.2,0.3-6.5,3.1-13.7,6.4h12.8l-12.8,0c-5,2.3-10.9,4.9-16.9,7.1 c-15,5.5-30.7,8.8-35.1,0h-6.5c7.9,16.9,38.1,7.7,57.5,0c8.7-3.5,15.2-6.6,16.5-7c0.1,0,0.3-0.1,0.4-0.1 C844.6,70.6,842.7,64.5,838.5,65.7"></path> </g> <path d="M367.7,120.1v24.2h-3.3v-24.2H367.7z M396,120.1v2.9h-8.1v21.3h-3.3V123h-8.1v-2.9H396z M414.2,134.3 l-3.7-10.7l-3.9,10.7H414.2z M408.8,120.1h3.7l8.8,24.2h-3.6l-2.5-7.3h-9.5l-2.6,7.3h-3.3L408.8,120.1z M429.6,120.1h3.3v21.3h12.2 v2.9h-15.5V120.1z M457.8,120.1v24.2h-3.3v-24.2H457.8z M480.8,134.3l-3.7-10.7l-3.9,10.7H480.8z M475.5,120.1h3.7l8.8,24.2h-3.6 l-2.4-7.3h-9.5l-2.6,7.3h-3.4L475.5,120.1z"></path></g></symbol></svg>
+
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+
+
+// menu: la pillola apre e chiude il pannello
+const menu=$('menu'),mpill=$('mpill');
+const page=$('page');let menuT,lenis=null; // lenis: scroll morbido, acceso al load
+[...menu.querySelectorAll('.menu-main li,.menu-meta,.menu-proj')].forEach((el,i)=>el.style.setProperty('--i',i));
+// i blocchi tenuti fermi da GSAP sono position:fixed: dentro la pagina spostata andrebbero in cima, li rimetto all'altezza dello scroll
+const pinned=()=>[...page.querySelectorAll('.pin-spacer>*')].filter(el=>getComputedStyle(el).position==='fixed');
+const setMenu=open=>{
+  if(open===document.body.classList.contains('menu-open'))return;
+  clearTimeout(menuT);
+  if(open){const sy=scrollY-page.offsetTop;page.style.setProperty('--sy',sy+'px');page.classList.add('clip');document.documentElement.style.background='var(--dark)';
+    pinned().forEach(el=>{el.dataset.top=el.style.top;el.style.top=sy+'px'});void page.offsetWidth}
+  document.body.classList.toggle('menu-open',open);menu.classList.toggle('open',open);mpill.setAttribute('aria-expanded',open);document.documentElement.style.overflow=open?'hidden':'';lenis&&(open?lenis.stop():lenis.start());
+  if(!open)menuT=setTimeout(()=>{page.classList.remove('clip');document.documentElement.style.background='';page.querySelectorAll('[data-top]').forEach(el=>{el.style.top=el.dataset.top;delete el.dataset.top})},800);
+};
+mpill.onclick=()=>setMenu(!menu.classList.contains('open'));
+$('pageShade').onclick=()=>setMenu(false);
+// voce del menu: prima la pagina risale, poi si va alla sezione
+menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',e=>{const t=a.getAttribute('href');setMenu(false);
+  if(t.startsWith('#')){e.preventDefault();setTimeout(()=>lenis?lenis.scrollTo(t):document.querySelector(t).scrollIntoView({behavior:'smooth'}),650)}}));
+// reel: il video si carica solo quando lo apri
+const reel=$('reel'),rv=$('reelVideo');
+const openReel=()=>{reel.hidden=false;if(!rv.src)rv.src='assets/reel.mp4';rv.currentTime=0;rv.play().catch(()=>{});requestAnimationFrame(()=>reel.classList.add('on'));$('reelClose').focus()};
+const closeReel=()=>{rv.pause();reel.classList.remove('on');setTimeout(()=>{reel.hidden=true},400)};
+$('reelOpen').onclick=openReel;$('reelClose').onclick=closeReel;
+reel.addEventListener('click',e=>{if(e.target===reel)closeReel()});
+addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!reel.hidden)closeReel();else setMenu(false)});
+
+// shutter: 12 lamelle per confine
+const shutters=[...document.querySelectorAll('.shutter')].map(el=>{const w=document.createElement('div');w.className='shutter-bands';
+  const bands=Array.from({length:12},()=>w.appendChild(document.createElement('i')));el.append(w);return {el,bands,out:el.classList.contains('shutter-out')}});
+
+
+// storia: il percorso si disegna mentre la sezione scorre; le tappe si accendono quando la linea ci arriva, il contatore sale
+{const rt=$('pjRoute');if(rt){const st=$('pj-storia'),ln=$('pjRouteP'),svg=rt.querySelector('svg'),stops=[...rt.querySelectorAll('.pj-stop')],N=+rt.dataset.n,num=$('pjN');
+  const fr=stops.map((_,i)=>i/(stops.length-1)),still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const place=()=>{const L=ln.getTotalLength(),k=svg.getBoundingClientRect().width/240;stops.forEach((s,i)=>{const pt=ln.getPointAtLength(fr[i]*L);s.style.left=pt.x*k+'px';s.style.top=pt.y*k+'px';s.classList.toggle('l',pt.x>120)})};
+  const go=()=>{const r=st.getBoundingClientRect(),p=still?1:clamp((innerHeight*.55-r.top)/Math.max(1,r.height-innerHeight*.5));ln.style.strokeDashoffset=(1-p).toFixed(4);
+    stops.forEach((s,i)=>s.classList.toggle('on',p>=fr[i]-.005));num.textContent=Math.round(p*N)};
+  place();go();addEventListener('resize',()=>{place();go()});addEventListener('scroll',go,{passive:true})}}
+// barra dei servizi: si accende la voce del lavoro al centro dello schermo; cliccando una voce si scorre al suo primo lavoro
+{const bar=$('pjSvc'),figs=[...document.querySelectorAll('[data-svc]')];if(bar&&figs.length){const pills=[...bar.querySelectorAll('button')];let act=null;
+  const go=()=>{const vh=innerHeight;let best=null,bd=1e9;figs.forEach(f=>{const r=f.getBoundingClientRect(),d=r.top>vh/2?r.top-vh/2:r.bottom<vh/2?vh/2-r.bottom:0;if(d<bd){bd=d;best=f}});
+    const show=bd<vh*.2;bar.classList.toggle('on',show);if(!show)return; // solo quando un lavoro occupa il centro dello schermo
+    const s=best.dataset.svc;if(s===act)return;act=s;pills.forEach(q=>q.classList.toggle('on',q.dataset.s===s))};
+  pills.forEach(q=>q.onclick=()=>{const f=figs.find(f=>f.dataset.svc===q.dataset.s);if(!f)return;const y=f.getBoundingClientRect().top+scrollY-Math.max(0,(innerHeight-f.offsetHeight)/2);
+    lenis?lenis.scrollTo(y,{duration:1.2}):scrollTo({top:y,behavior:'smooth'})});
+  addEventListener('scroll',go,{passive:true});go()}}
+// titolo lettera per lettera
+{const t=$('pjTtl');if(t)t.innerHTML=[...t.textContent].map((c,i)=>`<span class="ch" style="--i:${i}" aria-hidden="true">${c===' '?'&nbsp;':c}</span>`).join('')}
+const nav=$('nav'),darks=[...document.querySelectorAll('[data-dark]')],pjHero=$('pjHero'),still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const mb='Un pullman <a href="progetto-marinobus.html">MarinoBus</a> è lungo circa 12 metri: ';
+const onScroll=()=>{
+  const vh=innerHeight,y=nav.offsetHeight/2;
+  nav.classList.toggle('on-dark',darks.some(s=>{const r=s.getBoundingClientRect();return r.top<=y&&r.bottom>=y}));
+  nav.classList.toggle('solid',scrollY>40&&!nav.classList.contains('on-dark'));
+  // primo media: si allarga fino a tutta larghezza mentre sale
+  {const pr=document.querySelector('.nextp-pill').getBoundingClientRect();if(pr.top<=y&&pr.bottom>=y&&pr.left<innerWidth*.2&&pr.right>innerWidth*.8)nav.classList.add('on-dark')}
+  nav.classList.toggle('solid',scrollY>40&&!nav.classList.contains('on-dark'));
+  if(!still&&pjHero){const r=pjHero.getBoundingClientRect();pjHero.style.setProperty('--k',clamp((r.top-vh*.15)/(vh*.7)).toFixed(3))}
+  shutters.forEach(({el,bands,out})=>{const r=el.getBoundingClientRect();if(r.top>vh*1.3||r.top<-vh*.5)return;
+    const p=clamp(out?(vh-r.top)/(vh*.85):(vh*.75-r.top)/(vh*.6)),n=bands.length;
+    bands.forEach((b,i)=>{const k=clamp(p*2-(n-1-i)/(n-1));b.style.transform='scaleY('+(out?1-k:k).toFixed(3)+')'})});
+  const c=(scrollY+vh)*0.02646,m=c/100;
+  $('cm').textContent=c>=100?m.toFixed(1).replace('.',',')+' m':Math.round(c)+' cm';
+  $('cmtxt').innerHTML=mb+(m<12?'ne mancano '+(12-m).toFixed(1).replace('.',',')+'.':'l\'hai superato.');
+};
+addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',onScroll);onScroll();
+addEventListener('load',()=>{
+  if(!window.gsap)return;
+  gsap.registerPlugin(ScrollTrigger);
+  if(window.Lenis&&!still){lenis=new Lenis({lerp:.1,anchors:true});lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0)}
+  if(matchMedia('(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference)').matches){
+    const mags=[...document.querySelectorAll('.nav .btn,.mpill')].map(el=>({el,x:gsap.quickTo(el,'x',{duration:.6,ease:'power3'}),y:gsap.quickTo(el,'y',{duration:.6,ease:'power3'})}));
+    addEventListener('pointermove',e=>mags.forEach(({el,x,y})=>{const r=el.getBoundingClientRect(),cx=r.left+r.width/2-gsap.getProperty(el,'x'),cy=r.top+r.height/2-gsap.getProperty(el,'y'),
+      dx=e.clientX-cx,dy=e.clientY-cy,R=Math.max(r.width,r.height)/2+70,k=clamp((R-Math.hypot(dx,dy))/40);
+      x(clamp(dx*.25,-10,10)*k);y(clamp(dy*.25,-10,10)*k)}),{passive:true});
+  }
+  let rT;new ResizeObserver(()=>{clearTimeout(rT);rT=setTimeout(()=>ScrollTrigger.refresh(),200)}).observe(document.body);
+  // pagina successiva: lo stesso codice della home
+  // la pagina dopo si prepara in anticipo (prerender su Chrome, prefetch altrove) quando la sezione si avvicina: al cambio pagina è già pronta, niente attesa né scatto
+  {const nxEl=$('nextp');new IntersectionObserver((es,o)=>{if(!es[0].isIntersecting)return;o.disconnect();const u=nxEl.dataset.href;
+    if(HTMLScriptElement.supports&&HTMLScriptElement.supports('speculationrules')){const s=document.createElement('script');s.type='speculationrules';s.textContent=JSON.stringify({prerender:[{source:'list',urls:[u]}]});document.head.append(s)}
+    const l=document.createElement('link');l.rel='prefetch';l.href=u;document.head.append(l); // anche dove il prerender non parte, la pagina è già scaricata
+    const im=new Image();im.src=nxEl.querySelector('.nextp-pill img').src},{rootMargin:'0px 0px 1200px 0px'}).observe(nxEl)}
+  const nx=$('nextp');let nxGone=false,nxSeen=false; // nxSeen: la sezione va percorsa davvero (non basta riaprire la pagina già in fondo)
+  ScrollTrigger.create({trigger:nx,start:'top top',end:'bottom bottom',refreshPriority:-1,onUpdate:s=>{nx.style.setProperty('--np',s.progress.toFixed(3));nx.style.setProperty('--ne',gsap.parseEase('power2.inOut')(clamp((s.progress-.04)/.86)).toFixed(4));if(s.progress<.9)nxSeen=true;
+    if(s.progress>.995&&s.direction>0&&nxSeen&&!nxGone&&innerHeight+scrollY>=document.documentElement.scrollHeight-4){nxGone=true;try{sessionStorage.setItem('vt','expand')}catch(e){}location.href=nx.dataset.href}}});
+  addEventListener('pageshow',e=>{if(e.persisted){nxGone=false;nx.classList.remove('leaving')}});
+  addEventListener('pageswap',e=>{let t=null;try{t=sessionStorage.getItem('vt')}catch(_){}if(e.viewTransition&&t==='expand')e.viewTransition.types.add('expand')});
+});
+// lettere che scorrono in hover su bottoni e link con freccia
+const rollify=t=>{const s=document.createElement('span');s.className='roll';[...t.textContent.trim()].forEach((ch,i)=>{const l=document.createElement('span');l.style.setProperty('--d',i);l.textContent=ch===' '?'\u00a0':ch;s.append(l)});s.setAttribute('aria-hidden','true');
+  const lab=document.createElement('span');lab.className='sr';lab.textContent=t.textContent.trim();const f=document.createDocumentFragment();f.append(s,lab);t.replaceWith(f)};
+document.querySelectorAll('.btn,.btn .long,.btn .short,.go,.reel-btn').forEach(el=>[...el.childNodes].filter(n=>n.nodeType===3&&n.textContent.trim()).forEach(rollify));
+
+// pillole su una riga: un solo corpo per tutte, ridotto quanto serve alla scritta più lunga
+const fitPills=()=>{const ps=[...document.querySelectorAll('.ft-drop .fp')],rg=document.createRange();document.documentElement.style.removeProperty('--fpk');
+  const k=Math.min(1,...ps.map(p=>{rg.selectNodeContents(p);const pad=parseFloat(getComputedStyle(p).paddingLeft)*2;return (p.clientWidth-pad)/rg.getBoundingClientRect().width}));
+  document.documentElement.style.setProperty('--fpk',k.toFixed(3))};
+fitPills();document.fonts.load('400 20px "Google Sans"').then(fitPills,fitPills);addEventListener('resize',fitPills);
+// pagina successiva: parole + pillola centrate come gruppo; mentre la pillola cresce lo spostamento torna a zero e lei finisce al centro esatto.
+// Il corpo si riduce solo se il gruppo non ci sta (margine ai lati come il resto del sito)
+const fitNext=()=>{const n=$('nextp');if(!n)return;const t=n.querySelector('.nextp-t'),[a,,b]=t.children,wd=e=>e.getBoundingClientRect().width;
+  n.style.removeProperty('--nt');const fs=parseFloat(getComputedStyle(t).fontSize);
+  const cw=n.querySelector('.nextp-pin').clientWidth,avail=cw-2*Math.min(80,Math.max(24,cw*.05));
+  const k=avail/(wd(a)+wd(b)+fs*(2.1+.24));if(k<1)n.style.setProperty('--nt',(fs*k).toFixed(1)+'px');
+  n.style.setProperty('--nsh',((wd(a)-wd(b))/2).toFixed(1)+'px')};
+fitNext();document.fonts.load('400 100px "Google Sans"').then(fitNext,fitNext);addEventListener('resize',fitNext);
+
+// footer: quando arrivi in fondo le pillole dei servizi cadono e si ammucchiano. Matter.js si carica solo qui
+const ft=document.querySelector('.ft'),drop=document.querySelector('.ft-drop');
+const pills=()=>{const {Engine,Bodies,Body,Composite,Mouse,MouseConstraint,Sleeping}=Matter;
+  const eng=Engine.create({enableSleeping:true}),W=ft.clientWidth,ru=document.querySelector('.ft-ruler'),L=ru.offsetWidth?ru.getBoundingClientRect().right-ft.getBoundingClientRect().left:0;
+  // misure prese in fila, poi posizione assoluta. Partono già quasi a terra, a file: la prima piena, le altre sopra gli spazi
+  // (così il mucchio resta basso e nessuna si capovolge); la fisica le assesta
+  const F0=drop.offsetTop+drop.offsetHeight;let x=L+8+Math.random()*24,row=0;
+  const bodies=[...drop.children].map((el,i)=>{const w=el.offsetWidth,h=el.offsetHeight;
+    if(x+w>W-4){row++;x=L+w*(.35+Math.random()*.3)}
+    const b=Bodies.rectangle(x+w/2,F0-h/2-row*h*1.02-2,w,h,{chamfer:{radius:h/2},restitution:.2,friction:.6,angle:row?(Math.random()-.5)*.3:(Math.random()-.5)*.04});
+    x+=w+4+Math.random()*(row?6:10);
+    b.el=el;b.w=w;b.h=h;return b});
+  ft.classList.add('phys');Composite.add(eng.world,bodies);
+  let walls=[];const setWalls=()=>{Composite.remove(eng.world,walls);const W=ft.clientWidth,F=drop.offsetTop+drop.offsetHeight;
+    walls=[Bodies.rectangle(W/2,F+50,W+400,100,{isStatic:true}),Bodies.rectangle(L-50,F-2000,100,4000,{isStatic:true}),Bodies.rectangle(W+50,F-2000,100,4000,{isStatic:true})];
+    Composite.add(eng.world,walls);bodies.forEach(b=>Sleeping.set(b,false))};
+  setWalls();addEventListener('resize',setWalls);
+  for(let i=0;i<900&&bodies.some(b=>!b.isSleeping);i++)Engine.update(eng,1000/60); // fino a 15 s simulati, di solito molto meno
+  let mouse=null;
+  if(matchMedia('(pointer:fine)').matches){mouse=Mouse.create(ft);['wheel','mousewheel','DOMMouseScroll'].forEach(n=>ft.removeEventListener(n,mouse.mousewheel)); // la rotellina resta allo scroll
+    const mc=MouseConstraint.create(eng,{mouse});mc.constraint.stiffness=.2;Composite.add(eng.world,mc)} // non passare constraint:{} nelle opzioni, sostituirebbe il vincolo intero
+  const draw=()=>bodies.forEach(b=>{b.el.style.transform=`translate(${(b.position.x-b.w/2).toFixed(1)}px,${(b.position.y-b.h/2).toFixed(1)}px) rotate(${b.angle.toFixed(3)}rad)`});
+  // passo fisso a 60 al secondo (anche sugli schermi a 120 Hz); fermo quando il footer è fuori schermo o le pillole dormono
+  let vis=true,last=performance.now(),acc=0;new IntersectionObserver(es=>{vis=es[0].isIntersecting}).observe(ft);
+  const tick=t=>{acc=Math.min(acc+t-last,100);last=t;
+    if(vis&&(bodies.some(b=>!b.isSleeping)||mouse&&mouse.button===0)){while(acc>=1000/60){Engine.update(eng,1000/60);acc-=1000/60}draw()}else acc=0;
+    requestAnimationFrame(tick)};
+  // balzo leggero (30-50px): tutte, a scaglioni, quando la fascia entra nello schermo; una alla volta col mouse sopra
+  const hop=(b,k=1)=>{if(performance.now()-(b.hopT||0)<700)return;b.hopT=performance.now();Sleeping.set(b,false);
+    Body.setVelocity(b,{x:(Math.random()-.5)*1.6*k,y:-(3.6+Math.random()*1.2)*k});Body.setAngularVelocity(b,(Math.random()-.5)*.05)};
+  bodies.forEach(b=>b.el.addEventListener('pointerenter',()=>{if(!mouse||mouse.button!==0)hop(b)}));
+  new IntersectionObserver(es=>{if(es[0].isIntersecting)bodies.forEach((b,i)=>setTimeout(()=>hop(b,.7),120+i*60))},{threshold:.6}).observe(drop);
+  draw();requestAnimationFrame(tick)};
+if(!matchMedia('(prefers-reduced-motion:reduce)').matches)new IntersectionObserver((es,o)=>{if(!es[0].isIntersecting)return;o.disconnect();
+  const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js';s.onload=pills;document.head.append(s)},{rootMargin:'0px 0px 1500px 0px'}).observe(ft); // si prepara prima che il footer arrivi
+
+// SVG con animazioni SMIL: girano solo quando si vedono (fuori schermo consumavano CPU di continuo, pesante sui telefoni)
+{const so=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting?e.target.unpauseAnimations():e.target.pauseAnimations()));
+  document.querySelectorAll('svg').forEach(s=>{if(s.querySelector('animate,animateTransform,animateMotion'))so.observe(s)})}
+
+// comparsa allo scroll
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -10% 0px'});
+document.querySelectorAll('.rv,.lboard,.lr').forEach(el=>{if(!el.closest('.cta,.projects'))io.observe(el)});
+</script>
 </body>
 </html>

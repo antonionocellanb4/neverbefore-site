@@ -9,6 +9,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&display=swap" rel="stylesheet">
 <script>/* l'intro della hero aspetta i font (max 1,5 s): senza, il titolo si ricompone a metà animazione e la pagina sembra ricaricarsi */
+addEventListener('pagereveal',e=>{let t=null;try{t=sessionStorage.getItem('vt');sessionStorage.removeItem('vt')}catch(_){}if(e.viewTransition&&t==='expand')e.viewTransition.types.add('expand');document.documentElement.classList.add('shown')});
+if(!('onpagereveal' in window))document.documentElement.classList.add('shown');
+// (sopra: il segnale del passaggio 'pagina successiva' vale per un solo cambio pagina)
 document.documentElement.classList.add('wf');window.fontsReady=Promise.race([Promise.all(['400 18px "Google Sans"','700 18px "Google Sans"'].map(f=>document.fonts.load(f))),new Promise(r=>setTimeout(r,1500))]).catch(()=>{}).then(()=>document.documentElement.classList.remove('wf'));</script>
 <style>
 :root{
@@ -612,6 +615,12 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 @keyframes vtOld{to{transform:translateY(-8%) scale(.94);opacity:.3}}
 @keyframes vtNew{from{transform:translateY(100%);clip-path:inset(0 round var(--radius-media) var(--radius-media) 0 0)}to{clip-path:inset(0 round 0)}}
 .nav{view-transition-name:nav}
+/* pagina successiva: la foto della pillola, ormai a tutto schermo, resta ferma e diventa il fondo della hero della nuova pagina (stesso view-transition-name) */
+.nextp-pill img{view-transition-name:next-hero}
+html:active-view-transition-type(expand)::view-transition-old(root){animation:none}
+html:active-view-transition-type(expand)::view-transition-new(root){animation:vtFade .5s ease both}
+html:active-view-transition-type(expand)::view-transition-group(next-hero){animation-duration:.01s}
+@keyframes vtFade{from{opacity:0}}
 @media (prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
@@ -996,9 +1005,10 @@ const onScroll=()=>{
   // il reel cresciuto sotto l'header: logo e bottoni chiari
   const rr=hReel.getBoundingClientRect();if(rr.top<=y&&rr.bottom>=y&&rr.left<innerWidth*.2&&rr.right>innerWidth*.8)nav.classList.add('on-dark');
   const hb=$('hxBig');if(hb.style.display==='block'){const r=hb.getBoundingClientRect();if(r.top<=y&&r.bottom>=y&&r.left<innerWidth*.2&&r.right>innerWidth*.8)nav.classList.add('on-dark')} // idem per il video che si apre a fine intro
+  {const pr=document.querySelector('.nextp-pill').getBoundingClientRect();if(pr.top<=y&&pr.bottom>=y&&pr.left<innerWidth*.2&&pr.right>innerWidth*.8)nav.classList.add('on-dark')} // idem sopra la foto della pagina successiva
   const hr=hero.getBoundingClientRect();
   // niente fascia dell'header sopra la hero e sopra le sezioni ferme a tutto schermo
-  nav.classList.toggle('solid',hr.bottom<y&&![proj,vx,cta].some(s=>{const r=s.getBoundingClientRect();return r.top<=y&&r.bottom>=y}));
+  nav.classList.toggle('solid',hr.bottom<y&&![proj,vx,cta,$('nextp')].some(s=>{const r=s.getBoundingClientRect();return r.top<=y&&r.bottom>=y}));
 
   // parole accese in base a quanto l'intro è salita nello schermo
 
@@ -1054,10 +1064,16 @@ addEventListener('load',()=>{
   const mm=gsap.matchMedia(),svc=$('servizi');
 
   // pagina successiva: la barra segue lo scroll, a fine corsa lo schermo si chiude e si cambia pagina
+  // la pagina dopo si prepara in anticipo (prerender su Chrome, prefetch altrove) quando la sezione si avvicina: al cambio pagina è già pronta, niente attesa né scatto
+  {const nxEl=$('nextp');new IntersectionObserver((es,o)=>{if(!es[0].isIntersecting)return;o.disconnect();const u=nxEl.dataset.href;
+    if(HTMLScriptElement.supports&&HTMLScriptElement.supports('speculationrules')){const s=document.createElement('script');s.type='speculationrules';s.textContent=JSON.stringify({prerender:[{source:'list',urls:[u]}]});document.head.append(s)}
+    const l=document.createElement('link');l.rel='prefetch';l.href=u;document.head.append(l); // anche dove il prerender non parte, la pagina è già scaricata
+    const im=new Image();im.src=nxEl.querySelector('.nextp-pill img').src},{rootMargin:'0px 0px 1200px 0px'}).observe(nxEl)}
   const nx=$('nextp');let nxGone=false,nxSeen=false; // nxSeen: la sezione va percorsa davvero (non basta riaprire la pagina già in fondo)
   ScrollTrigger.create({trigger:nx,start:'top top',end:'bottom bottom',refreshPriority:-1,onUpdate:s=>{nx.style.setProperty('--np',s.progress.toFixed(3));nx.style.setProperty('--ne',gsap.parseEase('power2.inOut')(clamp((s.progress-.04)/.86)).toFixed(4));if(s.progress<.9)nxSeen=true;
-    if(s.progress>.995&&s.direction>0&&nxSeen&&!nxGone&&innerHeight+scrollY>=document.documentElement.scrollHeight-4){nxGone=true;nx.classList.add('leaving');setTimeout(()=>{location.href=nx.dataset.href},650)}}});
-  addEventListener('pageshow',e=>{if(e.persisted){nxGone=false;nx.classList.remove('leaving')}}); // tornando indietro la pagina non resta chiusa
+    if(s.progress>.995&&s.direction>0&&nxSeen&&!nxGone&&innerHeight+scrollY>=document.documentElement.scrollHeight-4){nxGone=true;try{sessionStorage.setItem('vt','expand')}catch(e){}location.href=nx.dataset.href}}});
+  addEventListener('pageshow',e=>{if(e.persisted){nxGone=false;nx.classList.remove('leaving')}});
+  addEventListener('pageswap',e=>{let t=null;try{t=sessionStorage.getItem('vt')}catch(_){}if(e.viewTransition&&t==='expand')e.viewTransition.types.add('expand')}); // tornando indietro la pagina non resta chiusa
 
   // hero: la pillola del reel esce dal titolo e cresce fino a tutto schermo, il video dentro si stringe da 1.35 a 1
   mm.add('(prefers-reduced-motion:no-preference)',()=>{
