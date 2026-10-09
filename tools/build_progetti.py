@@ -44,13 +44,13 @@ ABOUT = dict(
 ABOUT_CSS = r'''
 /* chi siamo: la foto della pillola "Chi ⬭ siamo" della home, a 10px dai bordi con raggio 22, diventa il fondo della hero */
 .ab-hero{position:relative;height:100svh;color:#fff}
-.ab-bg{position:absolute;inset:10px;border-radius:22px;overflow:hidden;background:var(--dark)}
-.ab-bg img{display:block;width:100%;height:100%;object-fit:cover;view-transition-name:next-hero}
+.ab-bg{position:absolute;inset:10px;border-radius:22px;overflow:hidden;background:var(--dark);view-transition-name:next-hero}
+.ab-bg img{display:block;width:100%;height:100%;object-fit:cover}
 .ab-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(5,5,5,.55),rgba(5,5,5,0) 60%)} /* scuro neutro in basso: il titolo bianco si legge */
 .ab-txt{position:absolute;left:calc(10px + var(--pad));right:calc(10px + var(--pad));bottom:calc(10px + var(--pad))}
 .ab-txt .pj-ttl{font-size:clamp(64px,13vw,240px);line-height:.9}
 .ab-txt p{margin-top:16px;font-size:17px}
-.nextp-pill img{view-transition-name:none} /* un solo elemento per nome nella pagina */
+.nextp-pill{view-transition-name:none} /* un solo elemento per nome nella pagina */
 '''
 
 CSS = r'''

@@ -577,7 +577,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
   .vx-w{font-size:15vw;padding:0 calc(var(--pad) + 16px)}
   .vx-w1{top:22%}.vx-w2{bottom:26%}
   .vx-foot{left:calc(var(--pad) + 16px);right:calc(var(--pad) + 16px);bottom:44px;font-size:15px}
-  .cta-box{right:calc(var(--pad) + 12px);width:calc(100% - 2*var(--pad) - 24px)}
+  .cta-box{right:calc(var(--pad) + 12px);bottom:40px;width:calc(100% - 2*var(--pad) - 24px);border-radius:calc(var(--radius-media) - 12px)} /* 12px dal bordo della foto su tre lati, angoli concentrici con i suoi */
   :root{--nav-h:72px;--pill-h:46px}
   body{font-size:17px}
   .nav{grid-template-columns:1fr auto}
@@ -616,7 +616,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 @keyframes vtNew{from{transform:translateY(100%);clip-path:inset(0 round var(--radius-media) var(--radius-media) 0 0)}to{clip-path:inset(0 round 0)}}
 .nav{view-transition-name:nav}
 /* pagina successiva: la foto della pillola, ormai a tutto schermo, resta ferma e diventa il fondo della hero della nuova pagina (stesso view-transition-name) */
-.nextp-pill img{view-transition-name:next-hero}
+.nextp-pill{view-transition-name:next-hero} /* sul contenitore, non sulla foto: il passaggio tiene gli angoli arrotondati */
 html:active-view-transition-type(expand)::view-transition-old(root){animation:none}
 html:active-view-transition-type(expand)::view-transition-new(root){animation:vtFade .5s ease both}
 html:active-view-transition-type(expand)::view-transition-group(next-hero){animation-duration:.01s}
