@@ -380,12 +380,54 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .hs-dark{color:#fff}
 .hs-clip{position:absolute;inset:10px;z-index:1;display:flex;align-items:center;padding:0 var(--pad);border-radius:22px;overflow:hidden} /* sulla foto la riga resta dentro il riquadro: entra ed esce dai suoi bordi, non dallo schermo */.hs-dark .hs-k{color:#fff;left:calc(10px + var(--pad))}
 .hs-dark .hx-line .w .c,.hs-dark .hx-line .w .c.on{color:#fff}
+.hs-dark .hs-cue{top:50%;bottom:auto;translate:-50% -50%;gap:.12em;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:clamp(96px,19vw,360px);line-height:.9;transition:opacity .5s,scale .7s var(--energy)} /* in Chi siamo "Scorri" è il titolo d'apertura: gigante al centro della foto */
+.hs-dark .hs-cue i{height:clamp(56px,7vw,120px);width:2px}.hs-dark .hs-cue i::after{width:2px}
+.hs-dark .hs-cue.off{scale:.92}
 .hs-dark .ab-bg::after{background:rgba(5,5,5,.42)} /* velo neutro: la riga bianca si legge su tutta la foto */
 /* rolodex: tamburo di frasi, gira con lo scroll */
 .rdx{position:relative}
 .rdx-pin{position:sticky;top:0;height:100svh;overflow:hidden;perspective:1600px}
 .rdx-i{position:absolute;left:0;right:0;top:50%;display:flex;justify-content:center;align-items:center;gap:.14em;white-space:nowrap;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:var(--rf,clamp(56px,11vw,210px));line-height:1.1;margin-top:-.55em;backface-visibility:hidden;will-change:transform,opacity}
 .rdx-i .hx-pill{opacity:1;margin:0}
+/* capitoli e schede tecniche (Creative Website Manual) */
+.ch-k{margin:0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.cap{padding:clamp(100px,12vw,180px) var(--pad) 0} /* non .ch: è la classe delle lettere del titolo animato */
+.ch-t{font-size:clamp(56px,9vw,170px);line-height:.95;margin:12px 0 clamp(40px,5vw,72px)}
+.ch-g{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:clamp(24px,5vw,96px);align-items:start}
+.sv-g{margin-top:clamp(40px,6vw,80px)}
+.spec{position:sticky;top:calc(var(--nav-h) + 24px);border:1px solid var(--ink);border-radius:var(--radius);padding:16px 16px 6px}
+.spec h3{font-size:clamp(26px,2.4vw,40px);line-height:1;margin-bottom:clamp(64px,9vw,140px)}
+.spec dl{margin:0}
+.spec dl div{display:grid;grid-template-columns:1fr 1.2fr;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.spec dt{color:var(--ink-2)}.spec dd{margin:0}
+.ch-txt .pj-big{margin:0 0 32px}
+.ch-txt p:not(.pj-big){font-size:17px;line-height:1.5;color:var(--ink-2);max-width:56ch}
+.ch-txt p+p{margin-top:16px}
+.ch-txt .go{margin-top:8px}
+.vm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:clamp(24px,5vw,96px);align-items:center;padding:clamp(20px,2.4vw,32px) 0 clamp(40px,5vw,72px);border-top:1px solid var(--ink)}
+.vm figure{margin:0;aspect-ratio:4/3;max-height:340px;border-radius:14px;overflow:hidden;background:var(--surface)}
+.vm .ch-k{margin-bottom:14px}
+.vm p:not(.ch-k){font-family:var(--display);font-size:clamp(26px,2.8vw,48px);letter-spacing:-.05em;line-height:1.1}
+@media (max-width:820px){.vm{grid-template-columns:1fr;gap:16px}}
+.ab-q2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,96px)}
+.ab-q2 p{font-size:17px;line-height:1.5;color:var(--ink-2);max-width:56ch}
+.cap .ab-num{display:flex;justify-content:space-between;gap:24px;margin:clamp(64px,8vw,120px) 0 0;padding-top:16px;border-top:1px solid var(--ink)} /* da bordo a bordo */
+.cap .ab-num b{font-size:clamp(88px,15vw,300px);line-height:.9;font-variant-numeric:tabular-nums}
+.cap .ab-num span{display:flex;align-items:center;gap:14px;margin-top:18px;font-size:17px}
+.cap .ab-num .hx-pill{font-size:clamp(28px,2.6vw,44px);margin:0;opacity:1;flex:none}
+@media (max-width:820px){.ab-q2{grid-template-columns:1fr;gap:16px}.cap .ab-num{flex-direction:column;gap:32px}}
+/* esempi del servizio: titolo fermo a sinistra, progetti grandi a destra uno dopo l'altro */
+.ex{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(24px,5vw,96px);padding:clamp(100px,12vw,180px) var(--pad) 0}
+.ex-side{position:sticky;top:calc(var(--nav-h) + 24px);align-self:start}
+.ex-side .ch-t{margin-bottom:24px}
+.ex-i{display:block;color:inherit;text-decoration:none;border-top:1px solid var(--line);padding-top:14px;margin-bottom:clamp(48px,6vw,96px)}
+.ex-k{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.ex-k i{width:8px;height:8px;border-radius:50%;background:var(--ink)}
+.ex-i .pc-m{aspect-ratio:16/10}
+.ex-i:hover .pc-m img{scale:1.04}
+.ex-c{display:flex;justify-content:space-between;gap:16px;padding-top:12px;font-size:17px}
+.ex-c small{font-size:15px;color:var(--ink-2);text-align:right}
+@media (max-width:820px){.ch-g,.ex{grid-template-columns:1fr}.spec,.ex-side{position:static}}
 /* card a ventaglio (Osmo Stacking Sticky Cards Bounce) */
 .sc{padding:clamp(80px,12vw,160px) var(--pad) 18svh;overflow-x:clip}
 .sc-h{text-align:center;font-size:clamp(44px,6vw,110px);margin-bottom:clamp(40px,6vw,80px)}
@@ -423,6 +465,10 @@ html:has(.pj-dome),body:has(.pj-dome){overflow:hidden;height:100%}
 '''
 
 PAGES_JS = r'''
+// numeri di Chi siamo: contano da data-from al valore quando entrano nello schermo; le pillole accanto partono insieme
+{const bs=[...document.querySelectorAll('.ab-num b[data-n]')];if(bs.length){const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;io.unobserve(e.target);const b=e.target,n=+b.dataset.n,f=+b.dataset.from,t0=performance.now(),D=still?0:1600;
+    b.parentNode.querySelector('.hx-pill')?.classList.add('on');const step=t=>{const k=D?Math.min(1,(t-t0)/D):1;b.textContent=Math.round(f+(n-f)*(1-(1-k)**3));if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}),{threshold:.4});
+  bs.forEach(b=>{b.textContent=b.dataset.from;io.observe(b)})}}
 // card a ventaglio: avvicinandosi alla cima ogni card (p 0→1, accelera) si sposta e si inclina al suo posto nel ventaglio; arrivata, rimbalza
 {const R=[-5,2,6,-3,4,-6],Y=[2.1,0,4.5,1,3.2,.5];document.querySelectorAll('.sc-list').forEach(L=>{const its=[...L.querySelectorAll('.sc-i')],n=its.length;
   const go=()=>{const vh=innerHeight,top=parseFloat(getComputedStyle(its[0]).top),w=its[0].offsetWidth,sp=n>1?Math.min(w*.92,(L.clientWidth-w)/(n-1)):0,fs=parseFloat(getComputedStyle(L).fontSize);
@@ -551,6 +597,19 @@ def stack(title, items):
     return f'<section class="sc">{head}<div class="sc-list">{cards}</div></section>'
 
 
+ARROW = '<i><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h12M9 3l5 5-5 5"/></svg></i>'  # freccia dei link .go
+
+
+def spec(title, rows):
+    # scheda a filetti come le "specs" di Creative Website Manual: titolo in alto, spazio vuoto, righe etichetta/valore in basso
+    rr = ''.join(f'<div><dt>{esc(k)}</dt><dd>{esc(str(v))}</dd></div>' for k, v in rows)
+    return f'<aside class="spec"><h3>{esc(title)}</h3><dl>{rr}</dl></aside>'
+
+
+def chap(n, title, inner, cls=''):
+    return f'<section class="cap{cls}"><p class="ch-k">Capitolo {n}</p><h2 class="ch-t">{esc(title)}</h2>{inner}</section>'
+
+
 def build_servizi():
     cards = ''.join(f'''
     <article class="stk-i" style="--i:{i + 1};--c:{PASTEL[i % len(PASTEL)]}"><div class="stk-top"><div><span class="n">{i + 1:02d} / {len(SERVIZI):02d}</span><h2>{s['h3']}</h2></div>
@@ -568,21 +627,26 @@ def build_servizi():
 def build_servizio(i):
     s, n = SERVIZI[i], SERVIZI[(i + 1) % len(SERVIZI)]
     name, txt = plain(s['h3']), s.get('long') or short_txt(s['h3'])
-    pjs = related(s)[:6]
-    spec = ''
+    pjs = related(s)
+    lab = dict(CATS)
+    cats = s.get('cats') or [c for c, _ in sorted(((c, sum(c in p['cats'] for p in pjs)) for c in lab), key=lambda x: -x[1]) if _][:2]
+    rows = []
+    if s.get('subs'):
+        rows.append(('Voci', len(s['subs'])))
     if pjs:
-        spec += f'<div class="pj-col" style="grid-column:span 2"><h2>Progetti</h2>{"<br>".join(f"""<a href="{pj_href(p)}">{esc(p["name"])}</a>""" for p in pjs[:4])}</div>'
-    more = '<a href="#sv-pj"><span>Vedi i progetti</span><span aria-hidden="true">→</span></a>' if pjs else '<a href="mailto:info@neverbeforeitalia.it?subject=Richiesta%20consulenza"><span>Richiedi una consulenza</span><span aria-hidden="true">→</span></a>'
-    grid = f'''
-  <section class="pj-blk pc-sec" id="sv-pj"><div class="pj-bh" style="padding-left:0"><h3>Progetti</h3></div><div class="pc-grid">{"".join(pj_card(p, " rv") for p in pjs)}</div>
-    <a class="go sv-all" href="progetti.html">Tutti i progetti <i><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h12M9 3l5 5-5 5"/></svg></i></a></section>''' if pjs else ''
+        rows.append(('Progetti', len(pjs)))
+    if cats:
+        rows.append(('Categorie', ' · '.join(lab[c] for c in cats)))
+    more = (f'<a class="go" href="#sv-pj">Vedi gli esempi {ARROW}</a>' if pjs else f'<a class="go" href="mailto:info@neverbeforeitalia.it?subject=Richiesta%20consulenza">Richiedi una consulenza {ARROW}</a>')
+    ex = ''.join(f'''<a class="ex-i rv" href="{pj_href(p)}"><span class="ex-k"><i></i>{esc(p["name"])}</span><figure class="pc-m"><img src="{COVER(p["slug"])}" alt="{esc(p["name"])}" loading="lazy"></figure><span class="ex-c">{esc(p["sector"])}<small>{esc(" · ".join(lab[c] for c in p["cats"] if c in lab))}</small></span></a>''' for p in pjs[:6])
+    examples = f'''
+  <section class="ex" id="sv-pj"><div class="ex-side"><p class="ch-k">Esempi</p><h2 class="ch-t">Progetti</h2><a class="go" href="progetti.html">Tutti i progetti {ARROW}</a></div><div class="ex-list">{ex}</div></section>''' if pjs else ''
     main = f'''<main id="top" class="pj">
   <section class="pj-head">
-    <p class="in-k">Servizio {i + 1:02d} / {len(SERVIZI):02d}</p>
     {ttl(name)}
-    <div class="pj-meta">{spec}<div class="pj-lede"><p>{esc(txt)}</p>{more}</div></div>
+    <div class="ch-g sv-g">{spec(name, rows)}<div class="ch-txt"><p class="pj-big">{esc(txt)}</p>{more}</div></div>
   </section>
-  <section class="pj-full"><figure class="pj-m sv-hero" id="pjHero" style="aspect-ratio:16/8">{card_svg(s['h3'])}</figure></section>{stack('Cosa facciamo', [(x, '') for x in s['subs']]) if s.get('subs') else ''}{grid}
+  <section class="pj-full"><figure class="pj-m sv-hero" id="pjHero" style="aspect-ratio:16/8">{card_svg(s['h3'])}</figure></section>{stack('Cosa facciamo', [(x, '') for x in s['subs']]) if s.get('subs') else ''}{examples}
   <div class="pj-end"></div>
 </main>'''
     w = plain(n['h3']).rsplit(' ', 1)
@@ -655,16 +719,45 @@ def build_progetti_index():
          js=DOME_JS.replace('__PD__', json.dumps(pd, ensure_ascii=False)))
 
 
+
+# motion design di Vision e Mission (stesso stile delle card dei servizi in home: SMIL, ciclo 6 s, pastelli pieni, tratto nero)
+def _vision():
+    A = 'M40,200 C120,190 160,120 220,130 C280,140 300,80 360,70'
+    B = 'M40,200 C110,210 170,170 220,180 C270,190 320,120 360,110'
+    C = 'M40,200 C130,160 170,200 230,150 C290,100 320,150 360,40'
+    D = 'dur="6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.33;.66;1" keySplines=".6 0 .2 1;.6 0 .2 1;.6 0 .2 1"'
+    ghosts = ''.join(f'<path d="{d}" fill="none" stroke="#BDBDBD" stroke-width="1.4" stroke-dasharray="3 6"/>' for d in (A, B, C))
+    return ('<svg class="mo" viewBox="0 0 400 300" role="img" aria-label="Tre scenari di mercato tratteggiati: la linea della strategia passa dall uno all altro e il punto d arrivo si sposta">'
+            '<path d="M40,240 H360" stroke="#050505" stroke-width="1.2"/>' + ghosts +
+            f'<path fill="none" stroke="#050505" stroke-width="3" stroke-linecap="round" d="{A}"><animate attributeName="d" values="{A};{B};{C};{A}" {D}/></path>'
+            f'<circle r="22" fill="#E2DBFF" cx="360" cy="70"><animate attributeName="cy" values="70;110;40;70" {D}/></circle>'
+            f'<circle r="7" fill="#050505" cx="360" cy="70"><animate attributeName="cy" values="70;110;40;70" {D}/></circle>'
+            '<circle cx="40" cy="200" r="6" fill="#050505"/></svg>')
+
+
+def _mission():
+    import math
+    ppl = ''
+    for i, c in enumerate(['#D7FFE0', '#FFDCCB', '#CDEBFF', '#FFF3B8', '#E2DBFF', '#FFD6EA']):
+        a = -math.pi / 2 + i * math.pi / 3
+        x, y = 200 + 112 * math.cos(a), 150 + 96 * math.sin(a)
+        t = .08 + i * .1
+        ppl += (f'<path d="M200,150 L{x:.1f},{y:.1f}" stroke="#050505" stroke-width="1.4" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1">'
+                f'<animate attributeName="stroke-dashoffset" values="1;1;0;0;1" keyTimes="0;{t:.2f};{t + .08:.2f};.9;1" dur="6s" repeatCount="indefinite"/></path>'
+                f'<g transform="translate({x:.1f} {y:.1f})"><g transform="scale(0)"><animateTransform attributeName="transform" type="scale" values="0;0;1.15;1;1;0" keyTimes="0;{t + .07:.2f};{t + .12:.2f};{t + .15:.2f};.9;1" dur="6s" repeatCount="indefinite"/>'
+                f'<circle r="17" fill="{c}" stroke="#050505" stroke-width="1.2"/><circle cy="-4" r="5" fill="#050505"/><path d="M-8,9 C-8,2 8,2 8,9" fill="#050505"/></g></g>')
+    return ('<svg class="mo" viewBox="0 0 400 300" role="img" aria-label="Il marchio al centro: una dopo l altra le linee raggiungono le persone intorno e restano collegate">'
+            + ppl + '<circle cx="200" cy="150" r="36" fill="#050505"/><text x="200" y="154.5" text-anchor="middle" fill="#fff">Brand</text>'
+            '<circle cx="200" cy="150" r="36" fill="none" stroke="#050505" stroke-width="1.2" opacity="0"><animate attributeName="r" values="36;60;60" keyTimes="0;.4;1" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".8;0;0" keyTimes="0;.4;1" dur="2s" repeatCount="indefinite"/></circle></svg>')
+
+
 def build_chi_siamo():
     c = CHI_SIAMO
     main = f'''<main id="top" class="pj">
   {hs('Nuovi modi di comunicare {bubble} per emozionare {pulse} e sorprendere {spark}', 'Chi siamo', 'assets/img/chi-siamo-placeholder.jpg')}
-  <section class="pj-story"><div class="pj-side"><h2>Il metodo NB4</h2></div><div><p class="pj-big">{esc(c['metodo_big'])}</p>{''.join(f'<p>{esc(t)}</p>' for t in c['metodo'][:2])}</div></section>
-  {stack('', [('Metodo', c['metodo'][2]), ('Team', c['metodo'][3]), ('Vision', c['vision']), ('Mission', c['mission']), ('Qualità', c['qualita'][0]), ('Network', c['qualita'][1])])}
-  <section class="ab-num">
-    <div><b>24</b><span>Premi Mediastar</span></div><div><b>2011</b><span>Certificazione ISO 9001</span></div>
-    <div><b>2</b><span>Sedi, Bari e Padova</span></div>
-  </section>
+  {chap(1, 'Il metodo NB4', f'<div class="ch-g">{spec("Never Before Italia", [("Sedi", "Bari · Padova"), ("ISO 9001", "Dicembre 2011"), ("Mediastar", "24 premi"), ("Confindustria", "Delegati Bari e BAT")])}<div class="ch-txt"><p class="pj-big">{esc(c["metodo_big"])}</p>{"".join(f"<p>{esc(t)}</p>" for t in c["metodo"])}</div></div>')}
+  {chap(2, 'Vision e Mission', ''.join(f'<div class="vm rv"><figure>{svg}</figure><div><p class="ch-k">{k}</p><p>{esc(v)}</p></div></div>' for k, v, svg in (('Vision', c['vision'], _vision()), ('Mission', c['mission'], _mission()))))}
+  {chap(3, 'Qualità', f'<div class="ab-q2">{"".join(f"<p>{esc(t)}</p>" for t in c["qualita"])}</div><div class="ab-num">{"".join(f"""<div><b data-n="{n}" data-from="{f}">{n}</b><span>{PILLS[k]}{esc(t)}</span></div>""" for n, f, k, t in ((24, 0, "spark", "Premi Mediastar"), (2011, 2000, "steps", "Certificazione ISO 9001"), (2, 0, "venn", "Sedi, Bari e Padova")))}</div>')}
   <section class="ab-job"><div><h2>Lavora con noi</h2><p>{esc(c['jobs'])}</p></div>
     <a class="go" href="https://www.neverbeforeitalia.it/jobs">Lavora con noi <i><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h12M9 3l5 5-5 5"/></svg></i></a></section>
   <div class="pj-end"></div>
