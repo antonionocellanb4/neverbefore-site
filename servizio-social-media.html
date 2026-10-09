@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MarinoBus · Progetti · Never Before Italia</title>
-<meta name="description" content="Dal 1957 nel trasporto su gomma tra Puglia e Basilicata, oggi realtà di riferimento nazionale. Per i sessant&#x27;anni dell&#x27;azienda abbiamo ridisegnato il marchio e raccontato la sua storia.">
+<title>Social media · Servizi · Never Before Italia</title>
+<meta name="description" content="Piano editoriale, contenuti e community gestiti ogni giorno sui canali del brand.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&display=swap" rel="stylesheet">
@@ -712,6 +712,144 @@ html:active-view-transition-type(expand)::view-transition-group(next-hero){anima
   .pj-trio{grid-template-columns:1fr 1fr}.pj-trio .rv:nth-child(3){grid-column:1/-1;aspect-ratio:2/1}
 }
 @media (prefers-reduced-motion:reduce){.pj-full .pj-m{clip-path:inset(0 round var(--radius-media))}.pj-full .pj-m img{scale:1}}
+
+/* pagine interne: stessa grammatica della home (titolo enorme lettera per lettera, filetti, card bianche col motion design) */
+.in-head{padding:calc(var(--nav-h) + clamp(60px,12vh,140px)) var(--pad) 0}
+.in-k{font-size:15px;color:var(--ink-2);margin-bottom:12px}
+.in-intro{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:16px;margin-top:clamp(40px,6vw,80px);padding-top:16px;border-top:1px solid var(--ink)}
+.in-intro .pj-big{grid-column:1/4;margin:0}
+.in-intro p:not(.pj-big){grid-column:5/7;font-size:clamp(17px,1.3vw,20px);line-height:1.35;text-indent:4em}
+/* servizi: una riga per servizio, col suo motion design a destra */
+.sv-list{list-style:none;margin:clamp(64px,8vw,120px) var(--pad) 0;padding:0;border-bottom:1px solid var(--line)}
+.sv-row{display:grid;grid-template-columns:3em minmax(0,1.25fr) minmax(0,1fr) clamp(170px,19vw,300px);gap:clamp(16px,2.4vw,40px);align-items:center;padding:clamp(14px,1.6vw,22px) 0;border-top:1px solid var(--line);color:inherit;text-decoration:none}
+.sv-row .n{font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.sv-row h2{font-size:clamp(34px,4.4vw,80px);line-height:1;transition:transform .7s var(--energy)}
+.sv-row p{font-size:17px;line-height:1.4;color:var(--ink-2);max-width:28em}
+.sv-row figure{margin:0;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:var(--surface);transition:transform .7s var(--energy)}
+.sv-row:hover h2{transform:translateX(14px)}
+.sv-row:hover figure{transform:scale(1.04) rotate(-1.5deg)}
+/* singolo servizio. Fondo dei disegni = quello delle card in home (surface): su bianco il terreno grigio di alcuni disegni sembrava un pezzo tagliato */
+.sv-hero{display:grid;place-items:center;background:var(--surface)}
+.sv-hero .mo{width:auto;height:86%;max-width:100%}
+.pc-sec{padding:0 var(--pad)}
+.pc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,2.4vw,40px) clamp(10px,1.2vw,16px)}
+.pc{display:block;color:inherit;text-decoration:none}
+.pc-m{margin:0;aspect-ratio:4/3;border-radius:var(--radius-media);overflow:hidden;background:var(--surface)}
+.pc-m img{display:block;width:100%;height:100%;object-fit:cover;transition:scale .8s var(--energy)}
+.pc:hover .pc-m img{scale:1.05}
+.pc-t{display:flex;justify-content:space-between;gap:16px;padding-top:12px;font-size:15px}
+.pc-t b{font-weight:400}.pc-t small{font-size:inherit;color:var(--ink-2);text-align:right}
+.sv-all{display:inline-flex;margin-top:clamp(32px,4vw,56px)}
+/* progetti: filtri (bottoni neutri, l'attivo pieno) e griglia */
+.pf{display:flex;flex-wrap:wrap;gap:8px;margin:clamp(40px,5vw,72px) var(--pad) clamp(28px,3vw,40px)}
+.pf button{border:1px solid var(--line);background:none;font:400 15px var(--sans);letter-spacing:-.02em;color:var(--ink);padding:9px 16px;border-radius:99px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+.pf button:hover{border-color:var(--ink)}
+.pf button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.pf sup{font-size:11px;margin-left:4px;color:inherit;opacity:.6}
+.pc[hidden]{display:none}
+.pf-go .pc{view-transition-name:var(--vt)}
+html:active-view-transition-type(filter)::view-transition-old(root),html:active-view-transition-type(filter)::view-transition-new(root){animation:none}
+html:active-view-transition-type(filter)::view-transition-group(*){animation-duration:.6s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+/* chi siamo */
+.ab-claim{padding:clamp(100px,14vw,200px) var(--pad) 0}
+.ab-claim h2{font-size:clamp(44px,7vw,128px);line-height:.98;max-width:13em}
+.ab-vm{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.2vw,16px);padding:0 var(--pad)}
+.ab-vm div{background:#fff;border-radius:22px;padding:clamp(24px,3vw,44px);min-height:clamp(260px,26vw,400px);display:flex;flex-direction:column;justify-content:space-between;gap:40px}
+.ab-vm h3{font:400 15px var(--sans);letter-spacing:-.02em;color:var(--ink-2)}
+.ab-vm p{font-family:var(--display);font-size:clamp(26px,2.6vw,44px);letter-spacing:-.05em;line-height:1.1}
+.ab-num{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:clamp(80px,10vw,160px) var(--pad) 0;padding-top:16px;border-top:1px solid var(--ink)}
+.ab-num b{display:block;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(56px,7vw,128px);letter-spacing:-.06em;line-height:1}
+.ab-num span{display:block;margin-top:10px;font-size:15px;color:var(--ink-2)}
+.ab-q{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:16px;padding:clamp(40px,5vw,64px) var(--pad) 0}
+.ab-q p{grid-column:span 3;font-size:17px;line-height:1.45;color:var(--ink-2);max-width:40em}
+.ab-job{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin:clamp(80px,10vw,160px) var(--pad) 0;padding-top:16px;border-top:1px solid var(--ink)}
+.ab-job h2{font-size:clamp(44px,6vw,110px);line-height:1}
+.ab-job p{font-size:17px;color:var(--ink-2);margin-top:12px}
+/* servizi: card che si impilano (Osmo "Stacking Cards 3D"): ogni card resta attaccata in alto, quella dopo la copre e lei si inclina all'indietro e si scurisce */
+.stk{--row:100svh;--top:calc(var(--nav-h) + 16px);--ch:calc(var(--row) - var(--top) - 24px);view-timeline-name:--stk;display:grid;grid-auto-rows:var(--row);width:min(100% - 2*var(--pad),1240px);margin:clamp(40px,6vw,80px) auto 0}
+.stk-i{position:sticky;top:var(--top);height:var(--ch);transform-origin:50% 100%;display:flex;flex-direction:column;gap:clamp(20px,3vw,40px);padding:clamp(20px,2.6vw,36px);border-radius:22px;background:var(--c);color:var(--ink);overflow:hidden}
+.stk-top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px 40px;align-items:end}
+.stk-top .n{display:block;font-size:15px;margin-bottom:10px}
+.stk-top h2{font-size:clamp(40px,5.4vw,96px);line-height:.95}
+.stk-top p{font-size:clamp(17px,1.3vw,20px);line-height:1.35;margin-bottom:18px;max-width:30em}
+.stk-art{flex:1;min-height:0;display:grid;place-items:center;border-radius:14px;background:#fff;overflow:hidden}
+.stk-art .mo{width:auto;height:100%;max-width:100%}
+@supports (animation-timeline:view()){@media (prefers-reduced-motion:no-preference){
+  .stk-i{animation:stkAway linear forwards;animation-timeline:--stk;animation-range:exit-crossing calc(var(--i) * var(--row) - 100svh) exit-crossing calc(var(--i) * var(--row) - var(--top))}
+  .stk-i:last-child{animation:none}
+}}
+@keyframes stkAway{to{transform:perspective(60em) rotateX(25deg) scale(.85);filter:brightness(.45)}}
+/* titolo che scorre in orizzontale, come l'intro della home: la riga entra da destra e le parole si accendono passando */
+.hs{position:relative}
+.hs-pin{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;align-items:center;padding:0 var(--pad)}
+.hs .hx-line .w .c:not(.on),.hs .hx-pill:not(.on){opacity:0} /* niente è già lì: lettere e pillole compaiono quando arrivano */
+/* pillole delle pagine interne: pastello pieno, tratto nero */
+.hx-pill[class*=hp-] svg *{fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.hp-bubble{background:#CDEBFF}.hp-bubble circle{fill:var(--ink);stroke:none;transform-box:fill-box;transform-origin:center;animation:hpDot 1.2s ease-in-out infinite}
+.hp-bubble circle:nth-of-type(2){animation-delay:.15s}.hp-bubble circle:nth-of-type(3){animation-delay:.3s}
+@keyframes hpDot{0%,60%,100%{transform:none}30%{transform:translateY(-7px)}}
+.hp-pulse{background:#FFDCCB}.hp-pulse .bg{stroke:rgba(5,5,5,.15)}.hp-pulse path:not(.bg){stroke-dasharray:.32 .68;animation:hpRun 1.8s linear infinite}
+@keyframes hpRun{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.hp-spark{background:#FFF3B8}.hp-spark g{transform-box:view-box;transform-origin:105px 39px;animation:hpBurst 1.8s var(--energy) infinite}.hp-spark circle{fill:var(--ink);stroke:none;transform-box:fill-box;transform-origin:center;animation:hpCore 1.8s var(--energy) infinite}
+@keyframes hpBurst{0%{transform:scale(.2);opacity:0}15%{opacity:1}70%,100%{transform:scale(1);opacity:0}}
+@keyframes hpCore{0%,100%{transform:scale(1)}10%{transform:scale(1.6)}30%{transform:scale(.8)}}
+.hp-gauge{background:#D7FFE0}.hp-gauge .bg{stroke:rgba(5,5,5,.15)}.hp-gauge .ar{stroke-dasharray:1;animation:hpArc 2.8s var(--energy) infinite}.hp-gauge circle{fill:var(--ink);stroke:none}
+.hp-gauge .nd{transform-box:view-box;transform-origin:105px 62px;animation:hpNeedle 2.8s var(--energy) infinite}
+@keyframes hpArc{0%{stroke-dashoffset:1}50%,80%{stroke-dashoffset:.08}100%{stroke-dashoffset:1}}
+@keyframes hpNeedle{0%{transform:rotate(-80deg)}50%,80%{transform:rotate(66deg)}100%{transform:rotate(-80deg)}}
+.hp-steps{background:#E2DBFF}.hp-steps rect{fill:#fff}.hp-steps path{stroke-dasharray:1;stroke-dashoffset:1;animation:hpTick 2.8s var(--energy) infinite}
+@keyframes hpTick{0%,8%{stroke-dashoffset:1}25%,80%{stroke-dashoffset:0}92%,100%{stroke-dashoffset:1}}
+.hp-venn{background:#FFDCCB}.hp-venn circle{fill:rgba(255,255,255,.55);animation:hpVa 3s ease-in-out infinite}.hp-venn .b{animation-name:hpVb}
+@keyframes hpVa{0%,100%{transform:translateX(-10px)}50%{transform:translateX(8px)}}
+@keyframes hpVb{0%,100%{transform:translateX(10px)}50%{transform:translateX(-8px)}}
+.hs .hx-pill{transition:opacity .5s,transform .8s var(--energy)}.hs .hx-pill:not(.on){transform:scale(.4)}
+.hs-t{display:flex;align-items:center;will-change:transform}
+.hs .hx-line{padding-right:var(--pad)}
+.hs-k{position:absolute;z-index:1;left:var(--pad);top:calc(var(--nav-h) + 40px);margin:0;font:400 15px var(--sans);letter-spacing:-.02em}
+.hs-t{position:relative;z-index:1}
+.hs-dark{color:#fff}
+.hs-clip{position:absolute;inset:10px;z-index:1;display:flex;align-items:center;padding:0 var(--pad);border-radius:22px;overflow:hidden} /* sulla foto la riga resta dentro il riquadro: entra ed esce dai suoi bordi, non dallo schermo */.hs-dark .hs-k{color:#fff;left:calc(10px + var(--pad))}
+.hs-dark .hx-line .w .c,.hs-dark .hx-line .w .c.on{color:#fff}
+.hs-dark .ab-bg::after{background:rgba(5,5,5,.42)} /* velo neutro: la riga bianca si legge su tutta la foto */
+/* rolodex: tamburo di frasi, gira con lo scroll */
+.rdx{position:relative}
+.rdx-pin{position:sticky;top:0;height:100svh;overflow:hidden;perspective:1600px}
+.rdx-i{position:absolute;left:0;right:0;top:50%;display:flex;justify-content:center;align-items:center;gap:.14em;white-space:nowrap;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:var(--rf,clamp(56px,11vw,210px));line-height:1.1;margin-top:-.55em;backface-visibility:hidden;will-change:transform,opacity}
+.rdx-i .hx-pill{opacity:1;margin:0}
+/* card a ventaglio (Osmo Stacking Sticky Cards Bounce) */
+.sc{padding:clamp(80px,12vw,160px) var(--pad) 18svh;overflow-x:clip}
+.sc-h{text-align:center;font-size:clamp(44px,6vw,110px);margin-bottom:clamp(40px,6vw,80px)}
+.sc-list{display:flex;flex-direction:column;align-items:center;gap:5em}
+.sc-i{position:sticky;top:calc(var(--nav-h) + 24px);flex:none;width:clamp(220px,22vw,320px)}
+.sc-c{aspect-ratio:2/3;display:flex;flex-direction:column;justify-content:space-between;gap:24px;padding:clamp(20px,2vw,32px);border-radius:22px;background:var(--c);color:var(--ink);box-shadow:0 10px 40px rgba(5,5,5,.08);will-change:transform}
+.sc-c.dk{background:var(--dark);color:#fff}
+.sc-n{font-family:var(--display);font-size:clamp(64px,6vw,104px);letter-spacing:-.05em;line-height:.9}
+.sc-c h3{font-size:clamp(28px,2.4vw,40px);line-height:1}
+.sc-c p{margin-top:12px;font-size:15px;line-height:1.4}
+.sc-c.bump{animation:scBump 1s cubic-bezier(.2,.8,.2,1)}
+@keyframes scBump{0%{scale:1}10%{scale:1.07 .97}35%{scale:.97 1.02}60%{scale:1.015 .995}80%{scale:.997 1.002}100%{scale:1}}
+/* progetti: la cupola della home a tutto schermo, la pagina non scorre */
+body:has(.pj-dome) .ft,body:has(.pj-dome) .nextp,body:has(.pj-dome) .shutter{display:none}
+html:has(.pj-dome),body:has(.pj-dome){overflow:hidden;height:100%}
+.pj-dome.projects{height:100svh;touch-action:none}
+.pj-dome .dome-pin{height:100svh}
+.pj-dome .dome-ui h1{font-size:clamp(56px,8vw,140px);color:#fff}
+.pj-dome .dome-ui p{opacity:1;align-self:center}
+.pf-d{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;pointer-events:auto;margin-top:12px}
+.pf-d button{border:1px solid #3A3A3A;background:var(--dark);font:400 14px var(--sans);letter-spacing:-.02em;color:#fff;padding:8px 14px;border-radius:99px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+.pf-d button:hover{border-color:#fff}
+.pf-d button.on{background:#fff;border-color:#fff;color:var(--ink)}
+.pf-d sup{font-size:10px;margin-left:3px;opacity:.6}
+.dome-bot{display:flex;flex-direction:column;align-items:center}
+@media (max-width:820px){
+  .stk-top{grid-template-columns:1fr}.stk-top p{margin-bottom:10px}
+  .pf-d{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;max-width:100%;padding-bottom:4px;scrollbar-width:none}
+  .in-intro{grid-template-columns:1fr;row-gap:24px}.in-intro .pj-big,.in-intro p:not(.pj-big){grid-column:1}
+  .sv-row{grid-template-columns:2em minmax(0,1fr);row-gap:10px}.sv-row p,.sv-row figure{grid-column:2}.sv-row figure{width:min(100%,320px)}
+  .pc-grid{grid-template-columns:1fr 1fr}
+  .ab-vm{grid-template-columns:1fr}.ab-num{grid-template-columns:1fr;row-gap:32px}.ab-q p{grid-column:1/-1}.ab-q p+p{margin-top:16px}
+}
+@media (max-width:560px){.pc-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -760,18 +898,15 @@ html:active-view-transition-type(expand)::view-transition-group(next-hero){anima
 <div class="page" id="page">
 <main id="top" class="pj">
   <section class="pj-head">
-    <h1 class="pj-ttl" id="pjTtl" aria-label="MarinoBus">MarinoBus</h1>
-    <div class="pj-meta"><div class="pj-col"><h2>Servizi</h2>Branding<br>Video<br>Website<br>Social<br>Events</div><div class="pj-col"><h2>Settore</h2>Trasporti</div><div class="pj-col"><h2>Sito</h2><a href="https://www.marinobus.it" target="_blank" rel="noopener">marinobus.it</a></div><div class="pj-lede"><p>Dal 1957 nel trasporto su gomma tra Puglia e Basilicata, oggi realtà di riferimento nazionale. Per i sessant&#x27;anni dell&#x27;azienda abbiamo ridisegnato il marchio e raccontato la sua storia.</p><a href="#pj-storia"><span>Leggi la storia</span><span aria-hidden="true">→</span></a></div></div>
+    <p class="in-k">Servizio 04 / 10</p>
+    <h1 class="pj-ttl" id="pjTtl" aria-label="Social media">Social media</h1>
+    <div class="pj-meta"><div class="pj-col" style="grid-column:span 2"><h2>Progetti</h2><a href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo">Amaro Mediterraneo</a><br><a href="https://www.neverbeforeitalia.it/portfolio/cortina-express">Cortina Express</a><br><a href="progetto-marinobus.html">MarinoBus</a><br><a href="https://www.neverbeforeitalia.it/portfolio/sneakers-room">Sneakers Room</a></div><div class="pj-lede"><p>Piano editoriale, contenuti e community gestiti ogni giorno sui canali del brand.</p><a href="#sv-pj"><span>Vedi i progetti</span><span aria-hidden="true">→</span></a></div></div>
   </section>
-  <section class="pj-full"><figure class="pj-m" id="pjHero" data-svc="Video" style="aspect-ratio:1100/620"><img src="assets/img/marinobus/never_before_italia_storytelling_marinobus.jpg" alt="Storytelling MarinoBus"></figure></section>
-  <section class="pj-story" id="pj-storia"><div class="pj-side"><h2>La storia</h2><div class="pj-route" id="pjRoute" data-n="60"><p class="pj-cnt"><small>dal 1957</small><span><b id="pjN">0</b> anni</span></p><div class="pj-map"><svg viewBox="0 0 240 560" aria-hidden="true"><path class="bg" d="M40,20 C40,110 200,110 200,200 C200,290 40,290 40,380 C40,470 200,470 200,540"/><path class="ln" id="pjRouteP" pathLength="1" d="M40,20 C40,110 200,110 200,200 C200,290 40,290 40,380 C40,470 200,470 200,540"/></svg><span class="pj-stop" style="--c:#E2DBFF"><i></i><b>Irsina (MT), 1957</b></span><span class="pj-stop" style="--c:#FFDCCB"><i></i><b>Altamura</b></span><span class="pj-stop" style="--c:#FFF3B8"><i></i><b>Puglia e Basilicata</b></span><span class="pj-stop" style="--c:#D7FFE0"><i></i><b>Centro e Nord Italia</b></span><span class="pj-stop" style="--c:#CDEBFF"><i></i><b>Estero</b></span></div></div></div><div><p class="pj-big">Attiva da 60 anni nel settore del trasporto su gomma, la società MarinoBus si attesta oggi come realtà di riferimento a livello nazionale.</p><p>La MarinoBus nasce nel 1957 ad Irsina (Matera) da un&#x27;intuizione del fondatore Michele Marino, allo scopo di assolvere alle esigenze di trasporto nel territorio lucano e pugliese, oltre che al noleggio da rimessa di autobus e auto.</p><p>Successivamente la famiglia si trasferisce ad Altamura, posizione strategica del territorio dell&#x27;Alta Murgia pugliese, dove attualmente ha la sua sede operativa, legale e gestionale.</p><p>Oggi la gestione della MarinoBus continua con il figlio Gerardo e sua moglie Loredana, che hanno ampiamente esteso l&#x27;attività nelle principali città lucane e pugliesi non trascurando le grandi località del centro e nord Italia e dell&#x27;estero. Nei suoi 60 anni di storia, l&#x27;azienda è cresciuta costantemente nei servizi, nella qualità e nelle risorse umane.</p></div></section>
-  <section class="pj-wide"><figure class="rv" data-svc="Branding"><div class="pj-m" style="aspect-ratio:1100/620"><img src="assets/img/marinobus/never_before_italia_branding_marinobus_restyling_logo.jpg" alt="Restyling del marchio MarinoBus" loading="lazy"></div><figcaption><span>Restyling del marchio</span><span>Branding</span></figcaption></figure></section>
-  <section class="pj-blk"><div class="pj-bh"><h3>Nuova livrea</h3></div><div class="pj-trio"><figure class="rv pj-m" data-svc="Branding"><img src="assets/img/marinobus/never_before_italia_nuova_livrea_marinobus.jpg" alt="Bozzetto a matita della nuova livrea MarinoBus" loading="lazy"></figure><figure class="rv pj-m" data-svc="Branding"><img src="assets/img/marinobus/never_before_italia_nuova_livrea_marinobus_2.jpg" alt="Nuova livrea MarinoBus" loading="lazy"></figure><figure class="rv pj-m" data-svc="Branding"><img src="assets/img/marinobus/never_before_italia_nuova_livrea_marinobus_3.jpg" alt="Nuova livrea MarinoBus" loading="lazy"></figure></div></section>
-  <section class="pj-wide pj-blk"><figure class="rv" data-svc="Website"><div class="pj-m" style="aspect-ratio:1100/750"><img src="assets/img/marinobus/never_before_italia_website_marinobus.jpg" alt="Il sito marinobus.it su computer, tablet e telefono" loading="lazy"></div><figcaption><span>marinobus.it</span><span>Website</span></figcaption></figure></section>
-  <section class="pj-blk"><div class="pj-bh"><h3>Eventi</h3></div><div class="pj-pair"><figure class="rv" data-svc="Events"><div class="pj-m" style="aspect-ratio:1100/750"><img src="assets/img/marinobus/never_before_italia_events_marinobus_carnevale_putignano.jpg" alt="Promoter MarinoBus al Carnevale di Putignano" loading="lazy"></div><figcaption><span>Carnevale di Putignano</span><span>Events</span></figcaption></figure><figure class="rv" data-svc="Events"><div class="pj-m" style="aspect-ratio:1100/750"><img src="assets/img/marinobus/never_before_italia_events_marinobus_terrone_fuori_sede.jpg" alt="Evento Terrone fuori sede con MarinoBus" loading="lazy"></div><figcaption><span>Terrone fuori sede</span><span>Events</span></figcaption></figure></div></section>
+  <section class="pj-full"><figure class="pj-m sv-hero" id="pjHero" style="aspect-ratio:16/8"><svg class="mo" viewBox="0 0 400 300" role="img" aria-label="Un post social riceve un mi piace: il cuore si riempie, il contatore sale e intorno salgono cuori e commenti"><rect x="125" y="22" width="150" height="256" rx="14" fill="#fff" stroke="#050505" stroke-width="1.2"/><circle cx="145" cy="44" r="9" fill="#E2DBFF"/><rect x="160" y="40" width="58" height="8" rx="4" fill="#050505"/><rect x="137" y="62" width="126" height="126" rx="8" fill="#FFDCCB"/><circle cx="200" cy="125" r="28" fill="#fff"/><g opacity="0" transform="translate(200 125)"><path d="M0,6 C-8,-1 -10,-8 -5,-10 C-2,-11 0,-8 0,-6 C0,-8 2,-11 5,-10 C10,-8 8,-1 0,6 Z" fill="#050505" transform="scale(3.2)"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.28;.31;.4;.46;1" dur="6s" repeatCount="indefinite"/></g><g transform="translate(150 210)"><path d="M0,6 C-8,-1 -10,-8 -5,-10 C-2,-11 0,-8 0,-6 C0,-8 2,-11 5,-10 C10,-8 8,-1 0,6 Z" stroke="#050505" stroke-width="1.2" fill="#fff" transform="scale(1.2)"><animate attributeName="fill" values="#fff;#fff;#050505;#050505;#fff" keyTimes="0;.3;.32;.92;1" dur="6s" repeatCount="indefinite"/></path></g><path d="M168,203 h18 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-10 l-5,4 v-4 h-3 a4,4 0 0 1 -4,-4 v-8 a4,4 0 0 1 4,-4 z" fill="none" stroke="#050505" stroke-width="1.2"/><text x="137" y="240">1.248 mi piace<animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;.3;.31;.92;1" dur="6s" repeatCount="indefinite"/></text><text x="137" y="240" opacity="0">1.249 mi piace<animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.3;.31;.92;1" dur="6s" repeatCount="indefinite"/></text><rect x="137" y="252" width="104" height="6" rx="3" fill="#BDBDBD"/><g opacity="0"><path d="M0,6 C-8,-1 -10,-8 -5,-10 C-2,-11 0,-8 0,-6 C0,-8 2,-11 5,-10 C10,-8 8,-1 0,6 Z" fill="#FFDCCB" stroke="#050505" stroke-width="1" transform="scale(1.3)"/><animateTransform attributeName="transform" type="translate" values="306 236;306 236;318 70;318 70" keyTimes="0;0.34;0.74;1" dur="6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.34;0.38;0.64;0.74;1" dur="6s" repeatCount="indefinite"/></g><g opacity="0"><path d="M0,6 C-8,-1 -10,-8 -5,-10 C-2,-11 0,-8 0,-6 C0,-8 2,-11 5,-10 C10,-8 8,-1 0,6 Z" fill="#E2DBFF" stroke="#050505" stroke-width="1" transform="scale(1.3)"/><animateTransform attributeName="transform" type="translate" values="332 236;332 236;324 70;324 70" keyTimes="0;0.44;0.84;1" dur="6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.44;0.48;0.74;0.84;1" dur="6s" repeatCount="indefinite"/></g><g opacity="0"><path d="M0,6 C-8,-1 -10,-8 -5,-10 C-2,-11 0,-8 0,-6 C0,-8 2,-11 5,-10 C10,-8 8,-1 0,6 Z" fill="#D7FFE0" stroke="#050505" stroke-width="1" transform="scale(1.3)"/><animateTransform attributeName="transform" type="translate" values="300 236;300 236;326 70;326 70" keyTimes="0;0.54;0.94;1" dur="6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.54;0.58;0.84;0.94;1" dur="6s" repeatCount="indefinite"/></g><g opacity="0"><rect x="-34" y="-13" width="68" height="26" rx="13" fill="#CDEBFF" stroke="#050505" stroke-width="1"/><rect x="-22" y="-3" width="44" height="6" rx="3" fill="#050505"/><animateTransform attributeName="transform" type="translate" values="70 220;70 220;70 120;70 120" keyTimes="0;.5;.85;1" dur="6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.5;.55;.75;.85;1" dur="6s" repeatCount="indefinite"/></g></svg></figure></section>
+  <section class="pj-blk pc-sec" id="sv-pj"><div class="pj-bh" style="padding-left:0"><h3>Progetti</h3></div><div class="pc-grid"><a class="pc rv" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo" data-cats="social website"><figure class="pc-m"><img src="assets/img/progetti/amaro-mediterraneo.jpg" alt="Amaro Mediterraneo" loading="lazy"></figure><span class="pc-t"><b>Amaro Mediterraneo</b><small>Marchio prodotto</small></span></a><a class="pc rv" href="https://www.neverbeforeitalia.it/portfolio/cortina-express" data-cats="graphics social website"><figure class="pc-m"><img src="assets/img/progetti/cortina-express.jpg" alt="Cortina Express" loading="lazy"></figure><span class="pc-t"><b>Cortina Express</b><small>Autolinee</small></span></a><a class="pc rv" href="progetto-marinobus.html" data-cats="advertising architecture branding events graphics social video website"><figure class="pc-m"><img src="assets/img/progetti/marinobus.jpg" alt="MarinoBus" loading="lazy"></figure><span class="pc-t"><b>MarinoBus</b><small>Società di trasporti</small></span></a><a class="pc rv" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room" data-cats="branding social website"><figure class="pc-m"><img src="assets/img/progetti/sneakers-room.jpg" alt="Sneakers Room" loading="lazy"></figure><span class="pc-t"><b>Sneakers Room</b><small>Retail</small></span></a><a class="pc rv" href="https://www.neverbeforeitalia.it/portfolio/xy-design-lab" data-cats="branding social"><figure class="pc-m"><img src="assets/img/progetti/xy-design-lab.jpg" alt="XY Design Lab" loading="lazy"></figure><span class="pc-t"><b>XY Design Lab</b><small>Progettisti di abitazioni, negozi e spazi commerciali</small></span></a><a class="pc rv" href="https://www.neverbeforeitalia.it/portfolio/as-labruna" data-cats="graphics social website"><figure class="pc-m"><img src="assets/img/progetti/as-labruna.jpg" alt="AS labruna" loading="lazy"></figure><span class="pc-t"><b>AS labruna</b><small>Azienda specializzata in tre diverse business unit: Marine,Power e Loading.</small></span></a></div>
+    <a class="go sv-all" href="progetti.html">Tutti i progetti <i><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h12M9 3l5 5-5 5"/></svg></i></a></section>
   <div class="pj-end"></div>
 </main>
-<nav class="pj-svc" id="pjSvc" aria-label="Lavori per servizio"><button type="button" data-s="Branding" style="--c:#E2DBFF">Branding</button><button type="button" data-s="Video" style="--c:#FFDCCB">Video</button><button type="button" data-s="Website" style="--c:#FFF3B8">Website</button><button type="button" data-s="Social" style="--c:#D7FFE0" disabled>Social</button><button type="button" data-s="Events" style="--c:#CDEBFF">Events</button></nav>
 
 
 <!-- 8. footer come il riferimento: logo verticale, righello dello scroll, colonne -->
@@ -805,10 +940,10 @@ html:active-view-transition-type(expand)::view-transition-group(next-hero){anima
 </footer>
 
 <div class="shutter" aria-hidden="true"></div>
-<section class="nextp" id="nextp" data-href="progetti.html" aria-label="Pagina successiva">
+<section class="nextp" id="nextp" data-href="servizio-campaign-management.html" aria-label="Pagina successiva">
   <div class="nextp-pin">
     <p class="nextp-k">Pagina successiva</p>
-    <a class="nextp-t" href="progetti.html" aria-label="Altri progetti"><span>Altri</span><span class="nextp-pill" aria-hidden="true"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="" loading="lazy"></span><span>progetti</span></a>
+    <a class="nextp-t" href="servizio-campaign-management.html" aria-label="Campaign management"><span>Campaign</span><span class="nextp-pill" aria-hidden="true"><img src="assets/img/progetti/marinobus.jpg" alt="" loading="lazy"></span><span>management</span></a>
     <p class="nextp-h">Continua a scorrere</p>
     <span class="nextp-bar" aria-hidden="true"><i></i></span>
   </div>
@@ -979,6 +1114,42 @@ if(!matchMedia('(prefers-reduced-motion:reduce)').matches)new IntersectionObserv
 // comparsa allo scroll
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -10% 0px'});
 document.querySelectorAll('.rv,.lboard,.lr').forEach(el=>{if(!el.closest('.cta,.projects'))io.observe(el)});
+
+// card a ventaglio: avvicinandosi alla cima ogni card (p 0→1, accelera) si sposta e si inclina al suo posto nel ventaglio; arrivata, rimbalza
+{const R=[-5,2,6,-3,4,-6],Y=[2.1,0,4.5,1,3.2,.5];document.querySelectorAll('.sc-list').forEach(L=>{const its=[...L.querySelectorAll('.sc-i')],n=its.length;
+  const go=()=>{const vh=innerHeight,top=parseFloat(getComputedStyle(its[0]).top),w=its[0].offsetWidth,sp=n>1?Math.min(w*.92,(L.clientWidth-w)/(n-1)):0,fs=parseFloat(getComputedStyle(L).fontSize);
+    its.forEach((it,i)=>{const c=it.firstElementChild,p=still?1:clamp((vh*.75-it.getBoundingClientRect().top)/(vh*.75-top)),e=p*p,done=p>.999;
+      c.style.transform=`translate(${((i-(n-1)/2)*sp*e).toFixed(1)}px,${(Y[i%6]*fs*e).toFixed(1)}px) rotate(${(R[i%6]*e).toFixed(2)}deg)`;
+      if(done&&!it._d&&!still){c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump')}it._d=done})};
+  addEventListener('scroll',go,{passive:true});addEventListener('resize',go);go()})}
+// (p con easing morbido per tratto: la frase si ferma un attimo al centro; nel passaggio quella che esce resta visibile fino a fine giro; ferme, le vicine non si vedono)
+// rolodex: p va da 0 al numero di frasi-1 lungo la sezione; ogni frase sta su un tamburo (ruota attorno a un asse dietro lo schermo)
+{const r=document.querySelector('.rdx');if(r){const it=[...r.querySelectorAll('.rdx-i')],N=it.length,STEP=55,SM=matchMedia('(pointer:coarse)').matches?.08:.2;let sd=null,raf=0;
+  const fit=()=>{r.style.removeProperty('--rf');const W=innerWidth*.9,w=Math.max(...it.map(e=>{const g=document.createRange();g.selectNodeContents(e);return g.getBoundingClientRect().width}));
+    if(w>W)r.style.setProperty('--rf',parseFloat(getComputedStyle(it[0]).fontSize)*W/w+'px');r.style.height=(innerHeight*(1+(N-1)*.35))+'px'};
+  const upd=()=>{const run=r.offsetHeight-innerHeight,d=sd===null?-r.getBoundingClientRect().top:sd,q=clamp(d/run)*(N-1),f=q-Math.floor(q),p=Math.floor(q)+f*f*(3-2*f),R=it[0].offsetHeight*1.15;
+    it.forEach((e,i)=>{const k=i-p;e.style.transform=`translateZ(${-R}px) rotateX(${(-k*STEP).toFixed(2)}deg) translateZ(${R}px)`;e.style.opacity=Math.max(0,1-Math.abs(k)**3).toFixed(3);
+      e.querySelectorAll('.hx-pill').forEach(q=>q.classList.toggle('on',Math.abs(k)<.5))})};
+  const tick=()=>{raf=0;const t=-r.getBoundingClientRect().top;if(sd===null||Math.abs(t-sd)>innerHeight*3)sd=t;sd+=(t-sd)*SM;if(Math.abs(t-sd)<.5)sd=t;upd();if(sd!==t)raf=requestAnimationFrame(tick)};
+  addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(tick)},{passive:true});let lw=innerWidth;addEventListener('resize',()=>{if(innerWidth!==lw){lw=innerWidth;fit()}upd()});
+  document.fonts.ready.then(()=>{fit();upd()});fit();upd()}}
+// (sulla foto, .hs-dark, niente entrata: la riga parte fuori a destra e arriva scorrendo)
+// titolo orizzontale (come l'intro della home): la sezione resta ferma, la riga scorre da destra a sinistra e ogni lettera si accende passando
+{const FX=['rise','drop','blur','rise','pop','flip','blur','wave','slide','slide','bold'];document.querySelectorAll('.hs').forEach(sec=>{
+  const ln=sec.querySelector('.hx-line'),tr=sec.querySelector('.hs-t');let nw=0;
+  [...ln.childNodes].forEach(n=>{if(n.nodeType!==3)return;const f=document.createDocumentFragment();
+    n.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.append(' ');return}const w=document.createElement('span');w.className='w';w.setAttribute('aria-hidden','true');
+      w.innerHTML=[...t].map((c,i)=>`<span class="c" style="--i:${i}">${c}</span>`).join('');w.dataset.fx=FX[nw++%FX.length];f.append(w)});n.replaceWith(f)});
+  const cs=[...ln.querySelectorAll('.c,.hx-pill')];const dark=sec.classList.contains('hs-dark'),cue=sec.querySelector('.hs-cue');let xs=[],x0=0,x1=0,pl=0,run=1,sd=null,raf=0,ready=dark;const SM=matchMedia('(pointer:coarse)').matches?.08:.2;
+  const size=()=>{const vw=innerWidth;xs=cs.map(c=>ln.offsetLeft+c.offsetLeft+c.offsetWidth/2);pl=tr.getBoundingClientRect().left-(new DOMMatrix(getComputedStyle(tr).transform).m41);x0=dark?vw-pl:0;x1=Math.min(0,vw*.8-pl-tr.scrollWidth);run=Math.max(1,(x0-x1)/1.2);sec.style.height=(innerHeight+run)+'px'};
+  const upd=()=>{const d=sd===null?-sec.getBoundingClientRect().top:sd,p=still?1:clamp(d/run),x=x0+(x1-x0)*p;tr.style.transform=`translate3d(${x.toFixed(1)}px,0,0)`;
+    cue&&cue.classList.toggle('off',d>8);
+    if(ready)cs.forEach((c,i)=>c.classList.toggle('on',still||pl+x+xs[i]<innerWidth*.86))};
+  // apertura: le lettere già nello schermo compaiono una dopo l'altra, poi comanda lo scroll
+  const intro=()=>{const x=x0+(x1-x0)*clamp(-sec.getBoundingClientRect().top/run);let n=0;cs.forEach((c,i)=>{if(pl+x+xs[i]<innerWidth*.86)setTimeout(()=>c.classList.add('on'),still?0:250+(n++)*45)});setTimeout(()=>{ready=true;upd()},still?0:250+n*45+200)};
+  const tick=()=>{raf=0;const t=-sec.getBoundingClientRect().top;if(sd===null||Math.abs(t-sd)>innerHeight*3)sd=t;sd+=(t-sd)*SM;if(Math.abs(t-sd)<.5)sd=t;upd();if(sd!==t)raf=requestAnimationFrame(tick)};
+  addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(tick)},{passive:true});let lw=innerWidth;addEventListener('resize',()=>{if(innerWidth!==lw){lw=innerWidth;size()}upd()});
+  document.fonts.ready.then(()=>{size();upd();dark||intro()});size();upd()})}
 </script>
 </body>
 </html>

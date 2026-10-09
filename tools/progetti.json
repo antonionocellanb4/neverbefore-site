@@ -1,0 +1,451 @@
+[
+ {
+  "slug": "amaro-mediterraneo",
+  "name": "Amaro Mediterraneo",
+  "sector": "Marchio prodotto",
+  "cats": [
+   "social",
+   "website"
+  ],
+  "svc": "Web/Mobile Design - Marketing - Social"
+ },
+ {
+  "slug": "cortina-express",
+  "name": "Cortina Express",
+  "sector": "Autolinee",
+  "cats": [
+   "graphics",
+   "social",
+   "website"
+  ],
+  "svc": "Website - Social - Foto e Video"
+ },
+ {
+  "slug": "marinobus",
+  "name": "MarinoBus",
+  "sector": "Società di trasporti",
+  "cats": [
+   "advertising",
+   "architecture",
+   "branding",
+   "events",
+   "graphics",
+   "social",
+   "video",
+   "website"
+  ],
+  "svc": "Branding - Video - Website - Social - Events"
+ },
+ {
+  "slug": "master-italy",
+  "name": "Master",
+  "sector": "Azienda di produzione di accessori per serramenti",
+  "cats": [
+   "graphics"
+  ],
+  "svc": "Graphic Design"
+ },
+ {
+  "slug": "granoro",
+  "name": "Granoro",
+  "sector": "La pasta granoro",
+  "cats": [
+   "graphics"
+  ],
+  "svc": "graphics"
+ },
+ {
+  "slug": "spettacolo",
+  "name": "Spettacolo",
+  "sector": "Design e Shop",
+  "cats": [
+   "ecommerce",
+   "website"
+  ],
+  "svc": "Branding - Marketing - E-commerce"
+ },
+ {
+  "slug": "dfv",
+  "name": "DFV",
+  "sector": "Verniciature industriali e decorazioni effetto legno",
+  "cats": [
+   "video",
+   "website"
+  ],
+  "svc": "Web/Mobile Design - Marketing - Video"
+ },
+ {
+  "slug": "sinergy",
+  "name": "Sinergy",
+  "sector": "Infissi in allumineo",
+  "cats": [
+   "advertising",
+   "video",
+   "website"
+  ],
+  "svc": "Website - Video - Advertising"
+ },
+ {
+  "slug": "viru",
+  "name": "Viru",
+  "sector": "Azienda internazionale di export di prodotti agroalimentari",
+  "cats": [
+   "architecture",
+   "events",
+   "graphics"
+  ],
+  "svc": "Website - Graphics"
+ },
+ {
+  "slug": "bludental",
+  "name": "Bludental",
+  "sector": "Centri odontoiatrici",
+  "cats": [
+   "video",
+   "website"
+  ],
+  "svc": "Website - Video"
+ },
+ {
+  "slug": "sneakers-room",
+  "name": "Sneakers Room",
+  "sector": "Retail",
+  "cats": [
+   "branding",
+   "social",
+   "website"
+  ],
+  "svc": "Social - Website - Branding - Architecture"
+ },
+ {
+  "slug": "birra-salento",
+  "name": "Birra Salento",
+  "sector": "Birrai per passione",
+  "cats": [
+   "graphics"
+  ],
+  "svc": "Graphics"
+ },
+ {
+  "slug": "xy-design-lab",
+  "name": "XY Design Lab",
+  "sector": "Progettisti di abitazioni, negozi e spazi commerciali",
+  "cats": [
+   "branding",
+   "social"
+  ],
+  "svc": "Branding - Social"
+ },
+ {
+  "slug": "produttori-di-manduria",
+  "name": "Produttori di Manduria",
+  "sector": "Maestri in Primitivo",
+  "cats": [
+   "graphics"
+  ],
+  "svc": "Advertising - Graphics - Foto - Video"
+ },
+ {
+  "slug": "masseria-mongio",
+  "name": "Masseria Mongiò dell'Elefante",
+  "sector": "Masseria Mongiò, tra le più belle e suggestive del litorale di Otranto",
+  "cats": [
+   "website"
+  ],
+  "svc": "Website"
+ },
+ {
+  "slug": "as-labruna",
+  "name": "AS labruna",
+  "sector": "Azienda specializzata in tre diverse business unit: Marine,Power e Loading.",
+  "cats": [
+   "graphics",
+   "social",
+   "website"
+  ],
+  "svc": "Website - Social - Graphics"
+ },
+ {
+  "slug": "hula-bari",
+  "name": "Hula Hawaiian Poke",
+  "sector": "Ristorante",
+  "cats": [
+   "advertising",
+   "branding",
+   "graphics",
+   "social"
+  ],
+  "svc": "Branding - Marketing - Format - Website - Social"
+ },
+ {
+  "slug": "le-carose",
+  "name": "Born To Be Pompon",
+  "sector": "Le Carose",
+  "cats": [
+   "advertising",
+   "branding",
+   "graphics",
+   "social"
+  ],
+  "svc": "Branding - Marketing - Format - Social - Video"
+ },
+ {
+  "slug": "gt-alarm",
+  "name": "GT Alarm",
+  "sector": "Software sicurezza automezzi",
+  "cats": [
+   "advertising",
+   "graphics",
+   "social",
+   "website"
+  ],
+  "svc": "Website - Graphic Design - Advertising"
+ },
+ {
+  "slug": "lum",
+  "name": "LUM",
+  "sector": "Università privata",
+  "cats": [
+   "advertising",
+   "graphics",
+   "social",
+   "video",
+   "website"
+  ],
+  "svc": "Branding - Video - Website - Social"
+ },
+ {
+  "slug": "soa-corporate",
+  "name": "SOA Corporate",
+  "sector": "Sette aziende specializzate nella gestione integrata di logistica, trasporti e distribuzione",
+  "cats": [
+   "graphics",
+   "video",
+   "website"
+  ],
+  "svc": "Web/Mobile Design - Marketing - Video"
+ },
+ {
+  "slug": "de-carlo",
+  "name": "De Carlo",
+  "sector": "Azienda olearia",
+  "cats": [
+   "graphics",
+   "social",
+   "website"
+  ],
+  "svc": "Website - Graphic Design - Social"
+ },
+ {
+  "slug": "amastuola",
+  "name": "Amastuola",
+  "sector": "Wine Resort | Cantina",
+  "cats": [
+   "social",
+   "website"
+  ],
+  "svc": "Web/Mobile Design - Marketing - Social"
+ },
+ {
+  "slug": "borgo-canonica",
+  "name": "Borgo Canonica",
+  "sector": "Struttura ricettiva",
+  "cats": [
+   "advertising",
+   "branding",
+   "graphics",
+   "social",
+   "video",
+   "website"
+  ],
+  "svc": "Branding - Website - Social"
+ },
+ {
+  "slug": "sandrino",
+  "name": "Sandrino",
+  "sector": "Gelateria con vari punti vendita in Italia",
+  "cats": [
+   "advertising",
+   "architecture",
+   "branding",
+   "events",
+   "graphics",
+   "social",
+   "video",
+   "website"
+  ],
+  "svc": "Graphic Design - Web/Mobile Design - Marketing - Unconventional Thinking - P.R. Eventi - Progetti Speciali"
+ },
+ {
+  "slug": "izoo",
+  "name": "Izoo.it",
+  "sector": "Negozio di articoli per animali",
+  "cats": [
+   "ecommerce",
+   "social"
+  ],
+  "svc": "Website Ecommerce - Social"
+ },
+ {
+  "slug": "calke",
+  "name": "Calke",
+  "sector": "Azienda di infissi",
+  "cats": [
+   "graphics",
+   "photography",
+   "social"
+  ],
+  "svc": "Graphic Design - Social - Architecture"
+ },
+ {
+  "slug": "cannebianche",
+  "name": "CanneBianche_",
+  "sector": "Struttura ricettiva",
+  "cats": [
+   "photography",
+   "website"
+  ],
+  "svc": "Website - Photo"
+ },
+ {
+  "slug": "carnevale-putignano",
+  "name": "Carnevale di Putignano",
+  "sector": "Evento: edizioni 2015 - 2016 - 2017",
+  "cats": [
+   "advertising",
+   "events",
+   "social"
+  ],
+  "svc": ""
+ },
+ {
+  "slug": "frulez",
+  "name": "Frulez",
+  "sector": "Ristorante Biologico",
+  "cats": [
+   "branding",
+   "graphics"
+  ],
+  "svc": "Graphic Design - Web/Mobile Design - Marketing - Unconventional Thinking - P.R. Eventi - Progetti Speciali"
+ },
+ {
+  "slug": "intini-food",
+  "name": "Intini Food",
+  "sector": "Pastificio",
+  "cats": [
+   "graphics"
+  ],
+  "svc": "Packaging"
+ },
+ {
+  "slug": "caruso",
+  "name": "Caruso",
+  "sector": "Vendita preparati per gelato artigianale",
+  "cats": [
+   "ecommerce",
+   "video"
+  ],
+  "svc": "E-commerce - Video"
+ },
+ {
+  "slug": "moye",
+  "name": "Moyé",
+  "sector": "Catena di ristoranti",
+  "cats": [
+   "branding",
+   "events",
+   "graphics",
+   "social",
+   "website"
+  ],
+  "svc": "Graphic Design - Web/Mobile Design - Marketing - Unconventional Thinking - P.R. Eventi - Progetti Speciali"
+ },
+ {
+  "slug": "terre-carsiche",
+  "name": "Terre Carsiche 1939",
+  "sector": "Cantina Vitivinicola Pugliese",
+  "cats": [
+   "architecture",
+   "graphics",
+   "social",
+   "video",
+   "website"
+  ],
+  "svc": "E-commerce - Packaging"
+ },
+ {
+  "slug": "tenuta-giustini",
+  "name": "Tenuta Giustini",
+  "sector": "Azienda Vinicola",
+  "cats": [
+   "architecture"
+  ],
+  "svc": "Architecture Stand"
+ },
+ {
+  "slug": "happetito",
+  "name": "Happetito",
+  "sector": "No ordinary take away",
+  "cats": [
+   "branding",
+   "graphics",
+   "social"
+  ],
+  "svc": "Branding - Social - Graphics - Website"
+ },
+ {
+  "slug": "olio-7-giorni",
+  "name": "7 Giorni De Carlo",
+  "sector": "Linea di oli per la grande distribuzione",
+  "cats": [
+   "branding",
+   "graphics",
+   "social"
+  ],
+  "svc": "Website - Graphic Design"
+ },
+ {
+  "slug": "pane-e-mozza",
+  "name": "Pane&Mozza Casari Salumieri",
+  "sector": "Food Format",
+  "cats": [
+   "branding",
+   "graphics",
+   "social"
+  ],
+  "svc": "Branding - Marketing - Format"
+ },
+ {
+  "slug": "aquamarea",
+  "name": "Aquamarea",
+  "sector": "Charming Rooms, Food & Spirits",
+  "cats": [
+   "branding",
+   "graphics",
+   "social",
+   "website"
+  ],
+  "svc": "Branding - Marketing - Format - Website - Social"
+ },
+ {
+  "slug": "ingromaglie",
+  "name": "Ingromaglie",
+  "sector": "Wholesale Distributor",
+  "cats": [
+   "architecture",
+   "branding",
+   "social",
+   "website"
+  ],
+  "svc": "Social - Website - Branding"
+ },
+ {
+  "slug": "tribes",
+  "name": "Tribes Store",
+  "sector": "Retail",
+  "cats": [
+   "website"
+  ],
+  "svc": ""
+ }
+]
