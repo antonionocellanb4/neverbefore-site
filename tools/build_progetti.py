@@ -38,7 +38,8 @@ PROJECTS = [
 ABOUT_CSS = r'''
 /* chi siamo: la foto della pillola "Chi ⬭ siamo" della home, a 10px dai bordi con raggio 22, diventa il fondo della hero */
 .ab-hero{position:relative;height:100svh;color:#fff}
-.ab-bg{position:absolute;inset:10px;border-radius:22px;overflow:hidden;background:var(--dark);view-transition-name:next-hero}
+.ab-bg{position:absolute;inset:10px;border-radius:22px;overflow:hidden;background:var(--dark)}
+html:active-view-transition-type(expand) .ab-bg{view-transition-name:next-hero} /* solo arrivando dalla pillola della home: dal menu la foto non deve stare sopra alla pagina che entra */
 .ab-bg img{display:block;width:100%;height:100%;object-fit:cover}
 .ab-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(5,5,5,.55),rgba(5,5,5,0) 60%)} /* scuro neutro in basso: il titolo bianco si legge */
 .ab-txt{position:absolute;left:calc(10px + var(--pad));right:calc(10px + var(--pad));bottom:calc(10px + var(--pad))}
@@ -384,7 +385,13 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .hs-dark .hs-cue{top:50%;bottom:auto;translate:-50% -50%;gap:.12em;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:clamp(96px,19vw,360px);line-height:.9;transition:opacity .5s,scale .7s var(--energy)} /* in Chi siamo "Scorri" è il titolo d'apertura: gigante al centro della foto */
 .hs-dark .hs-cue i{height:clamp(56px,7vw,120px);width:2px}.hs-dark .hs-cue i::after{width:2px}
 .hs-dark .hs-cue.off{scale:.92}
-.hs-dark .ab-bg::after{background:rgba(5,5,5,.42)} /* velo neutro: la riga bianca si legge su tutta la foto */
+.hs-dark .ab-bg::after{background:rgba(5,5,5,.42);opacity:0} /* velo neutro: la riga bianca si legge su tutta la foto */
+/* arrivo dalla home: la foto della pillola diventa la hero pulita, poi si scurisce e compare "Scorri" (prima comparivano di colpo e coprivano il passaggio) */
+.shown .hs-dark .ab-bg::after{animation:veilIn 1s ease .35s forwards}
+.hs-dark .hs-cue>*{opacity:0}
+.shown .hs-dark .hs-cue>*{animation:cueIn 1s var(--energy) .6s both}.shown .hs-dark .hs-cue>i{animation-delay:.8s}
+@keyframes veilIn{to{opacity:1}}
+@keyframes cueIn{from{opacity:0;transform:translateY(.25em)}to{opacity:1;transform:none}}
 /* rolodex: tamburo di frasi, gira con lo scroll */
 .rdx{position:relative}
 .rdx-pin{position:sticky;top:0;height:100svh;overflow:hidden;perspective:1600px}

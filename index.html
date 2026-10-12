@@ -631,7 +631,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 @keyframes vtNew{from{transform:translateY(100%);clip-path:inset(0 round var(--radius-media) var(--radius-media) 0 0)}to{clip-path:inset(0 round 0)}}
 .nav{view-transition-name:nav}
 /* pagina successiva: la foto della pillola, ormai a tutto schermo, resta ferma e diventa il fondo della hero della nuova pagina (stesso view-transition-name) */
-.nextp-pill{view-transition-name:next-hero} /* sul contenitore, non sulla foto: il passaggio tiene gli angoli arrotondati */
+html:active-view-transition-type(expand) .nextp-pill{view-transition-name:next-hero} /* sul contenitore (angoli arrotondati), e solo nel passaggio dalla pillola: negli altri cambi pagina la pagina nuova deve coprire tutto */
 html:active-view-transition-type(expand)::view-transition-old(root){animation:none}
 html:active-view-transition-type(expand)::view-transition-new(root){animation:vtFade .5s ease both}
 html:active-view-transition-type(expand)::view-transition-group(next-hero){animation-duration:.01s}
