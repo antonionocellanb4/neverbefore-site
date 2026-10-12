@@ -265,10 +265,10 @@ def build(p):
     head = SRC[:SRC.index('</head>')]
     head = re.sub(r'<title>.*?</title>', f"<title>{esc(p['name'])} · Progetti · Never Before Italia</title>", head)
     head = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{esc(p["lede"])}">', head)
-    head += '<style>' + CSS + '</style>\n</head>\n'
+    head += '<style>' + CSS + PAGES_CSS + '</style>\n</head>\n'  # PAGES_CSS/JS: servono anche qui (pagina successiva col testo)
     top = local(between(SRC, '<body>', '<main id="top">')).replace('href="index.html#top"', 'href="index.html"')
     tail = tail_html(p['next'])
-    page = head + top + main_html(p) + '\n' + tail + script() + '</body>\n</html>\n'
+    page = head + top + main_html(p) + '\n' + tail + script().replace('</script>\n', PAGES_JS + '</script>\n') + '</body>\n</html>\n'
     (ROOT / f"progetto-{p['slug']}.html").write_text(page, encoding='utf8')
     print('ok', p['slug'], len(page))
 
@@ -389,7 +389,14 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .rdx{position:relative}
 .rdx-pin{position:sticky;top:0;height:100svh;overflow:hidden;perspective:1600px}
 .rdx-i{position:absolute;left:0;right:0;top:50%;display:flex;justify-content:center;align-items:center;gap:.14em;white-space:nowrap;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:var(--rf,clamp(56px,11vw,210px));line-height:1.1;margin-top:-.55em;backface-visibility:hidden;will-change:transform,opacity}
-.rdx-i .hx-pill{opacity:1;margin:0}
+.rdx-i .hx-pill{opacity:1;margin:0;flex:none}
+@media (max-width:720px){ /* telefono: le tre frasi ferme una sotto l'altra, entrano a scaglioni */
+  .rdx-pin{position:static;height:auto;display:flex;flex-direction:column;gap:.1em;padding:calc(var(--nav-h) + 48px) var(--pad) 40px;perspective:none}
+  .rdx-i{position:static;margin:0;justify-content:flex-start;animation:rdxIn 1s var(--energy) both}
+  .rdx-i:nth-child(2){animation-delay:.12s}.rdx-i:nth-child(3){animation-delay:.24s}
+  .rdx .hx-pill svg *{animation-play-state:running}
+}
+@keyframes rdxIn{from{opacity:0;transform:translateY(40px)}}
 /* capitoli e schede tecniche (Creative Website Manual) */
 .ch-k{margin:0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
 .cap{padding:clamp(100px,12vw,180px) var(--pad) 0} /* non .ch: è la classe delle lettere del titolo animato */
@@ -431,8 +438,13 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .ex-c small{font-size:15px;color:var(--ink-2);text-align:right}
 @media (max-width:820px){.ch-g,.ex{grid-template-columns:1fr}.spec,.ex-side{position:static}}
 /* pagina successiva senza foto: si entra nel testo. Lo zoom parte dall'asta di una lettera (origine messa da JS) e il nero riempie lo schermo */
-.nextp.nt .nextp-t{display:block;transform:scale(calc(1 + var(--ne,0) * var(--ne,0) * var(--ne,0) * 160))} /* senza will-change: il testo si ridisegna nitido mentre cresce */
+.nextp.nt .nextp-t{display:block;text-align:center;transform:scale(calc(1 + var(--ne,0) * var(--ne,0) * var(--ne,0) * 160))} /* senza will-change: il testo si ridisegna nitido mentre cresce */
 .nextp.nt .nextp-t>span{opacity:1}.nextp.nt .nextp-t>span+span{margin-left:.24em}
+.nextp.nt .nextp-t>span{display:inline}
+@media (pointer:coarse),(max-width:720px){
+  .nextp.nt .nextp-t{will-change:transform;transform:scale(calc(1 + var(--ne,0) * var(--ne,0) * var(--ne,0) * 28))} /* telefono: ridisegnare il testo enorme a ogni passo bloccava tutto */
+  .nextp.nt .nextp-pin::after{opacity:clamp(0,calc((var(--ne,0) - .55) * 4),1)}
+}
 .nextp.nt .nextp-pin::after{content:"";position:absolute;inset:0;background:var(--ink);opacity:clamp(0,calc((var(--ne,0) - .8) * 6),1);pointer-events:none}
 /* card a ventaglio (Osmo Stacking Sticky Cards Bounce) */
 .sc{padding:clamp(80px,12vw,160px) var(--pad) 18svh;overflow-x:clip}
@@ -452,16 +464,28 @@ html:has(.pj-dome),body:has(.pj-dome){overflow:hidden;height:100%}
 .pj-dome.projects{height:100svh;touch-action:none}
 .pj-dome .dome-pin{height:100svh}
 .pj-dome .dome-ui h1{font-size:clamp(56px,8vw,140px);color:#fff}
+@media (max-width:720px){.pj-dome .dome-ui h1{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.pj-dome .dome-bot{margin-top:auto}.pj-dome .dc span+span{display:none}}
 .pj-dome .dome-ui p{opacity:1;align-self:center}
 .pf-d{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;pointer-events:auto;margin-top:12px}
-.pf-d button{border:1px solid #3A3A3A;background:var(--dark);font:400 14px var(--sans);letter-spacing:-.02em;color:#fff;padding:8px 14px;border-radius:99px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+/* telefono: al posto della fila un bottone che apre il pannello delle categorie dal basso */
+.pf-open{display:none;pointer-events:auto;margin-top:12px;border:0;background:#fff;color:var(--ink);font:400 15px var(--sans);letter-spacing:-.02em;padding:11px 18px;border-radius:99px;cursor:pointer}
+.pf-open b{font-weight:400}.pf-open sup{font-size:10px;margin-left:3px;opacity:.6}
+.pf-sheet{margin:auto 0 0;width:100%;max-width:100%;max-height:80svh;border:0;padding:18px var(--pad) calc(24px + env(safe-area-inset-bottom));border-radius:22px 22px 0 0;background:var(--dark);color:#fff}
+.pf-sheet[open]{animation:sheetUp .5s var(--energy)}
+.pf-sheet::backdrop{background:rgba(5,5,5,.5)}
+@keyframes sheetUp{from{transform:translateY(100%)}}
+.pf-sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.pf-sh p{margin:0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--on-dark-2)}
+.pf-x{width:40px;height:40px;border:0;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;cursor:pointer}.pf-x svg{width:14px;height:14px}
+.pf-sheet .pf-d{justify-content:flex-start;margin-top:8px}.pf-sheet .pf-d button{font-size:16px;padding:11px 18px}
+@media (max-width:720px){.dome-bot .pf-d{display:none}.pf-open{display:inline-block}}
+.pf-d button{flex:none;white-space:nowrap;border:1px solid #3A3A3A;background:var(--dark);font:400 14px var(--sans);letter-spacing:-.02em;color:#fff;padding:8px 14px;border-radius:99px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
 .pf-d button:hover{border-color:#fff}
 .pf-d button.on{background:#fff;border-color:#fff;color:var(--ink)}
 .pf-d sup{font-size:10px;margin-left:3px;opacity:.6}
 .dome-bot{display:flex;flex-direction:column;align-items:center}
 @media (max-width:820px){
   .stk-top{grid-template-columns:1fr}.stk-top p{margin-bottom:10px}
-  .pf-d{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;max-width:100%;padding-bottom:4px;scrollbar-width:none}
   .in-intro{grid-template-columns:1fr;row-gap:24px}.in-intro .pj-big,.in-intro p:not(.pj-big){grid-column:1}
   .sv-row{grid-template-columns:2em minmax(0,1fr);row-gap:10px}.sv-row p,.sv-row figure{grid-column:2}.sv-row figure{width:min(100%,320px)}
   .pc-grid{grid-template-columns:1fr 1fr}
@@ -489,10 +513,10 @@ PAGES_JS = r'''
   addEventListener('scroll',go,{passive:true});addEventListener('resize',go);go()})}
 // (p con easing morbido per tratto: la frase si ferma un attimo al centro; nel passaggio quella che esce resta visibile fino a fine giro; ferme, le vicine non si vedono)
 // rolodex: p va da 0 al numero di frasi-1 lungo la sezione; ogni frase sta su un tamburo (ruota attorno a un asse dietro lo schermo)
-{const r=document.querySelector('.rdx');if(r){const it=[...r.querySelectorAll('.rdx-i')],N=it.length,STEP=55,SM=matchMedia('(pointer:coarse)').matches?.08:.2;let sd=null,raf=0;
+{const r=document.querySelector('.rdx'),mob=matchMedia('(max-width:720px)');if(r){const it=[...r.querySelectorAll('.rdx-i')],N=it.length,STEP=55,SM=matchMedia('(pointer:coarse)').matches?.08:.2;let sd=null,raf=0;
   const fit=()=>{r.style.removeProperty('--rf');const W=innerWidth*.9,w=Math.max(...it.map(e=>{const g=document.createRange();g.selectNodeContents(e);return g.getBoundingClientRect().width}));
-    if(w>W)r.style.setProperty('--rf',parseFloat(getComputedStyle(it[0]).fontSize)*W/w+'px');r.style.height=(innerHeight*(1+(N-1)*.35))+'px'};
-  const upd=()=>{const run=r.offsetHeight-innerHeight,d=sd===null?-r.getBoundingClientRect().top:sd,q=clamp(d/run)*(N-1),f=q-Math.floor(q),p=Math.floor(q)+f*f*(3-2*f),R=it[0].offsetHeight*1.15;
+    if(w>W)r.style.setProperty('--rf',parseFloat(getComputedStyle(it[0]).fontSize)*W/w+'px');r.style.height=mob.matches?'':(innerHeight*(1+(N-1)*.35))+'px'};
+  const upd=()=>{if(mob.matches){it.forEach(e=>{e.style.transform=e.style.opacity=''});return}const run=r.offsetHeight-innerHeight,d=sd===null?-r.getBoundingClientRect().top:sd,q=clamp(d/run)*(N-1),f=q-Math.floor(q),p=Math.floor(q)+f*f*(3-2*f),R=it[0].offsetHeight*1.15;
     it.forEach((e,i)=>{const k=i-p;e.style.transform=`translateZ(${-R}px) rotateX(${(-k*STEP).toFixed(2)}deg) translateZ(${R}px)`;e.style.opacity=Math.max(0,1-Math.abs(k)**3).toFixed(3);
       e.querySelectorAll('.hx-pill').forEach(q=>q.classList.toggle('on',Math.abs(k)<.5))})};
   const tick=()=>{raf=0;const t=-r.getBoundingClientRect().top;if(sd===null||Math.abs(t-sd)>innerHeight*3)sd=t;sd+=(t-sd)*SM;if(Math.abs(t-sd)<.5)sd=t;upd();if(sd!==t)raf=requestAnimationFrame(tick)};
@@ -694,8 +718,11 @@ DOME_JS = r'''
   const end=e=>{if(!drag)return;const d=drag;drag=null;sec.classList.remove('drag');if(!d.m&&d.t&&e.type==='pointerup')openLb(d.t)};
   addEventListener('pointerup',end);addEventListener('pointercancel',end);
   // filtri: le card si rimescolano col nuovo elenco e arrivano di nuovo dal fondo
-  const bs=[...document.querySelectorAll('#pf button')];bs.forEach(b=>b.onclick=()=>{if(b.classList.contains('on'))return;bs.forEach(q=>q.classList.toggle('on',q===b));
-    const f=b.dataset.f;list=f==='*'?PD:PD.filter(d=>d.k.includes(f));fillCards();t0=performance.now()});
+  const bs=[...document.querySelectorAll('[data-f]')],sh=$('pfSheet'),po=$('pfOpen');
+  bs.forEach(b=>b.onclick=()=>{const f=b.dataset.f;if(sh.open)sh.close();if(b.classList.contains('on'))return;bs.forEach(q=>q.classList.toggle('on',q.dataset.f===f&&!(f==='*'&&sh.contains(q))));
+    const all=f==='*';po.querySelector('b').textContent=all?'Scegli categoria':b.firstChild.textContent;po.querySelector('sup').textContent=all?'':b.querySelector('sup').textContent;
+    list=f==='*'?PD:PD.filter(d=>d.k.includes(f));fillCards();t0=performance.now()});
+  po.onclick=()=>sh.showModal();sh.querySelector('.pf-x').onclick=()=>sh.close();sh.addEventListener('click',e=>{if(e.target===sh)sh.close()});
   const lb=$('domeLb'),lbImg=$('domeImg'),fill=(id,t)=>{$(id).textContent=t;$(id).hidden=!t};
   const openLb=el=>{const d=cards.find(k=>k.el===el).d,r=el.getBoundingClientRect();
     lbImg.src=d.i;lbImg.alt=d.n;fill('domeC',d.c);fill('domeN',d.n);fill('domeM',d.m);fill('domeD',d.d);$('domeA').href=d.h;
@@ -719,10 +746,11 @@ def build_progetti_index():
   <section class="projects pj-dome" id="progetti" data-dark aria-label="Progetti">
     <div class="dome-pin" id="domePin">
       <div class="dome-stage" id="dome" aria-hidden="true"></div>
-      <div class="dome-ui"><h1>Progetti</h1><div class="dome-bot"><p>Trascina per esplorare · clicca una foto per aprirla</p><nav class="pf-d" id="pf" aria-label="Filtra i progetti">{btns}</nav></div></div>
+      <div class="dome-ui"><h1>Progetti</h1><div class="dome-bot"><p>Trascina per esplorare · clicca una foto per aprirla</p><nav class="pf-d" id="pf" aria-label="Filtra i progetti">{btns}</nav><button type="button" class="pf-open" id="pfOpen" aria-haspopup="dialog"><b>Scegli categoria</b><sup></sup></button></div></div>
     </div>
     <ul class="sr">{links}</ul>
   </section>
+  <dialog class="pf-sheet" id="pfSheet" aria-label="Filtra i progetti"><div class="pf-sh"><p>Categoria</p><button type="button" class="pf-x" aria-label="Chiudi"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3 3 13"/></svg></button></div><div class="pf-d">{btns.replace(' class="on"', '', 1)}</div></dialog>
   {lbox}
 </main>'''
     page('progetti.html', 'Progetti · Never Before Italia', 'I progetti di Never Before Italia.', main, ('Chi', 'siamo', 'chi-siamo.html', 'assets/img/chi-siamo-placeholder.jpg'),
