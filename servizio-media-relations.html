@@ -827,7 +827,9 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .rdx-i .hx-pill{opacity:1;margin:0;flex:none}
 @media (max-width:720px){ /* telefono: le tre frasi ferme una sotto l'altra, entrano a scaglioni */
   .rdx-pin{position:static;height:auto;display:flex;flex-direction:column;gap:.1em;padding:calc(var(--nav-h) + 48px) var(--pad) 40px;perspective:none}
-  .rdx-i{position:static;margin:0;justify-content:flex-start;animation:rdxIn 1s var(--energy) both}
+  .rdx-i{position:static;margin:0 0 .5em;flex-direction:column;align-items:stretch;gap:.12em;animation:rdxIn 1s var(--energy) both}
+  .rdx-w{align-self:flex-start;white-space:nowrap;line-height:1}
+  .rdx-i .hx-pill{width:100%;height:auto;aspect-ratio:2.8/.92}
   .rdx-i:nth-child(2){animation-delay:.12s}.rdx-i:nth-child(3){animation-delay:.24s}
   .rdx .hx-pill svg *{animation-play-state:running}
 }
@@ -1209,7 +1211,8 @@ document.querySelectorAll('.rv,.lboard,.lr').forEach(el=>{if(!el.closest('.cta,.
 // (p con easing morbido per tratto: la frase si ferma un attimo al centro; nel passaggio quella che esce resta visibile fino a fine giro; ferme, le vicine non si vedono)
 // rolodex: p va da 0 al numero di frasi-1 lungo la sezione; ogni frase sta su un tamburo (ruota attorno a un asse dietro lo schermo)
 {const r=document.querySelector('.rdx'),mob=matchMedia('(max-width:720px)');if(r){const it=[...r.querySelectorAll('.rdx-i')],N=it.length,STEP=55,SM=matchMedia('(pointer:coarse)').matches?.08:.2;let sd=null,raf=0;
-  const fit=()=>{r.style.removeProperty('--rf');const W=innerWidth*.9,w=Math.max(...it.map(e=>{const g=document.createRange();g.selectNodeContents(e);return g.getBoundingClientRect().width}));
+  const fitM=()=>{const W=r.querySelector('.rdx-pin').clientWidth-2*parseFloat(getComputedStyle(r.querySelector('.rdx-pin')).paddingLeft);r.querySelectorAll('.rdx-w').forEach(w=>{w.style.fontSize='';if(!mob.matches)return;for(let k=0;k<3;k++){const s=parseFloat(getComputedStyle(w).fontSize);w.style.fontSize=(s*W/w.getBoundingClientRect().width*.99)+'px'}})};
+  const fit=()=>{fitM();r.style.removeProperty('--rf');const W=innerWidth*.9,w=Math.max(...it.map(e=>{const g=document.createRange();g.selectNodeContents(e);return g.getBoundingClientRect().width}));
     if(w>W)r.style.setProperty('--rf',parseFloat(getComputedStyle(it[0]).fontSize)*W/w+'px');r.style.height=mob.matches?'':(innerHeight*(1+(N-1)*.35))+'px'};
   const upd=()=>{if(mob.matches){it.forEach(e=>{e.style.transform=e.style.opacity=''});return}const run=r.offsetHeight-innerHeight,d=sd===null?-r.getBoundingClientRect().top:sd,q=clamp(d/run)*(N-1),f=q-Math.floor(q),p=Math.floor(q)+f*f*(3-2*f),R=it[0].offsetHeight*1.15;
     it.forEach((e,i)=>{const k=i-p;e.style.transform=`translateZ(${-R}px) rotateX(${(-k*STEP).toFixed(2)}deg) translateZ(${R}px)`;e.style.opacity=Math.max(0,1-Math.abs(k)**3).toFixed(3);
