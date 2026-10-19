@@ -435,7 +435,7 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .cap .ab-num .hx-pill{font-size:clamp(28px,2.6vw,44px);margin:0;opacity:1;flex:none}
 @media (max-width:820px){.ab-q2{grid-template-columns:1fr;gap:16px}.cap .ab-num{flex-direction:column;gap:32px}}
 /* esempi del servizio: titolo fermo a sinistra, progetti grandi a destra uno dopo l'altro */
-.ex{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(24px,5vw,96px);padding:clamp(100px,12vw,180px) var(--pad) 0}
+section.ex{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(24px,5vw,96px);padding:clamp(100px,12vw,180px) var(--pad) 0}
 .ex-side{position:sticky;top:calc(var(--nav-h) + 24px);align-self:start}
 .ex-side .ch-t{margin-bottom:24px}
 .ex-i{display:block;color:inherit;text-decoration:none;border-top:1px solid var(--line);padding-top:14px;margin-bottom:clamp(48px,6vw,96px)}
@@ -445,7 +445,7 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .ex-i:hover .pc-m img{scale:1.04}
 .ex-c{display:flex;justify-content:space-between;gap:16px;padding-top:12px;font-size:17px}
 .ex-c small{font-size:15px;color:var(--ink-2);text-align:right}
-@media (max-width:820px){.ch-g,.ex{grid-template-columns:1fr}.spec,.ex-side{position:static}}
+@media (max-width:820px){.ch-g,section.ex{grid-template-columns:1fr}.spec,.ex-side{position:static}}
 /* pagina successiva senza foto: si entra nel testo. Lo zoom parte dall'asta di una lettera (origine messa da JS) e il nero riempie lo schermo */
 .nextp.nt .nextp-t{display:block;text-align:center;transform:scale(calc(1 + var(--ne,0) * var(--ne,0) * var(--ne,0) * 160))} /* senza will-change: il testo si ridisegna nitido mentre cresce */
 .nextp.nt .nextp-t>span{opacity:1}.nextp.nt .nextp-t>span+span{margin-left:.24em}

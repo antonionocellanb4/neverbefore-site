@@ -148,6 +148,17 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .mp-item:hover img{transform:scale(1.05)}
 .mp-item span{position:absolute;left:10px;bottom:10px;background:var(--dark);color:var(--on-dark);font-size:13px;font-weight:400;padding:5px 10px;border-radius:4px}
 .reel-btn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;height:48px;padding:0 5px 0 22px;border:0;border-radius:99px;background:var(--btn-w);color:var(--ink);font:400 16px var(--sans);cursor:pointer;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,.3)}
+/* ruota di progetti: il centro è fuori schermo a destra, le card salgono lungo l'arco dal basso verso l'alto.
+   Esce dal riquadro: va dal bordo alto dello schermo (sotto l'header) al fondo del menu e fino al bordo destro */
+.menu-proj{overflow:visible;border-radius:0}
+.menu-proj .mp-col{display:none} /* restano solo come elenco dei progetti da cui si costruisce la ruota */
+.mrw{position:absolute;top:calc(-1 * (var(--nav-h) + 4px));bottom:-28px;left:0;right:calc(-1 * var(--pad));overflow:hidden}
+.mrw .rw{position:absolute;top:50%;width:0;height:0;animation:rwSpin 80s linear infinite;animation-play-state:paused}
+.menu.open .mrw .rw{animation-play-state:running}
+.menu.open .mrw:hover .rw{animation-play-state:paused}
+@keyframes rwSpin{to{rotate:360deg}}
+.mrw .rc{position:absolute;left:0;top:0;margin:0;aspect-ratio:auto;transform-origin:0 0}
+.menu-proj .reel-btn{z-index:2}
 .reel-btn i{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--btn-w)}
 .reel-btn svg{width:14px;height:14px;margin-left:2px}
 @media (prefers-reduced-motion:reduce){
@@ -443,19 +454,29 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .clients>.rv h2{grid-row:1/3}
 .clients .lead{margin:0 0 20px;max-width:30em}
 
-/* ---------- chiusura (da Capsules): la foto si allarga, "Parliamone" gigante dietro, poi il box con la CTA ---------- */
-.cta{position:relative;height:230svh;background:var(--dark);color:var(--on-dark)}
-.cta-pin{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center}
-.cta-word{font-family:var(--display);font-weight:var(--display-w);font-size:clamp(64px,13vw,240px);letter-spacing:.12em;text-transform:uppercase;color:#1C1C1C;white-space:nowrap;user-select:none}
-.cta-card{position:absolute;inset:0;
-  clip-path:inset(calc((1 - var(--g,0))*24% + var(--g,0)*28px) calc((1 - var(--g,0))*32% + var(--g,0)*var(--pad)) round var(--radius-media))}
-.cta-card img{width:100%;height:100%;object-fit:cover;transform:scale(calc(1.15 - var(--g,0)*.15))}
-.cta-box{position:absolute;right:calc(var(--pad) + 24px);bottom:var(--safe-b);width:min(620px,calc(100% - 2*var(--pad) - 48px));background:var(--bg);color:var(--ink);border-radius:var(--radius);padding:clamp(24px,3vw,40px);
+/* ---------- chiusura: la foto parte come pillola dentro la frase e cresce fino a tutto schermo (come il reel della frase iniziale);
+   aperta, sopra compare una mail già indirizzata che si scrive allo scroll, poi il cursore preme Invia (link vero) ---------- */
+.cta{position:relative;height:300svh;background:var(--dark);color:var(--on-dark)}
+.cta-pin{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center;padding:0 var(--pad)}
+.cta-t{max-width:17ch;text-align:center;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:clamp(40px,6.4vw,120px);line-height:1.04}
+.cta-p{display:inline-block;width:2.2em;height:.8em;vertical-align:-.08em}
+.cta-big{position:absolute;left:0;top:0;overflow:hidden;z-index:1}
+.cta-big img{width:100%;height:100%;object-fit:cover;display:block}
+.ml{position:absolute;z-index:2;right:calc(var(--pad) + 24px);bottom:var(--safe-b);width:min(560px,calc(100% - 2*var(--pad) - 48px));background:#fff;color:var(--ink);border-radius:var(--radius);padding:clamp(20px,2.4vw,32px);
   opacity:0;transform:translateY(24px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
-.cta.done .cta-box{opacity:1;transform:none}
-.cta-box h2{font-size:clamp(32px,3.4vw,56px)}
-.cta-box .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-.cta-box .btn.ghost{color:var(--ink)}
+.cta.done .ml{opacity:1;transform:none}
+.ml-h{font-size:clamp(32px,min(3.4vw,6svh),56px);margin-bottom:clamp(6px,1.4svh,14px)}
+.ml-r{display:flex;gap:12px;padding:clamp(8px,1.4svh,12px) 0;border-bottom:1px solid var(--line);font-size:16px}
+.ml-r span{width:72px;flex:none;color:var(--ink-2)}
+.ml-b{min-height:3.5em;padding:clamp(12px,2svh,18px) 0 clamp(14px,2.4svh,22px);font-family:var(--display);letter-spacing:-.03em;font-size:clamp(22px,min(2.2vw,4svh),34px);line-height:1.15}
+.ml-c{display:inline-block;width:2px;height:1em;margin-left:3px;vertical-align:-.12em;background:var(--ink);animation:mlBlink 1s steps(1) infinite}
+@keyframes mlBlink{50%{opacity:0}}
+.ml-f{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.ml .btn{transition:transform .2s}
+.ml .btn.press{transform:scale(.94)}
+.ml-tel{color:var(--ink);font-size:15px}
+.ml-cur{position:absolute;left:0;top:0;pointer-events:none}
+.ml-cur svg{display:block;width:28px;height:28px;fill:var(--ink);stroke:#fff;stroke-width:1.5;stroke-linejoin:round}
 
 /* ---------- pagina successiva dopo il footer: la sezione resta ferma, il titolo sale e la barra si riempie; in fondo si passa a "Chi siamo" ---------- */
 .nextp{height:190svh;background:var(--bg);color:var(--ink)}
@@ -480,26 +501,27 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .nextp.leaving::after{transform:scaleY(1)}
 
 /* ---------- footer: logo verticale, righello dello scroll, colonne a destra ---------- */
-.ft{--fl:clamp(420px,54vh,580px);--dh:clamp(200px,15.5vw,240px);position:relative;overflow:hidden;background:var(--dark);color:var(--on-dark);border-top:1px solid var(--line-dark)}
-.ft-main{display:grid;grid-template-columns:34px minmax(0,1.35fr) minmax(0,.85fr) minmax(0,.85fr);min-height:var(--fl);padding-left:var(--pad)}
-.ft-ruler{grid-row:1/3;position:relative;height:calc(100% + var(--dh));border-left:1px solid var(--line-dark);background:
-  repeating-linear-gradient(to bottom,var(--on-dark-2) 0 1px,transparent 1px 40px) left top/16px 100% no-repeat,
-  repeating-linear-gradient(to bottom,#707070 0 1px,transparent 1px 8px) left top/8px 100% no-repeat}
-.ft-msg{grid-row:1/3;position:relative;display:flex;align-items:center;padding-right:24px}
-.ft-msg .mk{position:absolute;left:-34px;top:50%;width:70px;height:1px;background:var(--on-dark)}
-.ft-msg .box{display:flex;gap:18px;align-items:center;margin-left:70px}
+.ft{--dh:clamp(200px,15.5vw,240px);position:relative;overflow:hidden;background:var(--dark);color:var(--on-dark);border-top:1px solid var(--line-dark)}
+.ft-main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr) minmax(0,.85fr);padding-left:var(--pad)}
+.ft-msg{display:flex;align-items:center;gap:24px;align-self:start;padding:36px 24px 0 0}
+/* anello che si riempie con la pagina, al centro la freccia per tornare su */
+.fm-ring{position:relative;flex:none;width:120px;height:120px;padding:0;border:0;background:none;color:var(--on-dark);cursor:pointer}
+.fm-ring>svg{width:100%;height:100%;rotate:-90deg}
+.fm-ring circle{fill:none;stroke-width:3}.fm-ring .bg{stroke:#2a2a2a}.fm-ring .pr{stroke:#D7FFE0;stroke-dasharray:1;stroke-dashoffset:1;stroke-linecap:round}
+.fm-ring i{position:absolute;inset:0;display:grid;place-items:center;transition:transform .4s var(--energy)}.fm-ring i svg{width:26px;height:26px}
+.fm-ring:hover i{transform:translateY(-4px)}
 .ft-msg strong{display:block;white-space:nowrap;font-size:26px;font-weight:400;letter-spacing:-.057em;line-height:1.1;margin-bottom:6px}
 .ft-msg p{font-size:16px;font-weight:400;line-height:1.35;max-width:22em}
 .ft-msg a{text-underline-offset:3px}
-.ft-col{padding:44px var(--pad) 0 0}
+.ft-col{padding:36px var(--pad) 0 0}
 .ft-col h4{font-family:var(--serif);font-weight:400;font-size:17px;color:var(--on-dark-2);margin-bottom:10px}
 .ft-col p,.ft-col li{font-size:17px;font-weight:400;line-height:1.4}
-.ft-col .blk{margin-bottom:40px}
+.ft-col .blk{margin-bottom:28px}
 .ft-col ul{list-style:none}
 .ft-col a{text-decoration:none}
 .ft-col a:hover{text-decoration:underline;text-underline-offset:4px}
 .ft-col .big a{font-size:clamp(32px,2.8vw,44px);letter-spacing:-.062em;line-height:1.08}
-.ft-legal{grid-column:3/5;align-self:end;border-top:1px solid var(--line-dark);padding:32px var(--pad) 28px 0;list-style:none}
+.ft-legal{grid-column:2/-1;margin-top:16px;border-top:1px solid var(--line-dark);padding:22px var(--pad) 8px 0;list-style:none} /* sotto le due colonne di destra, come prima */
 .ft-legal li{font-size:16px;font-weight:400;line-height:1.6}
 .ft-legal a{text-decoration:none}.ft-legal a:hover{text-decoration:underline}
 /* pillole dei servizi: senza JS (o con movimento ridotto) stanno in fila sul fondo; con Matter.js cadono dall'alto e si ammucchiano, col mouse si trascinano */
@@ -602,11 +624,10 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 
 /* ---------- tablet / mobile ---------- */
 @media (max-width:1100px){
-  .ft-main{grid-template-columns:34px minmax(0,1fr) minmax(0,1fr)}
-  .ft-msg{grid-row:auto;grid-column:2/4;padding:40px 0 0}
-  .ft-msg .mk{display:none}.ft-msg .box{margin-left:24px}
-  .ft-col{grid-row:2;padding-left:24px}.ft-col:not(.ex){grid-column:2}.ft-col.ex{grid-column:3}
-  .ft-legal{grid-column:2/4;grid-row:3;padding-left:24px}
+  .ft-main{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .ft-msg{grid-column:1/-1;padding:40px 0 0}
+  .ft-col{grid-row:2}.ft-col:not(.ex){grid-column:1}.ft-col.ex{grid-column:2}
+  .ft-legal{grid-row:3;grid-column:1/-1}
 }
 @media (max-width:1000px){
     .split,.clients{grid-template-columns:1fr}
@@ -618,7 +639,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 @media (max-width:720px){
   .labs{--R:1400px;--cw:68vw} /* card più strette e arco più curvo: si vedono le card accanto a destra e a sinistra */
   /* menu: niente colonne di progetti che scorrono, resta il bottone del reel */
-  .menu-proj{height:auto;display:block;overflow:visible;padding:8px 0 4px}.mp-col{display:none}
+  .menu-proj{height:auto;display:block;overflow:visible;padding:8px 0 4px}.mp-col,.mrw{display:none}
   .menu-proj .reel-btn{position:static;transform:none}
   /* "24 premi" + "Mediastar": più vicini */
   .echo{height:min(56svh,480px)}
@@ -627,7 +648,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
   .nav-blur i:nth-child(4){backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);mask:linear-gradient(#000 55%,transparent)}
   .ve{font-size:18vw}.ve1{top:24%;left:calc(var(--pad) + 16px)}.ve2{bottom:27%;right:calc(var(--pad) + 16px)}
   .vx-foot{left:calc(var(--pad) + 16px);right:calc(var(--pad) + 16px);bottom:44px;font-size:15px}
-  .cta-box{right:calc(var(--pad) + 12px);bottom:40px;width:calc(100% - 2*var(--pad) - 24px);border-radius:calc(var(--radius-media) - 12px)} /* 12px dal bordo della foto su tre lati, angoli concentrici con i suoi */
+  .ml{right:calc(var(--pad) + 12px);bottom:40px;width:calc(100% - 2*var(--pad) - 24px)} /* 12px dal bordo della foto su tre lati, angoli concentrici con i suoi */
   :root{--nav-h:72px;--pill-h:46px}
   body{font-size:17px}
   .nav{grid-template-columns:1fr auto}
@@ -639,7 +660,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
   .gc{flex-basis:82vw}
   .menu{grid-template-columns:1fr;grid-template-rows:auto auto;overflow-y:auto;padding:calc(var(--nav-h) + 4px) 16px calc(100svh - var(--mh) + 16px)}
   .menu-main{padding:4px 0 0 4px;min-height:auto}
-  .menu-proj{height:62svh}
+  .menu-proj{height:auto} /* solo il bottone del reel: niente riquadro vuoto che fa scorrere il menu */
   .menu-main li a{font-size:13vw}
   .nav .btn{height:40px;padding:0 16px;font-size:15px}
   .nav .btn .long{display:none}.nav .btn .short{display:inline}
@@ -649,11 +670,10 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
   .brk{padding:20px 18px}
   /* footer: logo orizzontale in fondo, niente righello */
   .ft-main{display:block;padding:8px var(--pad) 0}
-  .ft-ruler{display:none}
   .ft{--dh:220px}
-  .ft-msg{padding:40px 0 8px}.ft-msg .box{margin:0}
+  .ft-msg{padding:40px 0 8px;gap:18px}.fm-ring{width:84px;height:84px}
   .ft-col{padding:32px 0 0}
-  .ft-legal{padding:28px 0;margin-top:32px}
+  .ft-legal{padding:22px 0;margin-top:32px}
 }
 
 /* cambio pagina tra home e progetti (View Transitions tra documenti; dove non c'è si naviga e basta):
@@ -898,7 +918,7 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .cap .ab-num .hx-pill{font-size:clamp(28px,2.6vw,44px);margin:0;opacity:1;flex:none}
 @media (max-width:820px){.ab-q2{grid-template-columns:1fr;gap:16px}.cap .ab-num{flex-direction:column;gap:32px}}
 /* esempi del servizio: titolo fermo a sinistra, progetti grandi a destra uno dopo l'altro */
-.ex{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(24px,5vw,96px);padding:clamp(100px,12vw,180px) var(--pad) 0}
+section.ex{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(24px,5vw,96px);padding:clamp(100px,12vw,180px) var(--pad) 0}
 .ex-side{position:sticky;top:calc(var(--nav-h) + 24px);align-self:start}
 .ex-side .ch-t{margin-bottom:24px}
 .ex-i{display:block;color:inherit;text-decoration:none;border-top:1px solid var(--line);padding-top:14px;margin-bottom:clamp(48px,6vw,96px)}
@@ -908,7 +928,7 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .ex-i:hover .pc-m img{scale:1.04}
 .ex-c{display:flex;justify-content:space-between;gap:16px;padding-top:12px;font-size:17px}
 .ex-c small{font-size:15px;color:var(--ink-2);text-align:right}
-@media (max-width:820px){.ch-g,.ex{grid-template-columns:1fr}.spec,.ex-side{position:static}}
+@media (max-width:820px){.ch-g,section.ex{grid-template-columns:1fr}.spec,.ex-side{position:static}}
 /* pagina successiva senza foto: si entra nel testo. Lo zoom parte dall'asta di una lettera (origine messa da JS) e il nero riempie lo schermo */
 .nextp.nt .nextp-t{display:block;text-align:center;transform:scale(calc(1 + var(--ne,0) * var(--ne,0) * var(--ne,0) * 160))} /* senza will-change: il testo si ridisegna nitido mentre cresce */
 .nextp.nt .nextp-t>span{opacity:1}.nextp.nt .nextp-t>span+span{margin-left:.24em}
@@ -998,6 +1018,7 @@ html:has(.pj-dome),body:has(.pj-dome){overflow:hidden;height:100%}
   <div class="menu-proj">
     <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/le-carose"><img src="assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg" alt="Le Carose" loading="lazy"><span>Le Carose</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica"><img src="assets/img/never_before_italia_borgo_canonica_branding.png" alt="Borgo Canonica" loading="lazy"><span>Borgo Canonica</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/lum"><img src="assets/img/never_before_italia_video_lum.jpg" alt="Università LUM" loading="lazy"><span>Università LUM</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="Amaro Mediterraneo" loading="lazy"><span>Amaro Mediterraneo</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/cortina-express"><img src="assets/img/cortina-express-006.jpg" alt="Cortina Express" loading="lazy"><span>Cortina Express</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/hula-bari"><img src="assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg" alt="Hula Hawaiian Poke" loading="lazy"><span>Hula Hawaiian Poke</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/le-carose" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg" alt="" loading="lazy"><span>Le Carose</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_borgo_canonica_branding.png" alt="" loading="lazy"><span>Borgo Canonica</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/lum" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_video_lum.jpg" alt="" loading="lazy"><span>Università LUM</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="" loading="lazy"><span>Amaro Mediterraneo</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/cortina-express" aria-hidden="true" tabindex="-1"><img src="assets/img/cortina-express-006.jpg" alt="" loading="lazy"><span>Cortina Express</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/hula-bari" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg" alt="" loading="lazy"><span>Hula Hawaiian Poke</span></a></div></div>
     <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="Tenuta Giustini" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru"><img src="assets/img/immagine_home_viru.jpg" alt="Viru" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="Master Italy" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="progetto-marinobus.html"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="MarinoBus" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="Sneakers Room" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="Produttori di Manduria" loading="lazy"><span>Produttori di Manduria</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine_home_viru.jpg" alt="" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="progetto-marinobus.html" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="" loading="lazy"><span>Produttori di Manduria</span></a></div></div>
+    <div class="mrw"><div class="rw"></div></div>
     <button class="reel-btn" id="reelOpen" type="button">Guarda il reel <i><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg></i></button>
   </div>
 </nav>
@@ -1025,15 +1046,12 @@ html:has(.pj-dome),body:has(.pj-dome){overflow:hidden;height:100%}
 </main>
 
 
-<!-- 8. footer come il riferimento: logo verticale, righello dello scroll, colonne -->
+<!-- 8. footer: cerchio che si riempie con la pagina (torna su) e metri scrollati, colonne, link legali su una riga, pillole dei servizi che cadono -->
 <footer class="ft" data-dark>
   <div class="ft-main">
-    <div class="ft-ruler" aria-hidden="true"></div>
     <div class="ft-msg">
-      <span class="mk" aria-hidden="true"></span>
-      <div class="box">
-        <div><strong>Hai scrollato <span id="cm">0 cm</span></strong><p id="cmtxt">Un pullman <a href="progetto-marinobus.html">MarinoBus</a> è lungo circa 12 metri.</p></div>
-      </div>
+      <button class="fm-ring" type="button" aria-label="Torna su"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="46"/><circle class="pr" cx="50" cy="50" r="46" pathLength="1"/></svg><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 19V5M6 11l6-6 6 6"/></svg></i></button>
+      <div><strong>Hai scrollato <span id="cm">0 cm</span></strong><p id="cmtxt">Un pullman <a href="progetto-marinobus.html">MarinoBus</a> è lungo circa 12 metri.</p></div>
     </div>
     <div class="ft-col">
       <div class="blk"><h4>Dove siamo</h4><p>C.da Monopoli, 3<br>70013 Castellana Grotte (BA)</p><p style="margin-top:10px">Via Redipuglia, 20<br>Padova</p></div>
@@ -1079,6 +1097,12 @@ const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 const menu=$('menu'),mpill=$('mpill');
 const page=$('page');let menuT,lenis=null; // lenis: scroll morbido, acceso al load
 [...menu.querySelectorAll('.menu-main li,.menu-meta,.menu-proj')].forEach((el,i)=>el.style.setProperty('--i',i));
+// ruota dei progetti nel menu (solo desktop): card sul bordo di un cerchio col centro fuori a destra; raggio e misure dall'altezza del menu, ricalcolati all'apertura e al resize
+{const wh=menu.querySelector('.mrw'),rw=wh&&wh.querySelector('.rw'),seen=new Set(),src=[...menu.querySelectorAll('.mp-col .mp-item')].filter(a=>!seen.has(a.href)&&seen.add(a.href));let key='';
+  const build=()=>{const H=wh.clientHeight,W=wh.clientWidth,k=W+'x'+H;if(!H||k===key)return;key=k;const ch=H*.4,cw=ch*.8;let list=src.slice();while(list.length<12)list=list.concat(src);
+    const N=list.length,R=N*ch*1.12/(2*Math.PI)+cw/2;rw.innerHTML='';rw.style.left=(W*.5+R)+'px';
+    list.forEach((a,i)=>{const c=a.cloneNode(true);c.className='mp-item rc';c.style.cssText=`width:${cw.toFixed(1)}px;height:${ch.toFixed(1)}px;transform:rotate(${(i*360/N).toFixed(2)}deg) translate(${(-R-cw/2).toFixed(1)}px,${(-ch/2).toFixed(1)}px)`;rw.append(c)})};
+  if(rw&&src.length){new MutationObserver(()=>{if(menu.classList.contains('open'))build()}).observe(menu,{attributes:true,attributeFilter:['class']});addEventListener('resize',()=>{if(menu.classList.contains('open'))build()})}}
 // i blocchi tenuti fermi da GSAP sono position:fixed: dentro la pagina spostata andrebbero in cima, li rimetto all'altezza dello scroll
 const pinned=()=>[...page.querySelectorAll('.pin-spacer>*')].filter(el=>getComputedStyle(el).position==='fixed');
 const setMenu=open=>{
@@ -1090,6 +1114,7 @@ const setMenu=open=>{
   if(!open)menuT=setTimeout(()=>{page.classList.remove('clip');document.documentElement.style.background='';page.querySelectorAll('[data-top]').forEach(el=>{el.style.top=el.dataset.top;delete el.dataset.top})},800);
 };
 mpill.onclick=()=>setMenu(!menu.classList.contains('open'));
+document.querySelector('.nav .logo').addEventListener('click',e=>{if(menu.classList.contains('open')){e.preventDefault();e.stopPropagation();setMenu(false)}}); // a menu aperto il logo chiude il menu
 $('pageShade').onclick=()=>setMenu(false);
 // voce del menu: prima la pagina risale, poi si va alla sezione
 menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',e=>{const t=a.getAttribute('href');setMenu(false);
@@ -1189,8 +1214,11 @@ fitNext();document.fonts.load('400 100px "Google Sans"').then(fitNext,fitNext);a
 
 // footer: quando arrivi in fondo le pillole dei servizi cadono e si ammucchiano. Matter.js si carica solo qui
 const ft=document.querySelector('.ft'),drop=document.querySelector('.ft-drop');
+// footer: l'anello si riempie con la pagina, il clic riporta in cima
+{const ring=ft.querySelector('.fm-ring'),pr=ring.querySelector('.pr'),upd=()=>pr.style.strokeDashoffset=(1-Math.min(1,Math.max(0,scrollY/(document.documentElement.scrollHeight-innerHeight)))).toFixed(4);
+  ring.onclick=()=>typeof lenis!=='undefined'&&lenis?lenis.scrollTo(0):scrollTo({top:0,behavior:'smooth'});addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd()}
 const pills=()=>{const {Engine,Bodies,Body,Composite,Mouse,MouseConstraint,Sleeping}=Matter;
-  const eng=Engine.create({enableSleeping:true}),W=ft.clientWidth,ru=document.querySelector('.ft-ruler'),L=ru.offsetWidth?ru.getBoundingClientRect().right-ft.getBoundingClientRect().left:0;
+  const eng=Engine.create({enableSleeping:true}),W=ft.clientWidth,L=0;
   // misure prese in fila, poi posizione assoluta. Partono già quasi a terra, a file: la prima piena, le altre sopra gli spazi
   // (così il mucchio resta basso e nessuna si capovolge); la fisica le assesta
   const F0=drop.offsetTop+drop.offsetHeight;let x=L+8+Math.random()*24,row=0;
