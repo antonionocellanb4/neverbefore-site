@@ -148,16 +148,17 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .mp-item:hover img{transform:scale(1.05)}
 .mp-item span{position:absolute;left:10px;bottom:10px;background:var(--dark);color:var(--on-dark);font-size:13px;font-weight:400;padding:5px 10px;border-radius:4px}
 .reel-btn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;height:48px;padding:0 5px 0 22px;border:0;border-radius:99px;background:var(--btn-w);color:var(--ink);font:400 16px var(--sans);cursor:pointer;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,.3)}
-/* ruota di progetti: il centro è fuori schermo a destra, le card salgono lungo l'arco dal basso verso l'alto.
-   Esce dal riquadro: va dal bordo alto dello schermo (sotto l'header) al fondo del menu e fino al bordo destro */
+/* foto dei progetti con la cornice bianca buttate sul tavolo: cadono all'apertura, si prendono e si spostano (solo desktop) */
 .menu-proj{overflow:visible;border-radius:0}
-.menu-proj .mp-col{display:none} /* restano solo come elenco dei progetti da cui si costruisce la ruota */
-.mrw{position:absolute;top:calc(-1 * (var(--nav-h) + 4px));bottom:-28px;left:0;right:calc(-1 * var(--pad));overflow:hidden}
-.mrw .rw{position:absolute;top:50%;width:0;height:0;animation:rwSpin 80s linear infinite;animation-play-state:paused}
-.menu.open .mrw .rw{animation-play-state:running}
-.menu.open .mrw:hover .rw{animation-play-state:paused}
-@keyframes rwSpin{to{rotate:360deg}}
-.mrw .rc{position:absolute;left:0;top:0;margin:0;aspect-ratio:auto;transform-origin:0 0}
+.menu-proj .mp-col{display:none} /* restano solo come elenco dei progetti da cui si costruisce il tavolo */
+.mtb{position:absolute;inset:0}
+.mtb .mp-item{position:absolute;margin:0;width:30%;aspect-ratio:auto;padding:8px 8px 34px;background:#fff;border-radius:4px;cursor:grab;box-shadow:0 14px 40px rgba(0,0,0,.45);-webkit-user-drag:none;user-select:none;
+  transform:translate(0,-130vh) rotate(var(--r));transition:transform .9s var(--energy) calc(var(--i) * .05s)}
+.mtb img{aspect-ratio:4/5;border-radius:2px;-webkit-user-drag:none;pointer-events:none}
+.mtb .mp-item span{left:10px;bottom:7px;background:none;color:var(--ink);padding:0}
+.menu.open .mtb .mp-item{transform:rotate(var(--r))}
+.mtb .mp-item.drag{cursor:grabbing;transition:none;transform:rotate(0deg) scale(1.04)}
+.mtb .mp-item.drop{transition:transform .4s var(--energy)}
 .menu-proj .reel-btn{z-index:2}
 .reel-btn i{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--btn-w)}
 .reel-btn svg{width:14px;height:14px;margin-left:2px}
@@ -291,12 +292,31 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 
 /* ---------- visione ✕ esecuzione: un cerchio crema si apre dalla ✕ al centro. Dentro, come in un file di progetto:
    VISIONE è la bozza selezionata (cornice tratteggiata che scorre); il cursore porta la selezione su "esecuzione", la riempie e la rende piena ---------- */
-.vx{position:relative;height:220svh;background:var(--dark);margin-top:-1px}
+.vx{position:relative;height:300svh;background:var(--dark);margin-top:-1px}
 .vx-pin{position:sticky;top:0;height:100svh;overflow:hidden}
 .vx-card{position:absolute;inset:0;background:var(--bg);color:var(--ink);clip-path:circle(calc(var(--g,0)*72%) at 50% 50%)} /* 72%: a fine corsa copre gli angoli */
 .vx-x{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;transform:rotate(calc(var(--g,0)*180deg))}
 .vx-x svg{width:24px;height:24px}
-.vx-foot{position:absolute;left:calc(var(--pad) + 32px);right:calc(var(--pad) + 32px);bottom:56px;display:flex;justify-content:space-between;font-weight:400;font-size:16px}
+/* in fondo, a cerchio aperto (--h da 0 a 1 nella seconda metà del tratto fermo): la frase sale parola per parola, arriva il bottone;
+   poi il cursore di "esecuzione" scende su "miracoli", lo seleziona e lo riempie di giallo trascinando come sopra, infine va sul bottone e lo preme */
+.ve2{z-index:5} /* il cursore resta sopra alla frase e al bottone */
+.vx-foot{position:absolute;left:calc(var(--pad) + 32px);right:calc(var(--pad) + 32px);bottom:48px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.vx-foot p{font-family:var(--display);font-weight:var(--display-w);letter-spacing:-.05em;font-size:clamp(26px,2.6vw,44px);line-height:1.05}
+.vx-foot .w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .1em .12em;margin:0 -.1em -.12em}
+.vx.vup .vx-foot .w{overflow:visible} /* salite le parole, la maschera non serve più: la cornice di "miracoli" ne esce */
+.vx-foot .w>span{display:inline-block;transform:translateY(calc((1 - clamp(0, (var(--h,0) - var(--d) * .04) / .14, 1)) * 115%))}
+.vm{position:relative;isolation:isolate;--m:0}
+.vmt{color:transparent;background:linear-gradient(90deg,var(--ink) calc(var(--m) * 100%),#BDB6AC 0);-webkit-background-clip:text;background-clip:text}
+.vm::before{content:"";position:absolute;z-index:-1;inset:.02em -.05em -.04em;border:2px solid var(--ink);background:#FFF3B8;transform-origin:0 50%;transform:scaleX(var(--m))}
+.vm b{position:absolute;width:10px;height:10px;margin:-5px;background:#fff;border:2px solid var(--ink);border-radius:3px;opacity:clamp(0, (var(--m) - .95) * 20, 1)}
+.vm b:nth-of-type(1){left:-.05em;top:.02em}.vm b:nth-of-type(2){right:-.05em;top:.02em}.vm b:nth-of-type(3){left:-.05em;bottom:-.04em}.vm b:nth-of-type(4){right:-.05em;bottom:-.04em}
+.vx-foot .btn{opacity:clamp(0, (var(--h,0) - .14) * 10, 1);transform:scale(calc(.6 + .4 * clamp(0, (var(--h,0) - .14) / .12, 1)));transition:background .3s,color .3s}
+.vx-foot .btn.press{transform:scale(.94);transition:transform .2s}
+.ve-cur em{transition:opacity .3s,scale .3s var(--energy)}.ve-cur.lt em{opacity:0;scale:.6} /* sul bottone l'etichetta si toglie: coprirebbe il testo */
+/* in hover la freccia esce in basso e rientra dall'alto */
+.vdn{display:grid;overflow:hidden}
+.vx-foot .btn:hover .vdn svg{animation:vdLoop .6s var(--ease)}
+@keyframes vdLoop{49%{transform:translateY(130%)}50%{transform:translateY(-130%)}100%{transform:none}}
 .ve{position:absolute;isolation:isolate;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:clamp(56px,11.5vw,210px);line-height:.9;white-space:nowrap;--p:clamp(0, var(--g,0) / .35, 1);--f:clamp(0, (var(--g,0) - .35) * 1.7, 1)}
 .ve1{top:24%;left:calc(var(--pad) + 32px);text-transform:uppercase}
 .ve2{bottom:22%;right:calc(var(--pad) + 32px)}
@@ -316,13 +336,11 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .ve-cur svg{display:block;width:28px;height:28px;fill:var(--ink);stroke:#fff;stroke-width:1.5;stroke-linejoin:round}
 .ve-cur em{position:absolute;bottom:calc(100% + 4px);right:calc(100% - 10px);font:400 14px var(--sans);font-style:normal;letter-spacing:-.02em;background:var(--ink);color:#fff;padding:4px 10px;border-radius:99px;white-space:nowrap}
 
-/* manifesto: le parole escono da blocchi pieni man mano che scorri */
+/* manifesto: la frase c'è già tutta in grigio pieno e diventa nera parola per parola man mano che scorri */
 .manif{text-align:center;position:relative;margin-top:-2px;background:var(--bg)} /* copre la riga di 1px tra il riquadro aperto e questa sezione */
 .manif p{font-family:var(--display);font-weight:var(--display-w);letter-spacing:-.057em;font-size:clamp(30px,3.6vw,58px);line-height:1.12;max-width:24ch;margin:0 auto 44px}
-.manif .wb{position:relative;display:inline-block;color:transparent;transition:color .35s}
-.manif .wb::after{content:"";position:absolute;inset:.08em -.04em .02em;background:var(--surface);transition:transform .45s var(--ease);transform-origin:right}
+.manif .wb{color:#C4BCB1;transition:color .4s}
 .manif .wb.on{color:var(--ink)}
-.manif .wb.on::after{transform:scaleX(0)}
 
 /* ---------- manifesto ---------- */
 .split{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(32px,6vw,120px);align-items:start}
@@ -595,8 +613,11 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .manif-pin{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center}
 .manif .wrap{position:relative;z-index:1}
 /* pillole animate tra le parole del manifesto: entrano quando la parola prima si scopre */
-.manif .mvp{display:inline-block;transition:opacity .5s,transform .8s var(--energy)}
-.manif .mvp:not(.on){opacity:0;transform:scale(.4)}
+.manif .mvp{display:inline-block;transition:background-color .5s}
+/* prima di arrivarci sono spente: crema, tratto grigio, ferme */
+.manif .mvp:not(.on){background:var(--surface)}
+.manif .mvp:not(.on) svg *{stroke:#C4BCB1;animation-play-state:paused}
+.manif .mvp:not(.on) circle{fill:#C4BCB1}
 .mvp svg *{fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .hp-pulse{background:#FFDCCB}.hp-pulse .bg{stroke:rgba(5,5,5,.15)}.hp-pulse path:not(.bg){stroke-dasharray:.32 .68;animation:hpRun 1.8s linear infinite}
 @keyframes hpRun{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
@@ -639,7 +660,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 @media (max-width:720px){
   .labs{--R:1400px;--cw:68vw} /* card più strette e arco più curvo: si vedono le card accanto a destra e a sinistra */
   /* menu: niente colonne di progetti che scorrono, resta il bottone del reel */
-  .menu-proj{height:auto;display:block;overflow:visible;padding:8px 0 4px}.mp-col,.mrw{display:none}
+  .menu-proj{height:auto;display:block;overflow:visible;padding:8px 0 4px}.mp-col,.mtb{display:none}
   .menu-proj .reel-btn{position:static;transform:none}
   /* "24 premi" + "Mediastar": più vicini */
   .echo{height:min(56svh,480px)}
@@ -647,7 +668,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
   .nav-blur i:not(:nth-child(4)){display:none}
   .nav-blur i:nth-child(4){backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);mask:linear-gradient(#000 55%,transparent)}
   .ve{font-size:18vw}.ve1{top:24%;left:calc(var(--pad) + 16px)}.ve2{bottom:27%;right:calc(var(--pad) + 16px)}
-  .vx-foot{left:calc(var(--pad) + 16px);right:calc(var(--pad) + 16px);bottom:44px;font-size:15px}
+  .vx-foot{left:calc(var(--pad) + 8px);right:calc(var(--pad) + 8px);bottom:36px;flex-direction:column;align-items:flex-start;gap:16px}
   .ml{right:calc(var(--pad) + 12px);bottom:40px;width:calc(100% - 2*var(--pad) - 24px)} /* 12px dal bordo della foto su tre lati, angoli concentrici con i suoi */
   :root{--nav-h:72px;--pill-h:46px}
   body{font-size:17px}
@@ -1018,7 +1039,7 @@ html:has(.pj-dome),body:has(.pj-dome){overflow:hidden;height:100%}
   <div class="menu-proj">
     <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/le-carose"><img src="assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg" alt="Le Carose" loading="lazy"><span>Le Carose</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica"><img src="assets/img/never_before_italia_borgo_canonica_branding.png" alt="Borgo Canonica" loading="lazy"><span>Borgo Canonica</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/lum"><img src="assets/img/never_before_italia_video_lum.jpg" alt="Università LUM" loading="lazy"><span>Università LUM</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="Amaro Mediterraneo" loading="lazy"><span>Amaro Mediterraneo</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/cortina-express"><img src="assets/img/cortina-express-006.jpg" alt="Cortina Express" loading="lazy"><span>Cortina Express</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/hula-bari"><img src="assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg" alt="Hula Hawaiian Poke" loading="lazy"><span>Hula Hawaiian Poke</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/le-carose" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg" alt="" loading="lazy"><span>Le Carose</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_borgo_canonica_branding.png" alt="" loading="lazy"><span>Borgo Canonica</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/lum" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_video_lum.jpg" alt="" loading="lazy"><span>Università LUM</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="" loading="lazy"><span>Amaro Mediterraneo</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/cortina-express" aria-hidden="true" tabindex="-1"><img src="assets/img/cortina-express-006.jpg" alt="" loading="lazy"><span>Cortina Express</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/hula-bari" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg" alt="" loading="lazy"><span>Hula Hawaiian Poke</span></a></div></div>
     <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="Tenuta Giustini" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru"><img src="assets/img/immagine_home_viru.jpg" alt="Viru" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="Master Italy" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="progetto-marinobus.html"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="MarinoBus" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="Sneakers Room" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="Produttori di Manduria" loading="lazy"><span>Produttori di Manduria</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine_home_viru.jpg" alt="" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="progetto-marinobus.html" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="" loading="lazy"><span>Produttori di Manduria</span></a></div></div>
-    <div class="mrw"><div class="rw"></div></div>
+    <div class="mtb"></div>
     <button class="reel-btn" id="reelOpen" type="button">Guarda il reel <i><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg></i></button>
   </div>
 </nav>
@@ -1098,12 +1119,15 @@ const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 const menu=$('menu'),mpill=$('mpill');
 const page=$('page');let menuT,lenis=null; // lenis: scroll morbido, acceso al load
 [...menu.querySelectorAll('.menu-main li,.menu-meta,.menu-proj')].forEach((el,i)=>el.style.setProperty('--i',i));
-// ruota dei progetti nel menu (solo desktop): card sul bordo di un cerchio col centro fuori a destra; raggio e misure dall'altezza del menu, ricalcolati all'apertura e al resize
-{const wh=menu.querySelector('.mrw'),rw=wh&&wh.querySelector('.rw'),seen=new Set(),src=[...menu.querySelectorAll('.mp-col .mp-item')].filter(a=>!seen.has(a.href)&&seen.add(a.href));let key='';
-  const build=()=>{const H=wh.clientHeight,W=wh.clientWidth,k=W+'x'+H;if(!H||k===key)return;key=k;const ch=H*.4,cw=ch*.8;let list=src.slice();while(list.length<12)list=list.concat(src);
-    const N=list.length,R=N*ch*1.12/(2*Math.PI)+cw/2;rw.innerHTML='';rw.style.left=(W*.5+R)+'px';
-    list.forEach((a,i)=>{const c=a.cloneNode(true);c.className='mp-item rc';c.style.cssText=`width:${cw.toFixed(1)}px;height:${ch.toFixed(1)}px;transform:rotate(${(i*360/N).toFixed(2)}deg) translate(${(-R-cw/2).toFixed(1)}px,${(-ch/2).toFixed(1)}px)`;rw.append(c)})};
-  if(rw&&src.length){new MutationObserver(()=>{if(menu.classList.contains('open'))build()}).observe(menu,{attributes:true,attributeFilter:['class']});addEventListener('resize',()=>{if(menu.classList.contains('open'))build()})}}
+// tavolo dei progetti nel menu (solo desktop): 9 foto inclinate e sparse; si trascinano, e un clic senza trascinare apre il progetto
+{const tb=menu.querySelector('.mtb'),seen=new Set(),src=[...menu.querySelectorAll('.mp-col .mp-item')].filter(a=>!seen.has(a.href)&&seen.add(a.href)),R=[-9,6,-4,11,-13,3,8,-6,12];let zt=20;
+  if(tb)src.slice(0,9).forEach((a,i)=>{const c=a.cloneNode(true);c.className='mp-item';c.draggable=false;c.style.setProperty('--i',i);c.style.setProperty('--r',R[i]+'deg');
+    c.style.left=(3+(i%3)*33+(i*7%5))+'%';c.style.top=(1+Math.floor(i/3)*27+(i*11%6))+'%';tb.append(c);
+    c.addEventListener('pointerdown',e=>{if(e.button)return;const sx=e.clientX,sy=e.clientY,x0=c.offsetLeft,y0=c.offsetTop;let moved=false;c.style.zIndex=++zt;c.classList.remove('drop');
+      const mv=f=>{if(!moved&&Math.hypot(f.clientX-sx,f.clientY-sy)>5){moved=true;c.classList.add('drag')}if(moved){c.style.left=(x0+f.clientX-sx)+'px';c.style.top=(y0+f.clientY-sy)+'px'}};
+      const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);if(!moved)return;c.classList.remove('drag');c.classList.add('drop');c.style.setProperty('--r',(Math.random()*16-8).toFixed(1)+'deg');
+        const stop=k=>{k.preventDefault();k.stopPropagation()};addEventListener('click',stop,true);setTimeout(()=>removeEventListener('click',stop,true))}; // il clic che chiude il trascinamento non apre il progetto
+      addEventListener('pointermove',mv);addEventListener('pointerup',up)})})}
 // i blocchi tenuti fermi da GSAP sono position:fixed: dentro la pagina spostata andrebbero in cima, li rimetto all'altezza dello scroll
 const pinned=()=>[...page.querySelectorAll('.pin-spacer>*')].filter(el=>getComputedStyle(el).position==='fixed');
 const setMenu=open=>{
