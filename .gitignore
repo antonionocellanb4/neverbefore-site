@@ -9,3 +9,6 @@ Thumbs.db
 
 .vercel
 __pycache__/
+
+# prove di design scartate, tenute per altre sezioni
+prove/

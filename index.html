@@ -278,19 +278,32 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .hx-sq path{fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.1s var(--ease)}
 .hx-sq.on path{stroke-dashoffset:0} /* la freccia si disegna quando la frase la raggiunge */
 
-/* ---------- visione ✕ esecuzione (da Creative Website Manual): riquadro chiaro che si allarga allo scroll ---------- */
+/* ---------- visione ✕ esecuzione: un cerchio crema si apre dalla ✕ al centro. Dentro, come in un file di progetto:
+   VISIONE è la bozza selezionata (cornice tratteggiata che scorre); il cursore porta la selezione su "esecuzione", la riempie e la rende piena ---------- */
 .vx{position:relative;height:220svh;background:var(--dark);margin-top:-1px}
 .vx-pin{position:sticky;top:0;height:100svh;overflow:hidden}
-.vx-card{position:absolute;inset:0;background:var(--bg);color:var(--ink);
-  /* a fine corsa si apre a tutto schermo e si salda al manifesto sotto, che ha lo stesso fondo */
-  clip-path:inset(calc((1 - var(--g,0))*22%) calc((1 - var(--g,0))*27%) round calc((1 - var(--g,0))*var(--radius)))}
-.vx-w{position:absolute;left:0;right:0;font-size:clamp(56px,11.5vw,210px);line-height:.9;white-space:nowrap;padding:0 calc(var(--pad) + 32px)}
-.vx-w1{top:24%;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);text-transform:uppercase;transform:translateX(calc((1 - var(--g,0))*-28vw))}
-.vx-w2{bottom:22%;text-align:right;transform:translateX(calc((1 - var(--g,0))*28vw))}
-.vx-w2 em{letter-spacing:-.052em}
+.vx-card{position:absolute;inset:0;background:var(--bg);color:var(--ink);clip-path:circle(calc(var(--g,0)*72%) at 50% 50%)} /* 72%: a fine corsa copre gli angoli */
 .vx-x{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;transform:rotate(calc(var(--g,0)*180deg))}
 .vx-x svg{width:24px;height:24px}
 .vx-foot{position:absolute;left:calc(var(--pad) + 32px);right:calc(var(--pad) + 32px);bottom:56px;display:flex;justify-content:space-between;font-weight:400;font-size:16px}
+.ve{position:absolute;isolation:isolate;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:clamp(56px,11.5vw,210px);line-height:.9;white-space:nowrap;--p:clamp(0, var(--g,0) / .35, 1);--f:clamp(0, (var(--g,0) - .35) * 1.7, 1)}
+.ve1{top:24%;left:calc(var(--pad) + 32px);text-transform:uppercase}
+.ve2{bottom:22%;right:calc(var(--pad) + 32px)}
+.vf{position:absolute;inset:-.08em -.1em;z-index:-1}
+.ve1 .vf{background:linear-gradient(90deg,var(--ink) 50%,transparent 0) 0 0/12px 2px repeat-x,linear-gradient(90deg,var(--ink) 50%,transparent 0) 0 100%/12px 2px repeat-x,
+  linear-gradient(0deg,var(--ink) 50%,transparent 0) 0 0/2px 12px repeat-y,linear-gradient(0deg,var(--ink) 50%,transparent 0) 100% 0/2px 12px repeat-y;animation:vxAnts .8s linear infinite}
+@keyframes vxAnts{to{background-position:12px 0,-12px 100%,0 -12px,100% 12px}}
+.ve2 .vf{border:2px solid var(--ink);background:#D7FFE0;transform-origin:0 50%;transform:scaleX(var(--f))}
+/* "esecuzione" parte grigia (ancora da fare) e diventa nera dove il riempimento è già passato. Niente contorno: sul font variabile mostra le giunture interne */
+.vt{color:transparent;background:linear-gradient(90deg,var(--ink) calc(var(--f)*100%),#BDB6AC 0);-webkit-background-clip:text;background-clip:text}
+.ve b{position:absolute;width:12px;height:12px;margin:-6px;background:#fff;border:2px solid var(--ink);border-radius:3px}
+.ve b:nth-of-type(1){left:-.1em;top:-.08em}.ve b:nth-of-type(2){right:-.1em;top:-.08em}.ve b:nth-of-type(3){left:-.1em;bottom:-.08em}.ve b:nth-of-type(4){right:-.1em;bottom:-.08em}
+.ve1 b{opacity:calc(1 - var(--p))} /* la selezione lascia VISIONE quando parte il cursore… */
+.ve2 b{opacity:clamp(0, (var(--g,0) - .9) * 10, 1)} /* …e arriva su "esecuzione" a riempimento finito */
+/* il cursore parte dall'angolo di VISIONE, scende su "esecuzione" e ne trascina il riempimento; l'etichetta sta sopra a sinistra, così non esce dallo schermo */
+.ve-cur{position:absolute;z-index:3;left:calc(-.1em + var(--f) * (100% + .2em));top:-.08em;transform:translate(calc((1 - var(--p)) * 7vw),calc((1 - var(--p)) * -16svh))}
+.ve-cur svg{display:block;width:28px;height:28px;fill:var(--ink);stroke:#fff;stroke-width:1.5;stroke-linejoin:round}
+.ve-cur em{position:absolute;bottom:calc(100% + 4px);right:calc(100% - 10px);font:400 14px var(--sans);font-style:normal;letter-spacing:-.02em;background:var(--ink);color:#fff;padding:4px 10px;border-radius:99px;white-space:nowrap}
 
 /* manifesto: le parole escono da blocchi pieni man mano che scorri */
 .manif{text-align:center;position:relative;margin-top:-2px;background:var(--bg)} /* copre la riga di 1px tra il riquadro aperto e questa sezione */
@@ -543,11 +556,22 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .gl-nav button:disabled{opacity:.25;pointer-events:none}
 .gl-nav svg{width:16px;height:16px}
 
-/* quadrante di tacche che ruota dietro al manifesto */
 .manif{height:250svh} /* come la sezione di Creative Website Manual: il blocco resta fermo per circa un'altezza e mezza */
 .manif-pin{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center}
 .manif .wrap{position:relative;z-index:1}
-.dial{position:absolute;left:50%;top:50%;width:min(92vw,82svh);aspect-ratio:1;translate:-50% -50%;color:#D4D4D4;pointer-events:none;rotate:var(--rot,0deg)}
+/* pillole animate tra le parole del manifesto: entrano quando la parola prima si scopre */
+.manif .mvp{display:inline-block;transition:opacity .5s,transform .8s var(--energy)}
+.manif .mvp:not(.on){opacity:0;transform:scale(.4)}
+.mvp svg *{fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.hp-pulse{background:#FFDCCB}.hp-pulse .bg{stroke:rgba(5,5,5,.15)}.hp-pulse path:not(.bg){stroke-dasharray:.32 .68;animation:hpRun 1.8s linear infinite}
+@keyframes hpRun{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.hp-gauge{background:#D7FFE0}.hp-gauge .bg{stroke:rgba(5,5,5,.15)}.hp-gauge .ar{stroke-dasharray:1;animation:hpArc 2.8s var(--energy) infinite}.hp-gauge circle{fill:var(--ink);stroke:none}
+.hp-gauge .nd{transform-box:view-box;transform-origin:105px 62px;animation:hpNeedle 2.8s var(--energy) infinite}
+@keyframes hpArc{0%{stroke-dashoffset:1}50%,80%{stroke-dashoffset:.08}100%{stroke-dashoffset:1}}
+@keyframes hpNeedle{0%{transform:rotate(-80deg)}50%,80%{transform:rotate(66deg)}100%{transform:rotate(-80deg)}}
+.hp-venn{background:#E2DBFF}.hp-venn circle{fill:rgba(255,255,255,.55);animation:hpVa 3s ease-in-out infinite}.hp-venn .b{animation-name:hpVb}
+@keyframes hpVa{0%,100%{transform:translateX(-10px)}50%{transform:translateX(8px)}}
+@keyframes hpVb{0%,100%{transform:translateX(10px)}50%{transform:translateX(-8px)}}
 
 /* bottoni e link: in hover le lettere scorrono a cascata */
 .roll{display:inline-flex;overflow:hidden;vertical-align:top;line-height:1.25}
@@ -589,8 +613,7 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
   /* vetro dell'header: un solo strato (cinque backdrop-filter durante lo scroll pesano troppo sui telefoni) */
   .nav-blur i:not(:nth-child(4)){display:none}
   .nav-blur i:nth-child(4){backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);mask:linear-gradient(#000 55%,transparent)}
-  .vx-w{font-size:15vw;padding:0 calc(var(--pad) + 16px)}
-  .vx-w1{top:22%}.vx-w2{bottom:26%}
+  .ve{font-size:18vw}.ve1{top:24%;left:calc(var(--pad) + 16px)}.ve2{bottom:27%;right:calc(var(--pad) + 16px)}
   .vx-foot{left:calc(var(--pad) + 16px);right:calc(var(--pad) + 16px);bottom:44px;font-size:15px}
   .cta-box{right:calc(var(--pad) + 12px);bottom:40px;width:calc(100% - 2*var(--pad) - 24px);border-radius:calc(var(--radius-media) - 12px)} /* 12px dal bordo della foto su tre lati, angoli concentrici con i suoi */
   :root{--nav-h:72px;--pill-h:46px}
@@ -717,13 +740,13 @@ html:active-view-transition-type(expand)::view-transition-group(next-hero){anima
 
   <div class="shutter shutter-dk" aria-hidden="true"></div> <!-- lamelle scure che si chiudono sul video aperto -->
 
-  <!-- 2. visione ✕ esecuzione: il claim in due font, il riquadro si allarga allo scroll -->
+  <!-- 2. visione ✕ esecuzione: un cerchio si apre dalla ✕, il cursore porta la bozza a esecuzione -->
   <section class="vx" id="chi-siamo">
     <div class="vx-pin">
       <div class="vx-card">
-        <div class="vx-w vx-w1">Visione</div>
         <div class="vx-x" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 5l14 14M19 5 5 19"/></svg></div>
-        <div class="vx-w vx-w2"><em>esecuzione</em></div>
+        <span class="ve ve1"><i class="vf"></i>Visione<b></b><b></b><b></b><b></b></span>
+        <span class="ve ve2"><i class="vf"></i><span class="vt">esecuzione</span><b></b><b></b><b></b><b></b><span class="ve-cur" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 2l7 19 2.6-7.4L20 11z"/></svg><em>Never Before</em></span></span>
         <div class="vx-foot"><span>Un'idea può fare miracoli.</span><span>Il nostro metodo ↓</span></div>
       </div>
     </div>
@@ -732,7 +755,6 @@ html:active-view-transition-type(expand)::view-transition-group(next-hero){anima
   <!-- 2b. manifesto: le parole escono dai blocchi -->
   <section class="manif" id="manifSec">
    <div class="manif-pin">
-    <svg class="dial" id="dial" viewBox="-100 -100 200 200" aria-hidden="true"></svg>
     <div class="wrap">
       <p id="manif">Ogni progetto parte dall'analisi del mercato e arriva fino alla misura dei risultati. Costruiamo relazioni tra marchi e persone che durano nel tempo, anche con budget contenuti.</p>
       <a class="go" href="chi-siamo.html">Chi siamo <i><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h12M9 3l5 5-5 5"/></svg></i></a>
@@ -956,6 +978,12 @@ const vx=document.querySelector('.vx'),cta=document.querySelector('.cta');
 const manif=$('manif');
 manif.innerHTML=manif.textContent.trim().split(/\s+/).map(w=>`<span class="wb">${w}</span>`).join(' ');
 const mwords=[...manif.children];
+// pillole animate dopo mercato / risultati / persone: ognuna compare quando la parola prima si scopre
+{const P={pulse:'<path class="bg" d="M24,40 H74 L86,16 L100,64 L112,28 L120,40 H186"/><path pathLength="1" d="M24,40 H74 L86,16 L100,64 L112,28 L120,40 H186"/>',
+    gauge:'<path class="bg" d="M68,62 A37,37 0 0 1 142,62"/><path class="ar" pathLength="1" d="M68,62 A37,37 0 0 1 142,62"/><line class="nd" x1="105" y1="62" x2="105" y2="32"/><circle cx="105" cy="62" r="5"/>',
+    venn:'<circle class="a" cx="86" cy="39" r="22"/><circle class="b" cx="124" cy="39" r="22"/>'};
+  [[5,'pulse'],[12,'gauge'],[18,'venn']].forEach(([i,k])=>{const s=document.createElement('span');s.className='hx-pill mvp hp-'+k;s.setAttribute('aria-hidden','true');s.innerHTML=`<svg viewBox="0 0 210 78">${P[k]}</svg>`;mwords[i].after(' ',s);mwords[i]._p=s});
+}
 // shutter: 12 lamelle per confine
 const shutters=[...document.querySelectorAll('.shutter')].map(el=>{const w=document.createElement('div');w.className='shutter-bands';
   const bands=Array.from({length:12},()=>w.appendChild(document.createElement('i')));el.append(w);return {el,bands,out:el.classList.contains('shutter-out')}});
@@ -980,8 +1008,6 @@ const fitEcho=()=>{const W=document.documentElement.clientWidth,rg=document.crea
     echo.querySelectorAll('.ly h2').forEach(t=>{t.children[k].style.fontSize=s.style.fontSize})})};
 document.fonts.load('400 100px "Google Sans"').then(fitEcho,fitEcho);addEventListener('load',fitEcho);addEventListener('resize',fitEcho); // fonts.ready può arrivare prima che Google Sans sia richiesto
 
-// quadrante: 72 tacche, una lunga ogni 6
-$('dial').innerHTML=Array.from({length:72},(_,i)=>{const a=i*5*Math.PI/180,l=i%6?7:13,r=88;return `<line x1="${(Math.sin(a)*r).toFixed(2)}" y1="${(-Math.cos(a)*r).toFixed(2)}" x2="${(Math.sin(a)*(r-l)).toFixed(2)}" y2="${(-Math.cos(a)*(r-l)).toFixed(2)}" stroke="currentColor" stroke-width="${i%6?.5:.8}"/>`}).join('');
 
 // intro orizzontale: lettere divise una per una; la riga entra da destra e scorre a sinistra con lo scroll.
 // Una lettera (o una pillola) si accende quando passa la metà dello schermo
@@ -1047,17 +1073,16 @@ const onScroll=()=>{
   const grow=(el,end)=>{const r=el.getBoundingClientRect(),k=clamp(-r.top/(el.offsetHeight-vh));el.style.setProperty('--g',clamp(k/end).toFixed(3));return k};
   // il riquadro chiaro copre l'header quando è cresciuto: da lì l'header torna scuro su chiaro
   const vg=clamp(grow(vx,.7)/.7),vr=vx.getBoundingClientRect();
-  if(vr.top<=y&&vr.bottom>=y) nav.classList.toggle('on-dark',vg<.55);
+  if(vr.top<=y&&vr.bottom>=y) nav.classList.toggle('on-dark',vg<.9);
   cta.classList.toggle('done',grow(cta,.7)>.78);
   // le parole si scoprono mentre il blocco è fermo: da poco prima della sosta fino a tre quarti
   const msr=$('manifSec').getBoundingClientRect(),mp=clamp((vh*.35-msr.top)/(msr.height-vh*.6));
-  mwords.forEach((w,i)=>w.classList.toggle('on',i<mp*mwords.length));
+  mwords.forEach((w,i)=>{const on=i<mp*mwords.length;w.classList.toggle('on',on);if(w._p)w._p.classList.toggle('on',on)});
   // entrata: parte quando la sezione chiara occupa già il 25% basso dello schermo; uscita: in 85% di schermo. Le lamelle in basso partono prima
   shutters.forEach(({el,bands,out})=>{const r=el.getBoundingClientRect();if(r.top>vh*1.3||r.top<-vh*.5)return;
     const p=clamp(out?(vh-r.top)/(vh*.85):(vh*.75-r.top)/(vh*.6)),n=bands.length;
     bands.forEach((b,i)=>{const k=clamp(p*2-(n-1-i)/(n-1));b.style.transform='scaleY('+(out?1-k:k).toFixed(3)+')'})});
   const er=echo.getBoundingClientRect();if(er.top<vh&&er.bottom>0){const ep=clamp((vh*.7-er.top)/(er.height*.9));lys.forEach(({el,f})=>el.style.setProperty('--s',(1-ep*.52*f).toFixed(4)))}
-  $('dial').style.setProperty('--rot',(scrollY*.04).toFixed(1)+'deg');
   mq.style.transform=`translateX(${-((scrollY*.45)%(mq.scrollWidth/2))}px)`;
 
   // 96px per pollice: 1px = 0,02646 cm
