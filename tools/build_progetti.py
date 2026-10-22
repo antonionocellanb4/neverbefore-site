@@ -29,6 +29,13 @@ PROJECTS = [
                                             ('never_before_italia_events_marinobus_terrone_fuori_sede.jpg', 'Evento Terrone fuori sede con MarinoBus', 'Terrone fuori sede', 'Events')]),
         ],
         # facoltativo: il percorso che si disegna accanto alla storia (tappe vere del racconto) e il contatore
+        # pagina in stile Windergy: scheda a righe (01), frase grande della storia e numeri (02), lavori fatti (03); tutto dal racconto qui sopra
+        facts=[('Cliente', 'MarinoBus'), ('Settore', 'Trasporti'), ('Sede', 'Altamura (BA)'), ('Servizi', 'Branding · Video · Website · Social · Events'),
+               ('Sito', '<a href="https://www.marinobus.it" target="_blank" rel="noopener">marinobus.it</a>')],
+        big2="Dal 1957 a oggi: da Irsina alle principali città lucane e pugliesi, fino al centro e nord Italia e all'estero.",
+        stats=[('60', 'anni'), ('1957', 'fondazione'), ('5', 'servizi')],
+        work=[('Branding', 'Restyling del marchio e nuova livrea.'), ('Video', "Storytelling per i sessant'anni dell'azienda."),
+              ('Website', 'Il nuovo marinobus.it, su computer, tablet e telefono.'), ('Social', ''), ('Events', 'Carnevale di Putignano e Terrone fuori sede.')],
         route=dict(n=60, unit='anni', since='dal 1957', stops=['Irsina (MT), 1957', 'Altamura', 'Puglia e Basilicata', 'Centro e Nord Italia', 'Estero']),
         # pagina successiva: parola, pillola con foto, parola (come "Chi ⬭ siamo" della home)
         next=('Altri', 'progetti', 'progetti.html', None),
@@ -141,36 +148,130 @@ def img(slug, f):
     return f'assets/img/{slug}/{f}'
 
 
-def main_html(p):
-    s = p['slug']
-    spec = ''.join(f'<div class="pj-col"><h2>{k}</h2>{"<br>".join(v)}</div>' for k, v in p['spec'])
-    out = [f'''<main id="top" class="pj">
-  <section class="pj-head">
-    <h1 class="pj-ttl" id="pjTtl" aria-label="{esc(p['name'])}">{esc(p['name'])}</h1>
-    <div class="pj-meta">{spec}<div class="pj-lede"><p>{esc(p['lede'])}</p><a href="#pj-storia"><span>Leggi la storia</span><span aria-hidden="true">→</span></a></div></div>
-  </section>
-  <section class="pj-full"><figure class="pj-m" id="pjHero" data-svc="{p['hero'][3]}" style="aspect-ratio:{p['hero'][2]}"><img src="{img(s, p['hero'][0])}" alt="{esc(p['hero'][1])}"></figure></section>
-  <section class="pj-story" id="pj-storia"><div class="pj-side"><h2>La storia</h2>{route_html(p)}</div><div><p class="pj-big">{esc(p['big'])}</p>{''.join(f'<p>{esc(t)}</p>' for t in p['story'])}</div></section>''']
-    for i, g in enumerate(p['gallery']):
-        blk = ' pj-blk' if i else ''
-        if g[0] == 'wide':
-            _, f, alt, ratio, cap, svc = g
-            out.append(f'  <section class="pj-wide{blk}"><figure class="rv" data-svc="{svc}"><div class="pj-m" style="aspect-ratio:{ratio}"><img src="{img(s, f)}" alt="{esc(alt)}" loading="lazy"></div><figcaption><span>{esc(cap)}</span><span>{esc(svc)}</span></figcaption></figure></section>')
-        elif g[0] == 'trio':
-            _, t, svc, items = g
-            figs = ''.join(f'<figure class="rv pj-m" data-svc="{svc}"><img src="{img(s, f)}" alt="{esc(a)}" loading="lazy"></figure>' for f, a in items)
-            out.append(f'  <section class="pj-blk"><div class="pj-bh"><h3>{esc(t)}</h3></div><div class="pj-trio">{figs}</div></section>')
-        elif g[0] == 'pair':
-            _, t, ratio, items = g
-            figs = ''.join(f'<figure class="rv" data-svc="{v}"><div class="pj-m" style="aspect-ratio:{ratio}"><img src="{img(s, f)}" alt="{esc(a)}" loading="lazy"></div><figcaption><span>{esc(c)}</span><span>{esc(v)}</span></figcaption></figure>' for f, a, c, v in items)
-            out.append(f'  <section class="pj-blk"><div class="pj-bh"><h3>{esc(t)}</h3></div><div class="pj-pair">{figs}</div></section>')
-    # barra dei servizi: le voci della colonna Servizi; si accende quella del lavoro che stai guardando
+CS_CSS = r'''
+/* pagina progetto (struttura da Moyra, caso Windergy): hero a tutto schermo col nome che scorre, sezioni numerate (01) (02) (03) con frase grande,
+   scheda a righe e numeri; tra una sezione e l'altra i lavori a tutta larghezza. Il fondo passa dallo scuro al chiaro e torna scuro mentre scorri */
+.cs{--t2:#8C8C8C;--hl:rgba(255,255,255,.16);background:var(--dark);color:var(--on-dark);transition:background .7s,color .7s}
+.cs.lt{--t2:#78726B;--hl:var(--line);background:var(--bg);color:var(--ink)}
+.cs-hero{position:relative;z-index:0;height:100svh;min-height:560px;color:#fff}
+/* la foto continua sotto la prima schermata (140svh) e sfuma nel nero lentamente: la sezione 01 comincia sopra di lei */
+.cs-bg{position:absolute;inset:0 0 auto;height:max(140svh,780px);margin:0;pointer-events:none}
+.cs-bg img{width:100%;height:100%;object-fit:cover}
+.cs-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(5,5,5,.5),rgba(5,5,5,.42) 30%,rgba(5,5,5,.72) 58%,var(--dark) 94%)} /* in basso la foto sfuma nel fondo della pagina */
+.cs-lede{position:absolute;left:var(--pad);top:40%;max-width:min(580px,calc(100% - 2*var(--pad)));font-size:clamp(20px,2.1vw,32px);line-height:1.22;letter-spacing:-.035em}
+.cs-name{position:absolute;left:0;right:0;top:57%;overflow:hidden;padding:.02em 0 .08em;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(88px,13vw,230px);letter-spacing:-.06em;line-height:1;white-space:nowrap}
+.cs-run{display:inline-flex;animation:csRun 26s linear infinite;translate:0 110%;transition:translate 1.3s var(--energy) .15s}
+.shown .cs-run{translate:0 0}
+.wf .cs-name{visibility:hidden}
+.cs-run i{font-style:normal;margin:0 .3em}
+@keyframes csRun{to{transform:translateX(-50%)}}
+.cs-foot{position:absolute;left:var(--pad);right:var(--pad);bottom:28px;display:flex;justify-content:space-between;gap:24px;font-size:15px}
+.cs-lede,.cs-foot{opacity:0;transform:translateY(16px);transition:opacity .8s .5s,transform 1s var(--energy) .5s}
+.shown .cs-lede,.shown .cs-foot{opacity:1;transform:none}
+.cs-sec{position:relative;z-index:1;padding:clamp(120px,15vw,230px) var(--pad) clamp(100px,12vw,180px)}
+.cs-sh{display:flex;justify-content:space-between;padding-bottom:20px;border-bottom:1px solid var(--hl);font-size:15px}
+.cs-sh span:first-child{color:var(--t2)}
+.cs-big{max-width:16.5em;margin-top:clamp(64px,8vw,120px);font-family:var(--display);font-weight:var(--display-w);font-size:clamp(38px,5.2vw,86px);letter-spacing:-.055em;line-height:1.05}
+.cs-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;margin-top:clamp(80px,10vw,160px)}
+.cs-k{align-self:start;font:400 17px var(--sans);letter-spacing:-.02em}
+.cs-p{max-width:40em;font-size:clamp(17px,1.35vw,21px);line-height:1.42}
+.cs-p+.cs-p{margin-top:1em}
+.cs-spec{margin-top:clamp(56px,7vw,110px)}
+.cs-spec div{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:26px 0 22px;border-bottom:1px solid var(--hl);font-size:clamp(17px,1.4vw,22px)}
+.cs-spec dt{color:var(--t2)}.cs-spec dd{text-align:right}
+.cs-spec a{color:inherit;text-underline-offset:4px}
+/* numeri: cifra piena, etichetta grigia, indice piccolo in alto */
+.cs-stats{list-style:none;margin-top:clamp(56px,7vw,110px)}
+.cs-stats li{display:flex;align-items:baseline;column-gap:.22em;white-space:nowrap;padding:20px 0 24px;border-bottom:1px solid var(--hl);font-family:var(--display);font-weight:var(--display-w);font-size:clamp(52px,6vw,100px);letter-spacing:-.06em;line-height:1.02}
+.cs-stats span{color:var(--t2)}
+.cs-stats sup{align-self:flex-start;margin-top:.4em;font:400 13px var(--sans);letter-spacing:0;color:var(--t2)}
+.cs .pj-cnt{display:none} /* il percorso resta, il contatore lo fanno i numeri accanto */
+.cs .pj-route{margin-top:12px}
+.cs-di h3{padding-bottom:18px;border-bottom:1px solid var(--hl);font:400 clamp(19px,1.6vw,24px) var(--sans);letter-spacing:-.03em}
+.cs-di p{padding-top:22px;font-size:clamp(17px,1.4vw,22px);color:var(--t2);line-height:1.4}
+.cs-di+.cs-di{margin-top:clamp(40px,4vw,64px)}
+/* lavori: fila dopo fila, staccati di poco come nel riferimento */
+.cs-media{display:grid;gap:clamp(10px,1.2vw,16px);padding:0 var(--pad)}
+.cs-media+.cs-media{margin-top:clamp(10px,1.2vw,16px)}
+.cs-row{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.2vw,16px)}
+.cs-row.trio{grid-template-columns:repeat(3,1fr)}.cs-row.trio .pj-m{aspect-ratio:1}
+.cs figcaption{color:var(--t2)}
+.cs-end{height:clamp(100px,14vw,200px)}
+@media (max-width:820px){
+  .cs-two{grid-template-columns:minmax(0,1fr);gap:28px}
+  .cs-bg{height:125svh}
+  .cs-name{font-size:26vw;top:58%}.cs-lede{top:30%}
+  .cs-foot{flex-direction:column;gap:6px;bottom:20px}
+  .cs-stats li{font-size:12vw;flex-wrap:wrap;white-space:normal}
+  .cs-row.trio{grid-template-columns:1fr 1fr}.cs-row.trio .rv:nth-child(3){grid-column:1/-1;aspect-ratio:2/1}
+  .cs .pj-side{position:static}
+}
+@media (max-width:560px){.cs-row:not(.trio){grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.cs-run{animation:none}}
+'''
+
+
+def cs_media(s, g, first=False):
+    # un blocco della galleria (stessi dati di prima): wide = una foto, trio = tre quadrate, pair = due affiancate
+    if g[0] == 'wide':
+        _, f, alt, ratio, cap, svc = g
+        hid = ' id="pjHero"' if first else ''
+        return (f'  <section class="cs-media{" pj-full" if first else ""}"><figure class="{"" if first else "rv"}" data-svc="{svc}"><div class="pj-m"{hid} style="aspect-ratio:{ratio}"><img src="{img(s, f)}" alt="{esc(alt)}" loading="lazy"></div>'
+                f'<figcaption><span>{esc(cap)}</span><span>{esc(svc)}</span></figcaption></figure></section>')
+    if g[0] == 'trio':
+        _, t, svc, items = g
+        figs = ''.join(f'<figure class="rv pj-m" data-svc="{svc}"><img src="{img(s, f)}" alt="{esc(a)}" loading="lazy"></figure>' for f, a in items)
+        return f'  <section class="cs-media"><div class="cs-row trio">{figs}</div><figure><figcaption><span>{esc(t)}</span><span>{esc(svc)}</span></figcaption></figure></section>'
+    _, t, ratio, items = g
+    figs = ''.join(f'<figure class="rv" data-svc="{v}"><div class="pj-m" style="aspect-ratio:{ratio}"><img src="{img(s, f)}" alt="{esc(a)}" loading="lazy"></div><figcaption><span>{esc(c)}</span><span>{esc(v)}</span></figcaption></figure>' for f, a, c, v in items)
+    return f'  <section class="cs-media"><div class="cs-row">{figs}</div></section>'
+
+
+def cs_head(label, n):
+    return f'<header class="cs-sh"><span>{label}</span><span>({n:02d})</span></header>'
+
+
+def cs_main(p):
+    s, g = p['slug'], p['gallery']
+    lede1, lede2 = p['lede'].split('. ', 1)
     svcs = dict(p['spec']).get('Servizi', [])
-    have = {g[-1] for g in p['gallery'] if g[0] == 'wide'} | {g[2] for g in p['gallery'] if g[0] == 'trio'} | {it[3] for g in p['gallery'] if g[0] == 'pair' for it in g[3]} | {p['hero'][3]}
+    run = ''.join(f'<span>{esc(p["name"])}</span><i>·</i>' for _ in range(4))
+    facts = ''.join(f'<div><dt>{k}</dt><dd>{v}</dd></div>' for k, v in p['facts'])
+    stats = ''.join(f'<li><b>{n}</b><span>· {esc(t)}</span><sup>({i + 1:02d})</sup></li>' for i, (n, t) in enumerate(p['stats']))
+    work = ''.join(f'<div class="cs-di rv"><h3>{esc(k)}</h3>{f"<p>{esc(v)}</p>" if v else ""}</div>' for k, v in p['work'])
+    out = [f'''<main id="top" class="pj cs" data-dark>
+  <section class="cs-hero">
+    <figure class="cs-bg"><img src="{img(s, p['hero'][0])}" alt="{esc(p['hero'][1])}"></figure>
+    <p class="cs-lede">{esc(lede1)}.</p>
+    <h1 class="cs-name" aria-label="{esc(p['name'])}"><span class="cs-run" aria-hidden="true">{run}{run}</span></h1>
+    <div class="cs-foot"><span>{esc(', '.join(svcs))}.</span><span>Scorri</span></div>
+  </section>
+  <section class="cs-sec">
+    {cs_head('Il progetto.', 1)}
+    <p class="cs-big rv">{esc(p['big'])}</p>
+    <div class="cs-two"><h2 class="cs-k">Dettagli</h2><div><p class="cs-p">{esc(p['story'][0])}</p><dl class="cs-spec">{facts}</dl></div></div>
+  </section>''']
+    out += [cs_media(s, g[0], first=True), cs_media(s, g[1])]
+    out.append(f'''  <div data-light>
+  <section class="cs-sec" id="pj-storia">
+    {cs_head('La storia.', 2)}
+    <p class="cs-big rv">{esc(p['big2'])}</p>
+    <div class="cs-two"><div class="pj-side"><h2 class="cs-k">(Il percorso)</h2>{route_html(p)}</div><div>{''.join(f'<p class="cs-p">{esc(t)}</p>' for t in p['story'][1:])}<ul class="cs-stats">{stats}</ul></div></div>
+  </section>
+{cs_media(s, g[2])}
+  </div>
+  <section class="cs-sec">
+    {cs_head('Cosa abbiamo fatto.', 3)}
+    <p class="cs-big rv">{esc(lede2)}</p>
+    <div class="cs-two"><h2 class="cs-k">(Servizi)</h2><div>{work}</div></div>
+  </section>''')
+    out += [cs_media(s, x) for x in g[3:]]
+    have = {x[-1] for x in g if x[0] == 'wide'} | {x[2] for x in g if x[0] == 'trio'} | {it[3] for x in g if x[0] == 'pair' for it in x[3]}
     pills = ''.join(f'<button type="button" data-s="{esc(v)}" style="--c:{PASTEL[i % len(PASTEL)]}"{"" if v in have else " disabled"}>{esc(v)}</button>' for i, v in enumerate(svcs))
-    out.append('  <div class="pj-end"></div>\n</main>')
+    out.append('  <div class="cs-end"></div>\n</main>')
     out.append(f'<nav class="pj-svc" id="pjSvc" aria-label="Lavori per servizio">{pills}</nav>')
     return '\n'.join(out)
+
 
 
 def between(s, a, b, inc_b=False):
@@ -214,9 +315,12 @@ def script():
   document.fonts.ready.then(fit);addEventListener('resize',fit)}}
 const nav=$('nav'),darks=[...document.querySelectorAll('[data-dark]')],pjHero=$('pjHero'),still=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const mb='Un pullman <a href="progetto-marinobus.html">MarinoBus</a> è lungo circa 12 metri: ';
+const csMain=document.querySelector('.cs'),csLight=[...document.querySelectorAll('[data-light]')];
 const onScroll=()=>{
   const vh=innerHeight,y=nav.offsetHeight/2;
-  nav.classList.toggle('on-dark',darks.some(s=>{const r=s.getBoundingClientRect();return r.top<=y&&r.bottom>=y}));
+  // pagina progetto: il fondo diventa chiaro quando una parte [data-light] occupa il centro dello schermo; main perde data-dark e l'header torna scuro
+  if(csMain){const lt=csLight.some(s=>{const r=s.getBoundingClientRect();return r.top<vh*.5&&r.bottom>vh*.5});csMain.classList.toggle('lt',lt);csMain.toggleAttribute('data-dark',!lt)}
+  nav.classList.toggle('on-dark',darks.some(s=>{if(!s.hasAttribute('data-dark'))return false;const r=s.getBoundingClientRect();return r.top<=y&&r.bottom>=y}));
   nav.classList.toggle('solid',scrollY>40&&!nav.classList.contains('on-dark'));
   // primo media: si allarga fino a tutta larghezza mentre sale
   {const pe=document.querySelector('.nextp-pill'),pr=pe&&pe.getBoundingClientRect();if(pr&&pr.top<=y&&pr.bottom>=y&&pr.left<innerWidth*.2&&pr.right>innerWidth*.8)nav.classList.add('on-dark')}
@@ -266,10 +370,10 @@ def build(p):
     head = SRC[:SRC.index('</head>')]
     head = re.sub(r'<title>.*?</title>', f"<title>{esc(p['name'])} · Progetti · Never Before Italia</title>", head)
     head = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{esc(p["lede"])}">', head)
-    head += '<style>' + CSS + PAGES_CSS + '</style>\n</head>\n'  # PAGES_CSS/JS: servono anche qui (pagina successiva col testo)
+    head += '<style>' + CSS + PAGES_CSS + CS_CSS + '</style>\n</head>\n'  # PAGES_CSS/JS: servono anche qui (pagina successiva col testo)
     top = local(between(SRC, '<body>', '<main id="top">')).replace('href="index.html#top"', 'href="index.html"')
     tail = tail_html(p['next'])
-    page = head + top + main_html(p) + '\n' + tail + script().replace('</script>\n', PAGES_JS + '</script>\n') + '</body>\n</html>\n'
+    page = head + top + cs_main(p) +'\n' + tail + script().replace('</script>\n', PAGES_JS + '</script>\n') + '</body>\n</html>\n'
     (ROOT / f"progetto-{p['slug']}.html").write_text(page, encoding='utf8')
     print('ok', p['slug'], len(page))
 

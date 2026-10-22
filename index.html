@@ -41,7 +41,6 @@ document.documentElement.classList.add('wf');window.fontsReady=Promise.race([Pro
   --serif:var(--sans);  /* niente secondo font: chi usava il serif ora usa il font unico */
   --ease:cubic-bezier(.2,.7,.1,1);
   --energy:cubic-bezier(.32,.72,0,1); /* l'ease "energy" del menu di Osmo */
-  --mh:min(84svh,860px);
   --h1:clamp(44px,9vw,164px); /* titolo della hero: da qui anche la misura della pillola del reel e delle pillole che cadono */              /* quanto scende la pagina quando apri il menu */
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -112,34 +111,39 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .mpill svg{width:16px;height:16px}
 .mpill .x{display:none}.menu-open .mpill .x{display:block}.menu-open .mpill .bars{display:none}
 
-/* ---------- menu sotto la pagina (movimento da Osmo, Fixed Underlay Navigation): il menu è fermo in alto,
-   all'apertura la pagina intera scende e lo scopre, con angoli arrotondati e velo scuro; le voci scendono una dopo l'altra ---------- */
-.page{position:relative;z-index:2;background:var(--bg);transition:transform .8s var(--energy),clip-path .8s var(--energy)}
-.menu-open .page{transform:translateY(var(--mh))}
-/* la parte sopra lo scroll non deve comparire sopra il menu */
-.page.clip{clip-path:inset(var(--sy,0px) 0 0 0 round 0 0 0 0)}
-.menu-open .page.clip{clip-path:inset(var(--sy,0px) 0 0 0 round var(--radius-media) var(--radius-media) 0 0)}
-.page-shade{position:fixed;inset:0;z-index:3;border-radius:var(--radius-media) var(--radius-media) 0 0;background:rgba(5,5,5,.5);opacity:0;visibility:hidden;cursor:pointer;
-  transition:transform .8s var(--energy),opacity .6s,visibility 0s .8s}
-.menu-open .page-shade{opacity:1;visibility:visible;transform:translateY(var(--mh));transition:transform .8s var(--energy),opacity .6s}
-.menu{position:fixed;inset:0;z-index:1;background:var(--dark);color:var(--on-dark);overflow:hidden;
-  display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:24px;padding:calc(var(--nav-h) + 4px) var(--pad) calc(100svh - var(--mh) + 28px); /* il contenuto resta nella parte scoperta */
-  visibility:hidden;transition:visibility 0s .8s}
-.menu.open{visibility:visible;transition:none}
-.menu-main li,.menu-meta,.menu-proj{opacity:0;transform:translateY(-48px);transition:opacity .3s,transform .5s var(--energy)}
-.menu.open .menu-main li,.menu.open .menu-meta,.menu.open .menu-proj{opacity:1;transform:none;
-  transition:opacity .6s calc(.12s + var(--i,0)*.05s),transform .9s var(--energy) calc(.12s + var(--i,0)*.05s)}
-.menu-main{display:flex;flex-direction:column;justify-content:space-between;gap:40px;padding:8px 0 4px 8px;min-height:0}
-.menu ul{list-style:none}
-/* voci enormi; in hover il testo sale e lascia il posto alla copia sotto (lo span contiene due righe: si sposta di metà) */
-.menu-main li a{display:block;width:max-content;overflow:hidden;height:1.06em;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(44px,6vw,96px);letter-spacing:-.067em;line-height:1.06;color:var(--on-dark-2);text-decoration:none}
+/* ---------- menu (da Moyra): la pillola resta nell'header; il pannello è una card bianca che nasce dalla pillola e cresce fino alla sua misura,
+   con la pillola nel suo angolo (diventa "Chiudi"); la pagina dietro si scurisce e si sfoca ---------- */
+.page{position:relative;z-index:2;background:var(--bg)}
+.page-shade{position:fixed;inset:0;z-index:78;background:rgba(5,5,5,.7);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;visibility:hidden;cursor:pointer;transition:opacity .5s,visibility 0s .5s}
+.menu-open .page-shade{opacity:1;visibility:visible;transition:opacity .5s}
+html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento (scrollbar-gutter) mostra il fondo di html: scuro come la pagina velata */
+.nav-cta{transition:opacity .3s,visibility .3s}.menu-open .nav-cta{opacity:0;visibility:hidden}
+/* la card nasce dalla pillola: chiusa è ritagliata esattamente sulla sua forma (--ct/--cr/--cb/--cl/--cr2 dal JS) e sta sotto di lei, aprendosi il ritaglio si allarga fino alla card intera */
+.menu{position:fixed;z-index:79;top:10px;right:calc(var(--pad) - 10px);width:min(940px,calc(100vw - 2*var(--pad) + 20px));height:min(660px,calc(100svh - 20px));
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);grid-template-rows:minmax(0,1fr) auto auto;background:#fff;color:var(--ink);overflow:hidden;border-radius:34px;
+  clip-path:inset(var(--ct,0) var(--cr,0) var(--cb,100%) var(--cl,100%) round var(--cr2,24px));visibility:hidden;transition:clip-path .6s cubic-bezier(.65,0,.35,1),visibility 0s .6s}
+.menu.open{clip-path:inset(0 round 34px);visibility:visible;transition:clip-path .6s cubic-bezier(.65,0,.35,1)}
+.menu-main,.menu-meta,.menu-act{opacity:0;transform:translateY(-20px);transition:opacity .2s,transform .2s}
+.menu.open .menu-main,.menu.open .menu-meta,.menu.open .menu-act{opacity:1;transform:none;transition:opacity .5s calc(.3s + var(--i,0)*.06s),transform .8s var(--energy) calc(.3s + var(--i,0)*.06s)}
+.menu-main{grid-column:1;grid-row:1;list-style:none;align-self:start;padding:56px 0 0 56px}
+/* voci grandi; in hover il testo sale e lascia il posto alla copia sotto (lo span contiene due righe: si sposta di metà) */
+.menu-main li a{display:block;width:max-content;overflow:hidden;height:1.12em;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(36px,3.7vw,58px);letter-spacing:-.06em;line-height:1.12;color:var(--ink);text-decoration:none}
 .menu-main li a span{display:block;transition:transform .55s var(--ease)}
-.menu-main li a span::after{content:attr(data-t);display:block;color:var(--on-dark)}
+.menu-main li a span::after{content:attr(data-t);display:block}
 .menu-main li a:hover span,.menu-main li a:focus-visible span{transform:translateY(-50%)}
-.menu-meta{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:16px;font-weight:400;color:var(--on-dark-2)}
-.menu-meta a{color:var(--on-dark);text-decoration:none}.menu-meta a:hover{text-decoration:underline;text-underline-offset:4px}
-/* a destra i progetti che scendono dall'alto in basso, in due colonne a velocità diverse */
-.menu-proj{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px;min-height:0;overflow:hidden;border-radius:calc(var(--radius-media) - 8px)}
+.menu-meta{grid-column:1/-1;grid-row:2;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding:24px 56px 0;font-size:16px;line-height:1.45}
+.menu-meta p{display:flex;flex-direction:column}
+.mm-soc a{color:var(--ink-2);text-decoration:none}.mm-soc a:hover{color:var(--ink)}
+.mm-ct{align-items:flex-end;text-align:right}
+.mm-ct a{color:var(--ink);text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.mm-ct b{font-weight:inherit;font-variant-numeric:tabular-nums}
+.menu-act{grid-column:1/-1;grid-row:3;display:flex;justify-content:center;gap:8px;padding:28px 24px 32px}
+.menu-act .reel-btn{position:static;transform:none;box-shadow:inset 0 0 0 1.5px var(--line)}
+.menu-act .btn{height:48px;background:var(--ink);color:var(--btn-w)}
+.menu-act .btn .short{display:none}
+/* in alto a destra i progetti che scendono, in due colonne a velocità diverse: arrivano al bordo della card e in basso sfumano nel bianco prima dei contatti (come il render di Moyra) */
+.menu-proj{grid-column:2;grid-row:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;min-height:0;overflow:hidden;padding:0 10px 0 0;mask:linear-gradient(#000 50%,transparent 96%)}
+.menu-proj{opacity:0;transition:opacity .3s}.menu.open .menu-proj{opacity:1;transition:opacity .8s .25s}
 .mp-col{overflow:hidden;min-height:0}
 /* margine sotto ogni foto, non gap: metà colonna è esattamente un giro */
 .mp-track{display:flex;flex-direction:column;animation:mpdown 46s linear infinite;animation-play-state:paused}
@@ -152,7 +156,6 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .mp-item:hover img{transform:scale(1.05)}
 .mp-item span{position:absolute;left:10px;bottom:10px;background:var(--dark);color:var(--on-dark);font-size:13px;font-weight:400;padding:5px 10px;border-radius:4px}
 .reel-btn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;height:48px;padding:0 5px 0 22px;border:0;border-radius:99px;background:var(--btn-w);color:var(--ink);font:400 16px var(--sans);cursor:pointer;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,.3)}
-.menu-proj .reel-btn{z-index:2}
 .reel-btn i{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--btn-w)}
 .reel-btn svg{width:14px;height:14px;margin-left:2px}
 @media (prefers-reduced-motion:reduce){
@@ -664,8 +667,6 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 @media (max-width:720px){
   .labs{--R:1400px;--cw:68vw} /* card più strette e arco più curvo: si vedono le card accanto a destra e a sinistra */
   /* menu: niente colonne di progetti che scorrono, resta il bottone del reel */
-  .menu-proj{height:auto;display:block;overflow:visible;padding:8px 0 4px}.mp-col{display:none}
-  .menu-proj .reel-btn{position:static;transform:none}
   /* "24 premi" + "Mediastar": più vicini */
   .echo{height:min(56svh,480px)}
   /* vetro dell'header: un solo strato (cinque backdrop-filter durante lo scroll pesano troppo sui telefoni) */
@@ -681,12 +682,17 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
   .nav-cta{display:none}
   .logo svg{height:24px}
   .mpill{height:44px;padding-left:18px}.mpill i{width:34px;height:34px}
-  :root{--mh:86svh}
   .gc{flex-basis:82vw}
-  .menu{grid-template-columns:1fr;grid-template-rows:auto auto;overflow-y:auto;padding:calc(var(--nav-h) + 4px) 16px calc(100svh - var(--mh) + 16px)}
-  .menu-main{padding:4px 0 0 4px;min-height:auto}
-  .menu-proj{height:auto} /* solo il bottone del reel: niente riquadro vuoto che fa scorrere il menu */
-  .menu-main li a{font-size:13vw}
+  /* menu: la card prende tutta la larghezza, senza progetti; il logo sta sopra la card bianca e torna scuro */
+  .menu{top:6px;right:6px;width:calc(100vw - 12px);height:auto;max-height:calc(100svh - 12px);overflow-y:auto;scrollbar-width:none;grid-template-columns:1fr;grid-template-rows:auto auto auto}
+  .menu-proj{display:none}
+  .menu-main{padding:calc(var(--nav-h) - 4px) 0 0 16px} /* stessa linea del logo */
+  .menu-main li a{font-size:12vw}
+  .menu-meta{padding:32px 16px 0;font-size:15px}
+  .menu-act{padding:24px 16px 20px}
+  .menu-act .btn .long{display:none}.menu-act .btn .short{display:inline}
+  .menu-open .nav .logo{color:var(--ink)}
+  .menu-open .nav{padding:0 22px;transform:translateY(4px)} /* logo e pillola staccati dai bordi della card: 16px ai lati, 12px sopra (raggio 34 = 22 della pillola + 12) */
   .nav .btn{height:40px;padding:0 16px;font-size:15px}
   .nav .btn .long{display:none}.nav .btn .short{display:inline}
   .hero-pin .wrap{display:block}
@@ -734,27 +740,25 @@ html:active-view-transition-type(expand)::view-transition-group(next-hero){anima
 </header>
 <span class="nav-blur" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span> <!-- fuori dall'header: con view-transition-name l'header non vede sotto di sé e il backdrop-filter non sfocava nulla -->
 <nav class="menu" id="menu" data-lenis-prevent aria-label="Menu principale">
-  <div class="menu-main">
-    <ul>
-      <li><a href="chi-siamo.html" aria-label="Chi siamo"><span data-t="Chi siamo" aria-hidden="true">Chi siamo</span></a></li>
-      <li><a href="servizi.html" aria-label="Servizi"><span data-t="Servizi" aria-hidden="true">Servizi</span></a></li>
-      <li><a href="progetti.html" aria-label="Progetti"><span data-t="Progetti" aria-hidden="true">Progetti</span></a></li>
-      <li><a href="#clienti" aria-label="Clienti"><span data-t="Clienti" aria-hidden="true">Clienti</span></a></li>
-      <li><a href="https://www.neverbeforeitalia.it/jobs" aria-label="Lavora con noi"><span data-t="Lavora con noi" aria-hidden="true">Lavora con noi</span></a></li>
-      <li><a href="#contatti" aria-label="Contatti"><span data-t="Contatti" aria-hidden="true">Contatti</span></a></li>
-    </ul>
-    <div class="menu-meta">
-      <a href="mailto:info@neverbeforeitalia.it">info@neverbeforeitalia.it</a>
-      <a href="tel:+390804964221">+39 080 496 4221</a>
-      <span>Bari · Padova</span>
-      <a href="https://www.instagram.com/neverbeforeitalia/">Instagram</a>
-      <a href="https://it.linkedin.com/company/never-before-italia">LinkedIn</a>
-    </div>
-  </div>
+  <ul class="menu-main">
+    <li><a href="chi-siamo.html" aria-label="Chi siamo"><span data-t="Chi siamo" aria-hidden="true">Chi siamo</span></a></li>
+    <li><a href="servizi.html" aria-label="Servizi"><span data-t="Servizi" aria-hidden="true">Servizi</span></a></li>
+    <li><a href="progetti.html" aria-label="Progetti"><span data-t="Progetti" aria-hidden="true">Progetti</span></a></li>
+    <li><a href="#clienti" aria-label="Clienti"><span data-t="Clienti" aria-hidden="true">Clienti</span></a></li>
+    <li><a href="https://www.neverbeforeitalia.it/jobs" aria-label="Lavora con noi"><span data-t="Lavora con noi" aria-hidden="true">Lavora con noi</span></a></li>
+    <li><a href="#contatti" aria-label="Contatti"><span data-t="Contatti" aria-hidden="true">Contatti</span></a></li>
+  </ul>
   <div class="menu-proj">
     <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/le-carose"><img src="assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg" alt="Le Carose" loading="lazy"><span>Le Carose</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica"><img src="assets/img/never_before_italia_borgo_canonica_branding.png" alt="Borgo Canonica" loading="lazy"><span>Borgo Canonica</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/lum"><img src="assets/img/never_before_italia_video_lum.jpg" alt="Università LUM" loading="lazy"><span>Università LUM</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="Amaro Mediterraneo" loading="lazy"><span>Amaro Mediterraneo</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/cortina-express"><img src="assets/img/cortina-express-006.jpg" alt="Cortina Express" loading="lazy"><span>Cortina Express</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/hula-bari"><img src="assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg" alt="Hula Hawaiian Poke" loading="lazy"><span>Hula Hawaiian Poke</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/le-carose" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg" alt="" loading="lazy"><span>Le Carose</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_borgo_canonica_branding.png" alt="" loading="lazy"><span>Borgo Canonica</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/lum" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_video_lum.jpg" alt="" loading="lazy"><span>Università LUM</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="" loading="lazy"><span>Amaro Mediterraneo</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/cortina-express" aria-hidden="true" tabindex="-1"><img src="assets/img/cortina-express-006.jpg" alt="" loading="lazy"><span>Cortina Express</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/hula-bari" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg" alt="" loading="lazy"><span>Hula Hawaiian Poke</span></a></div></div>
     <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="Tenuta Giustini" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru"><img src="assets/img/immagine_home_viru.jpg" alt="Viru" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="Master Italy" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="progetto-marinobus.html"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="MarinoBus" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="Sneakers Room" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="Produttori di Manduria" loading="lazy"><span>Produttori di Manduria</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine_home_viru.jpg" alt="" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="progetto-marinobus.html" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="" loading="lazy"><span>Produttori di Manduria</span></a></div></div>
+  </div>
+  <div class="menu-meta">
+    <p class="mm-soc"><a href="https://www.instagram.com/neverbeforeitalia/">Instagram</a><a href="https://it.linkedin.com/company/never-before-italia">LinkedIn</a></p>
+    <p class="mm-ct"><span>Bari · Padova, <b id="mmTime"></b></span><a href="mailto:info@neverbeforeitalia.it">info@neverbeforeitalia.it</a><a href="tel:+390804964221">+39 080 496 4221</a></p>
+  </div>
+  <div class="menu-act">
     <button class="reel-btn" id="reelOpen" type="button">Guarda il reel <i><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg></i></button>
+    <a class="btn" href="#contatti"><span class="long">Richiedi una consulenza</span><span class="short">Contatti</span></a>
   </div>
 </nav>
 
@@ -998,18 +1002,20 @@ const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 
 // menu: la pillola apre e chiude il pannello
 const menu=$('menu'),mpill=$('mpill');
-const page=$('page');let menuT,lenis=null; // lenis: scroll morbido, acceso al load
-[...menu.querySelectorAll('.menu-main li,.menu-meta,.menu-proj')].forEach((el,i)=>el.style.setProperty('--i',i));
-// i blocchi tenuti fermi da GSAP sono position:fixed: dentro la pagina spostata andrebbero in cima, li rimetto all'altezza dello scroll
-const pinned=()=>[...page.querySelectorAll('.pin-spacer>*')].filter(el=>getComputedStyle(el).position==='fixed');
+let lenis=null; // lenis: scroll morbido, acceso al load
+[...menu.querySelectorAll('.menu-main,.menu-meta,.menu-act')].forEach((el,i)=>el.style.setProperty('--i',i));
+// ritaglio della card chiusa = rettangolo della pillola, misurato rispetto alla card; pronto già al caricamento, così anche la prima apertura parte dalla pillola
+const menuClip=()=>{const r=mpill.getBoundingClientRect(),L=menu.offsetLeft,T=menu.offsetTop,s=menu.style;
+  s.setProperty('--ct',r.top-T+'px');s.setProperty('--cl',r.left-L+'px');s.setProperty('--cr',L+menu.offsetWidth-r.right+'px');s.setProperty('--cb',T+menu.offsetHeight-r.bottom+'px');s.setProperty('--cr2',r.height/2+'px')};
+menuClip();addEventListener('resize',()=>{if(!menu.classList.contains('open'))menuClip()});
 const setMenu=open=>{
   if(open===document.body.classList.contains('menu-open'))return;
-  clearTimeout(menuT);
-  if(open){const sy=scrollY-page.offsetTop;page.style.setProperty('--sy',sy+'px');page.classList.add('clip');document.documentElement.style.background='var(--dark)';
-    pinned().forEach(el=>{el.dataset.top=el.style.top;el.style.top=sy+'px'});void page.offsetWidth}
-  document.body.classList.toggle('menu-open',open);menu.classList.toggle('open',open);mpill.setAttribute('aria-expanded',open);document.documentElement.style.overflow=open?'hidden':'';lenis&&(open?lenis.stop():lenis.start());
-  if(!open)menuT=setTimeout(()=>{page.classList.remove('clip');document.documentElement.style.background='';page.querySelectorAll('[data-top]').forEach(el=>{el.style.top=el.dataset.top;delete el.dataset.top})},800);
+  document.body.classList.toggle('menu-open',open); // prima la classe: su mobile la pillola si sposta, il ritaglio va misurato dove sta ora
+  if(open){menuClip();void menu.offsetWidth}
+  menu.classList.toggle('open',open);mpill.setAttribute('aria-expanded',open);document.documentElement.style.overflow=open?'hidden':'';lenis&&(open?lenis.stop():lenis.start());
 };
+// ora di Bari nella card
+{const t=$('mmTime'),tick=()=>t.textContent=new Date().toLocaleTimeString('it-IT',{timeZone:'Europe/Rome',hour:'2-digit',minute:'2-digit'});tick();setInterval(tick,30000)}
 mpill.onclick=()=>setMenu(!menu.classList.contains('open'));
 document.querySelector('.nav .logo').addEventListener('click',e=>{if(menu.classList.contains('open')){e.preventDefault();e.stopPropagation();setMenu(false)}}); // a menu aperto il logo chiude il menu
 $('pageShade').onclick=()=>setMenu(false);
