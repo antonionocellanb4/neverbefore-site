@@ -82,7 +82,7 @@ CSS = r'''
 .pj-full .pj-m img{scale:calc(1 + var(--k,1)*.12)}
 .pj-story{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:clamp(80px,12vw,180px) var(--pad)}
 .pj-story h2{font:400 15px var(--sans);letter-spacing:-.02em;color:var(--ink-2)}
-.pj-big{font-family:var(--display);font-weight:var(--display-w);font-size:clamp(30px,3.4vw,54px);letter-spacing:-.057em;line-height:1.1;margin-bottom:32px}
+.pj-big{font-family:var(--display);font-weight:var(--display-w);font-size:clamp(30px,3.4vw,54px);letter-spacing:-.067em;line-height:1.1;margin-bottom:32px}
 .pj-story p+p{margin-top:16px}
 .pj-story p:not(.pj-big){color:var(--ink-2);max-width:56ch}
 .pj-blk{margin-top:clamp(64px,9vw,140px)}
@@ -97,7 +97,7 @@ CSS = r'''
 .pj-side{position:sticky;top:calc(var(--nav-h) + 24px);align-self:start}
 .pj-route{margin-top:28px}
 .pj-cnt small{display:block;font-size:15px;color:var(--ink-2)}
-.pj-cnt span{font-family:var(--display);font-size:clamp(48px,5vw,88px);letter-spacing:-.06em;line-height:1}
+.pj-cnt span{font-family:var(--display);font-size:clamp(48px,5vw,88px);letter-spacing:-.07em;line-height:1}
 .pj-cnt b{font-weight:inherit;font-variant-numeric:tabular-nums}
 .pj-map{position:relative;width:min(100%,190px);margin:24px 0 0 40px}
 .pj-map svg{display:block;width:100%;overflow:visible}
@@ -159,7 +159,7 @@ CS_CSS = r'''
 .cs-bg img{width:100%;height:100%;object-fit:cover}
 .cs-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(5,5,5,.5),rgba(5,5,5,.42) 30%,rgba(5,5,5,.72) 58%,var(--dark) 94%)} /* in basso la foto sfuma nel fondo della pagina */
 .cs-lede{position:absolute;left:var(--pad);top:40%;max-width:min(580px,calc(100% - 2*var(--pad)));font-size:clamp(20px,2.1vw,32px);line-height:1.22;letter-spacing:-.035em}
-.cs-name{position:absolute;left:0;right:0;top:57%;overflow:hidden;padding:.02em 0 .08em;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(88px,13vw,230px);letter-spacing:-.06em;line-height:1;white-space:nowrap}
+.cs-name{position:absolute;left:0;right:0;top:57%;overflow:hidden;padding:.02em 0 .08em;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(88px,13vw,230px);letter-spacing:-.07em;line-height:1;white-space:nowrap}
 .cs-run{display:inline-flex;animation:csRun 26s linear infinite;translate:0 110%;transition:translate 1.3s var(--energy) .15s}
 .shown .cs-run{translate:0 0}
 .wf .cs-name{visibility:hidden}
@@ -171,7 +171,7 @@ CS_CSS = r'''
 .cs-sec{position:relative;z-index:1;padding:clamp(120px,15vw,230px) var(--pad) clamp(100px,12vw,180px)}
 .cs-sh{display:flex;justify-content:space-between;padding-bottom:20px;border-bottom:1px solid var(--hl);font-size:15px}
 .cs-sh span:first-child{color:var(--t2)}
-.cs-big{max-width:16.5em;margin-top:clamp(64px,8vw,120px);font-family:var(--display);font-weight:var(--display-w);font-size:clamp(38px,5.2vw,86px);letter-spacing:-.055em;line-height:1.05}
+.cs-big{max-width:16.5em;margin-top:clamp(64px,8vw,120px);font-family:var(--display);font-weight:var(--display-w);font-size:clamp(38px,5.2vw,86px);letter-spacing:-.065em;line-height:1.05}
 .cs-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;margin-top:clamp(80px,10vw,160px)}
 .cs-k{align-self:start;font:400 17px var(--sans);letter-spacing:-.02em}
 .cs-p{max-width:40em;font-size:clamp(17px,1.35vw,21px);line-height:1.42}
@@ -182,12 +182,12 @@ CS_CSS = r'''
 .cs-spec a{color:inherit;text-underline-offset:4px}
 /* numeri: cifra piena, etichetta grigia, indice piccolo in alto */
 .cs-stats{list-style:none;margin-top:clamp(56px,7vw,110px)}
-.cs-stats li{display:flex;align-items:baseline;column-gap:.22em;white-space:nowrap;padding:20px 0 24px;border-bottom:1px solid var(--hl);font-family:var(--display);font-weight:var(--display-w);font-size:clamp(52px,6vw,100px);letter-spacing:-.06em;line-height:1.02}
+.cs-stats li{display:flex;align-items:baseline;column-gap:.22em;white-space:nowrap;padding:20px 0 24px;border-bottom:1px solid var(--hl);font-family:var(--display);font-weight:var(--display-w);font-size:clamp(52px,6vw,100px);letter-spacing:-.07em;line-height:1.02}
 .cs-stats span{color:var(--t2)}
 .cs-stats sup{align-self:flex-start;margin-top:.4em;font:400 13px var(--sans);letter-spacing:0;color:var(--t2)}
 .cs .pj-cnt{display:none} /* il percorso resta, il contatore lo fanno i numeri accanto */
 .cs .pj-route{margin-top:12px}
-.cs-di h3{padding-bottom:18px;border-bottom:1px solid var(--hl);font:400 clamp(19px,1.6vw,24px) var(--sans);letter-spacing:-.03em}
+.cs-di h3{padding-bottom:18px;border-bottom:1px solid var(--hl);font:400 clamp(19px,1.6vw,24px) var(--display);letter-spacing:-.045em}
 .cs-di p{padding-top:22px;font-size:clamp(17px,1.4vw,22px);color:var(--t2);line-height:1.4}
 .cs-di+.cs-di{margin-top:clamp(40px,4vw,64px)}
 /* lavori: fila dopo fila, staccati di poco come nel riferimento */
@@ -432,9 +432,9 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .ab-vm{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.2vw,16px);padding:0 var(--pad)}
 .ab-vm div{background:#fff;border-radius:22px;padding:clamp(24px,3vw,44px);min-height:clamp(260px,26vw,400px);display:flex;flex-direction:column;justify-content:space-between;gap:40px}
 .ab-vm h3{font:400 15px var(--sans);letter-spacing:-.02em;color:var(--ink-2)}
-.ab-vm p{font-family:var(--display);font-size:clamp(26px,2.6vw,44px);letter-spacing:-.05em;line-height:1.1}
+.ab-vm p{font-family:var(--display);font-size:clamp(26px,2.6vw,44px);letter-spacing:-.06em;line-height:1.1}
 .ab-num{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:clamp(80px,10vw,160px) var(--pad) 0;padding-top:16px;border-top:1px solid var(--ink)}
-.ab-num b{display:block;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(56px,7vw,128px);letter-spacing:-.06em;line-height:1}
+.ab-num b{display:block;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(56px,7vw,128px);letter-spacing:-.07em;line-height:1}
 .ab-num span{display:block;margin-top:10px;font-size:15px;color:var(--ink-2)}
 .ab-q{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:16px;padding:clamp(40px,5vw,64px) var(--pad) 0}
 .ab-q p{grid-column:span 3;font-size:17px;line-height:1.45;color:var(--ink-2);max-width:40em}
@@ -528,7 +528,7 @@ html:active-view-transition-type(filter)::view-transition-group(*){animation-dur
 .vm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:clamp(24px,5vw,96px);align-items:center;padding:clamp(20px,2.4vw,32px) 0 clamp(40px,5vw,72px);border-top:1px solid var(--ink)}
 .vm figure{margin:0;aspect-ratio:4/3;max-height:340px;border-radius:14px;overflow:hidden;background:var(--surface)}
 .vm .ch-k{margin-bottom:14px}
-.vm p:not(.ch-k){font-family:var(--display);font-size:clamp(26px,2.8vw,48px);letter-spacing:-.05em;line-height:1.1}
+.vm p:not(.ch-k){font-family:var(--display);font-size:clamp(26px,2.8vw,48px);letter-spacing:-.06em;line-height:1.1}
 @media (max-width:820px){.vm{grid-template-columns:1fr;gap:16px}}
 .cap-big{max-width:22em;margin-bottom:clamp(32px,4vw,56px)}
 .ab-q2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,96px)}
@@ -566,7 +566,7 @@ section.ex{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:
 .sc-i{position:sticky;top:calc(var(--nav-h) + 24px);flex:none;width:clamp(220px,22vw,320px)}
 .sc-c{aspect-ratio:2/3;display:flex;flex-direction:column;justify-content:space-between;gap:24px;padding:clamp(20px,2vw,32px);border-radius:22px;background:var(--c);color:var(--ink);box-shadow:0 10px 40px rgba(5,5,5,.08);will-change:transform}
 .sc-c.dk{background:var(--dark);color:#fff}
-.sc-n{font-family:var(--display);font-size:clamp(64px,6vw,104px);letter-spacing:-.05em;line-height:.9}
+.sc-n{font-family:var(--display);font-size:clamp(64px,6vw,104px);letter-spacing:-.06em;line-height:.9}
 .sc-c h3{font-size:clamp(28px,2.4vw,40px);line-height:1}
 .sc-c p{margin-top:12px;font-size:15px;line-height:1.4}
 .sc-c.bump{animation:scBump 1s cubic-bezier(.2,.8,.2,1)}

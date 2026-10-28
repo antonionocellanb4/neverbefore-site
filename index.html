@@ -7,12 +7,12 @@
 <meta name="description" content="Never Before Italia: agenzia di comunicazione e marketing a Bari e Padova. Strategia, branding, digital, ufficio stampa.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Google+Sans:wght@400..700&display=swap" rel="stylesheet">
 <script>/* l'intro della hero aspetta i font (max 1,5 s): senza, il titolo si ricompone a metà animazione e la pagina sembra ricaricarsi */
 addEventListener('pagereveal',e=>{let t=null;try{t=sessionStorage.getItem('vt');sessionStorage.removeItem('vt')}catch(_){}if(e.viewTransition&&t==='expand')e.viewTransition.types.add('expand');document.documentElement.classList.add('shown')});
 if(!('onpagereveal' in window))document.documentElement.classList.add('shown');
 // (sopra: il segnale del passaggio 'pagina successiva' vale per un solo cambio pagina)
-document.documentElement.classList.add('wf');window.fontsReady=Promise.race([Promise.all(['400 18px "Google Sans"','700 18px "Google Sans"'].map(f=>document.fonts.load(f))),new Promise(r=>setTimeout(r,1500))]).catch(()=>{}).then(()=>document.documentElement.classList.remove('wf'));</script>
+document.documentElement.classList.add('wf');window.fontsReady=Promise.race([Promise.all(['400 18px "Google Sans"','700 18px "Google Sans"','400 18px "Funnel Display"','700 18px "Funnel Display"'].map(f=>document.fonts.load(f))),new Promise(r=>setTimeout(r,1500))]).catch(()=>{}).then(()=>document.documentElement.classList.remove('wf'));</script>
 <style>
 :root{
   /* fondo crema caldo come Google Labs (#F3EFEA) e neutri caldi; il bianco puro è in index-pre-crema.html, il verde in index-verde.html */
@@ -35,9 +35,9 @@ document.documentElement.classList.add('wf');window.fontsReady=Promise.race([Pro
   --pill-h:54px;
   --safe-b:clamp(28px,5vh,56px); /* spazio sotto ai testi appoggiati al fondo dello schermo */
   --sans:"Google Sans",system-ui,sans-serif;   /* un solo font in tutto il sito */
-  --display:var(--sans);  /* titoli e scritte grandi: la versione variabile di Google Sans, scende fino a 300 */
+  --display:"Funnel Display",var(--sans);  /* prova: titoli e scritte grandi in Funnel Display (variabile 300–800), il resto in Google Sans */
   --display-w:400; /* titoli leggeri: al passaggio del mouse le lettere salgono fino a 700 e il cambio si vede */
-  --display-ls:-.06em; /* caratteri stretti, chiesto dall utente */
+  --display-ls:-.06em; /* titoli in Funnel Display, stretti: chiesto dall utente anche se alcune coppie si sfiorano */
   --serif:var(--sans);  /* niente secondo font: chi usava il serif ora usa il font unico */
   --ease:cubic-bezier(.2,.7,.1,1);
   --energy:cubic-bezier(.32,.72,0,1); /* l'ease "energy" del menu di Osmo */
@@ -127,7 +127,7 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
 .menu.open .menu-main,.menu.open .menu-meta,.menu.open .menu-act{opacity:1;transform:none;transition:opacity .5s calc(.3s + var(--i,0)*.06s),transform .8s var(--energy) calc(.3s + var(--i,0)*.06s)}
 .menu-main{grid-column:1;grid-row:1;list-style:none;align-self:start;padding:56px 0 0 56px}
 /* voci grandi; in hover il testo sale e lascia il posto alla copia sotto (lo span contiene due righe: si sposta di metà) */
-.menu-main li a{display:block;width:max-content;overflow:hidden;height:1.12em;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(36px,3.7vw,58px);letter-spacing:-.06em;line-height:1.12;color:var(--ink);text-decoration:none}
+.menu-main li a{display:block;width:max-content;overflow:hidden;height:1.12em;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(36px,3.7vw,58px);letter-spacing:-.065em;line-height:1.12;color:var(--ink);text-decoration:none}
 .menu-main li a span{display:block;transition:transform .55s var(--ease)}
 .menu-main li a span::after{content:attr(data-t);display:block}
 .menu-main li a:hover span,.menu-main li a:focus-visible span{transform:translateY(-50%)}
@@ -178,7 +178,7 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
 .hero-pin .wrap{width:100%;padding-bottom:var(--safe-b)}
 .hero .hero-side{position:absolute;bottom:var(--safe-b);right:var(--pad)}
 .hero h1{font-size:var(--h1)}
-.hero h1 em{letter-spacing:-.052em}
+.hero h1 em{letter-spacing:-.062em}
 .slot{position:relative;display:inline-block;width:2.1em;height:.74em;margin:0 .04em;vertical-align:-.02em}
 .hero-reel{position:absolute;left:0;top:0;width:100%;height:100%;z-index:5;overflow:hidden;border-radius:99px;background:var(--dark)}
 .hero-reel video{display:block;width:100%;height:100%;object-fit:cover}
@@ -244,7 +244,7 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
 @media (hover:none){.hs-cue{display:block}.hx-pin.mouse .hs-cue{display:none}} /* sui telefoni, senza mouse, resta ferma in basso */
 .hx-intro{flex:none;width:100vw;height:100%;display:grid;place-items:center;padding:0 var(--pad)}
 /* apertura: il claim grande, centrato e fermo; le parole entrano una alla volta, poi scorrendo esce a sinistra */
-.hx-claim{max-width:11.5em;margin:0;text-align:center;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls);font-size:clamp(44px,7.4vw,140px);line-height:.98}
+.hx-claim{max-width:none;margin:0;text-align:center;text-wrap:balance;font-family:var(--display);font-weight:var(--display-w);letter-spacing:var(--display-ls); /* su due righe (sotto i 40px, cioè su telefono, va a capo) */ font-size:clamp(40px,6.6vw,130px);line-height:.98}
 .hx-claim .cw{display:inline-block;animation:claimIn 1s var(--energy) calc(.15s + var(--i) * 70ms) both}
 @keyframes claimIn{from{opacity:0;transform:translateY(.45em) rotate(4deg)}}
 .wf .hx-claim{visibility:hidden}.wf .hx-claim *{animation-play-state:paused} /* aspetta i font come la hero */
@@ -307,7 +307,7 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
    poi il cursore di "esecuzione" scende su "miracoli", lo seleziona e lo riempie di giallo trascinando come sopra, infine va sul bottone e lo preme */
 .ve2{z-index:5} /* il cursore resta sopra alla frase e al bottone */
 .vx-foot{position:absolute;left:calc(var(--pad) + 32px);right:calc(var(--pad) + 32px);bottom:48px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
-.vx-foot p{font-family:var(--display);font-weight:var(--display-w);letter-spacing:-.05em;font-size:clamp(26px,2.6vw,44px);line-height:1.05}
+.vx-foot p{font-family:var(--display);font-weight:var(--display-w);letter-spacing:-.055em;font-size:clamp(26px,2.6vw,44px);line-height:1.05}
 .vx-foot .w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .1em .12em;margin:0 -.1em -.12em}
 .vx.vup .vx-foot .w{overflow:visible} /* salite le parole, la maschera non serve più: la cornice di "miracoli" ne esce */
 .vx-foot .w>span{display:inline-block;transform:translateY(calc((1 - clamp(0, (var(--h,0) - var(--d) * .04) / .14, 1)) * 115%))}
@@ -344,7 +344,7 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
 
 /* manifesto: le parole non ci sono, salgono dalla loro maschera una alla volta man mano che scorri */
 .manif{text-align:center;position:relative;margin-top:-2px;background:var(--bg)} /* copre la riga di 1px tra il riquadro aperto e questa sezione */
-.manif p{font-family:var(--display);font-weight:var(--display-w);letter-spacing:-.057em;font-size:clamp(30px,3.6vw,58px);line-height:1.12;max-width:24ch;margin:0 auto 44px}
+.manif p{font-family:var(--display);font-weight:var(--display-w);letter-spacing:-.06em;font-size:clamp(30px,3.6vw,58px);line-height:1.12;max-width:31ch;margin:0 auto 44px;text-wrap:pretty} /* pretty: niente parola sola sull ultima riga */
 .manif .wb{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
 .manif .wi{display:inline-block;transform:translateY(110%);transition:transform .7s var(--energy)}
 .manif .wb.on .wi{transform:none}
@@ -493,7 +493,7 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
 .ml-h{font-size:clamp(32px,min(3.4vw,6svh),56px);margin-bottom:clamp(6px,1.4svh,14px)}
 .ml-r{display:flex;gap:12px;padding:clamp(8px,1.4svh,12px) 0;border-bottom:1px solid var(--line);font-size:16px}
 .ml-r span{width:72px;flex:none;color:var(--ink-2)}
-.ml-b{min-height:3.5em;padding:clamp(12px,2svh,18px) 0 clamp(14px,2.4svh,22px);font-family:var(--display);letter-spacing:-.03em;font-size:clamp(22px,min(2.2vw,4svh),34px);line-height:1.15}
+.ml-b{min-height:3.5em;padding:clamp(12px,2svh,18px) 0 clamp(14px,2.4svh,22px);font-family:var(--display);letter-spacing:-.04em;font-size:clamp(22px,min(2.2vw,4svh),34px);line-height:1.15}
 .ml-c{display:inline-block;width:2px;height:1em;margin-left:3px;vertical-align:-.12em;background:var(--ink);animation:mlBlink 1s steps(1) infinite}
 @keyframes mlBlink{50%{opacity:0}}
 .ml-f{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
@@ -535,7 +535,7 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
 .fm-ring circle{fill:none;stroke-width:3}.fm-ring .bg{stroke:#2a2a2a}.fm-ring .pr{stroke:#D7FFE0;stroke-dasharray:1;stroke-dashoffset:1;stroke-linecap:round}
 .fm-ring i{position:absolute;inset:0;display:grid;place-items:center;transition:transform .4s var(--energy)}.fm-ring i svg{width:26px;height:26px}
 .fm-ring:hover i{transform:translateY(-4px)}
-.ft-msg strong{display:block;white-space:nowrap;font-size:26px;font-weight:400;letter-spacing:-.057em;line-height:1.1;margin-bottom:6px}
+.ft-msg strong{display:block;white-space:nowrap;font-size:26px;font-weight:400;letter-spacing:-.067em;line-height:1.1;margin-bottom:6px}
 .ft-msg p{font-size:16px;font-weight:400;line-height:1.35;max-width:22em}
 .ft-msg a{text-underline-offset:3px}
 .ft-col{padding:36px var(--pad) 0 0}
@@ -545,7 +545,7 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
 .ft-col ul{list-style:none}
 .ft-col a{text-decoration:none}
 .ft-col a:hover{text-decoration:underline;text-underline-offset:4px}
-.ft-col .big a{font-size:clamp(32px,2.8vw,44px);letter-spacing:-.062em;line-height:1.08}
+.ft-col .big a{font-size:clamp(32px,2.8vw,44px);letter-spacing:-.072em;line-height:1.08}
 .ft-legal{grid-column:2/-1;margin-top:16px;border-top:1px solid var(--line-dark);padding:22px var(--pad) 8px 0;list-style:none} /* sotto le due colonne di destra, come prima */
 .ft-legal li{font-size:16px;font-weight:400;line-height:1.6}
 .ft-legal a{text-decoration:none}.ft-legal a:hover{text-decoration:underline}
@@ -587,7 +587,7 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
 
 /* nastro gigante che scorre con lo scroll */
 .bigmq{position:relative;overflow:hidden;margin-bottom:clamp(56px,7vw,96px)}
-.bigmq-t{display:flex;width:max-content;white-space:nowrap;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(72px,11vw,200px);letter-spacing:-.067em;line-height:1.05;will-change:transform}
+.bigmq-t{display:flex;width:max-content;white-space:nowrap;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(72px,11vw,200px);letter-spacing:-.07em;line-height:1.05;will-change:transform}
 .bigmq .dot{display:inline-block;width:.6em;height:.6em;border-radius:50%;background:currentColor;margin:0 .32em;align-self:center}
 
 /* griglia a 12 colonne visibile sul fondo scuro */
@@ -597,9 +597,10 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
 /* eco (da Creative Website Manual, "PRACTICE"): sette livelli uguali con fondo pieno, parola in alto e in basso.
    Scorrendo i livelli sopra si rimpiccioliscono verso il centro e coprono quelli sotto: dei grandi restano solo le fette ai bordi, come un tunnel */
 .echo{position:relative;height:min(92svh,960px);width:100vw;margin-left:calc(50% - 50vw)}
-.echo .ly{position:absolute;inset:0;background:var(--bg);transform:scale(var(--s,1))}
-.echo h2{height:100%;display:flex;flex-direction:column;justify-content:space-between;align-items:center;font-size:19.5vw;line-height:.78;letter-spacing:-.062em;text-transform:uppercase;white-space:nowrap}
-.echo-x{position:absolute;left:50%;top:50%;z-index:1;width:44px;height:44px;margin:-22px 0 0 -22px;background:linear-gradient(var(--ink),var(--ink)) center/100% 1px no-repeat,linear-gradient(var(--ink),var(--ink)) center/1px 100% no-repeat}
+.echo .ly{position:absolute;inset:0;background:var(--bg);transform:scale(var(--s,1));transform-origin:50% var(--oy,50%)} /* --oy (JS): a metà tra le due parole, non a metà del livello */
+.echo h2{height:100%;display:flex;flex-direction:column;justify-content:space-between;align-items:center;font-size:19.5vw;line-height:.78;text-transform:uppercase;white-space:nowrap}
+.echo h2>*{letter-spacing:-.072em;text-box:trim-both cap alphabetic} /* tracking sulle parole: in em sul loro corpo, non su quello dell h2 */ /* riga tagliata alle maiuscole: in alto e in basso le lettere toccano il bordo del livello, e i frammenti partono insieme sopra e sotto (Funnel Display ha più aria sopra che sotto) */
+.echo-x{position:absolute;left:50%;top:var(--oy,50%);z-index:1;width:44px;height:44px;margin:-22px 0 0 -22px;background:linear-gradient(var(--ink),var(--ink)) center/100% 1px no-repeat,linear-gradient(var(--ink),var(--ink)) center/1px 100% no-repeat}
 
 /* clienti: carosello come le card di Google Labs. Card verticali grigie con solo il marchio del cliente a colori; si scorre con le frecce, trascinando o col trackpad (scroll-snap) */
 .gl-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
@@ -1073,7 +1074,7 @@ lrs.forEach(el=>{const walk=n=>[...n.childNodes].forEach(c=>{if(c.nodeType===3){
   else if(c.nodeType===1&&c.tagName!=='BR'&&!c.classList.contains('slot'))walk(c)});walk(el)}); // la pillola del reel resta fuori: cade per conto suo
 lrs.forEach(el=>el.querySelectorAll('.w>span').forEach(s=>{s.innerHTML=[...s.textContent].map(c=>`<span class="lt">${c}</span>`).join('')})); // lettere singole: servono al peso che cambia col mouse
 const lineUp=()=>lrs.forEach(el=>{let top=null,l=-1;el.querySelectorAll('.w').forEach(w=>{const t=Math.round(w.offsetTop);if(t!==top){top=t;l++}w.style.setProperty('--l',l)})});
-document.fonts.load('400 100px "Google Sans"').then(lineUp,lineUp);addEventListener('resize',lineUp);lineUp();
+document.fonts.load('400 100px "Funnel Display"').then(lineUp,lineUp);addEventListener('resize',lineUp);lineUp();
 
 // eco: sei copie del livello sopra all'originale; più sono in alto, più si rimpiccioliscono (passi sempre più corti)
 const echo=$('echo'),ly0=echo.querySelector('.ly'),echoX=echo.querySelector('.echo-x');
@@ -1083,8 +1084,17 @@ const fitEcho=()=>{const W=document.documentElement.clientWidth,rg=document.crea
   [...ly0.querySelector('h2').children].forEach((s,k)=>{
     // tre passaggi: misuro il testo vero, regolo, rimisuro (la larghezza non scala in modo perfettamente lineare)
     for(let p=0;p<3;p++){rg.selectNodeContents(s);s.style.fontSize=parseFloat(getComputedStyle(s).fontSize)*W/rg.getBoundingClientRect().width/innerWidth*100+'vw'}
-    echo.querySelectorAll('.ly h2').forEach(t=>{t.children[k].style.fontSize=s.style.fontSize})})};
-document.fonts.load('400 100px "Google Sans"').then(fitEcho,fitEcho);addEventListener('load',fitEcho);addEventListener('resize',fitEcho); // fonts.ready può arrivare prima che Google Sans sia richiesto
+    echo.querySelectorAll('.ly h2').forEach(t=>{t.children[k].style.fontSize=s.style.fontSize})});
+  // equilibrio: ogni parola centrata sull'inchiostro (non sulla scatola: lo spazio ai lati delle lettere e il tracking finale la spostano)
+  // e il centro dell'eco (croce + punto verso cui si stringono i livelli) a metà tra le due parole, che hanno altezze diverse
+  const L=ly0.getBoundingClientRect(),cv=document.createElement('canvas').getContext('2d');
+  [...ly0.querySelector('h2').children].forEach((s,k)=>{echo.querySelectorAll('.ly h2').forEach(t=>t.children[k].style.translate='');
+    const tn=s.firstChild,t=tn.textContent.toUpperCase(),ch=i=>{rg.setStart(tn,i);rg.setEnd(tn,i+1);return rg.getBoundingClientRect().left};
+    cv.font=`400 ${getComputedStyle(s).fontSize} "Funnel Display"`;
+    const inkL=ch(0)-cv.measureText(t[0]).actualBoundingBoxLeft-L.left,inkR=L.right-ch(t.length-1)-cv.measureText(t.at(-1)).actualBoundingBoxRight;
+    echo.querySelectorAll('.ly h2').forEach(u=>u.children[k].style.translate=`${((inkR-inkL)/2).toFixed(1)}px 0`)});
+  const [a,b]=ly0.querySelector('h2').children;echo.style.setProperty('--oy',((a.offsetHeight+L.height-b.offsetHeight)/2).toFixed(1)+'px')};
+document.fonts.load('400 100px "Funnel Display"').then(fitEcho,fitEcho);addEventListener('load',fitEcho);addEventListener('resize',fitEcho); // fonts.ready può arrivare prima che il font dei titoli sia richiesto
 
 
 // intro orizzontale: lettere divise una per una; la riga entra da destra e scorre a sinistra con lo scroll.
@@ -1253,7 +1263,7 @@ const fitNext=()=>{const n=$('nextp');if(!n||n.classList.contains('nt'))return;c
   const cw=n.querySelector('.nextp-pin').clientWidth,avail=cw-2*Math.min(80,Math.max(24,cw*.05));
   const k=avail/(wd(a)+wd(b)+fs*(2.1+.24));if(k<1)n.style.setProperty('--nt',(fs*k).toFixed(1)+'px');
   n.style.setProperty('--nsh',((wd(a)-wd(b))/2).toFixed(1)+'px')};
-fitNext();document.fonts.load('400 100px "Google Sans"').then(fitNext,fitNext);addEventListener('resize',fitNext);
+fitNext();document.fonts.load('400 100px "Funnel Display"').then(fitNext,fitNext);addEventListener('resize',fitNext);
 
 // apertura: il titolo della hero lettera per lettera (le parole restano intere per l'a capo; la pillola del reel resta fuori)
 (()=>{const t=$('heroT');t.setAttribute('aria-label',t.textContent.replace(/\s+/g,' ').trim());
