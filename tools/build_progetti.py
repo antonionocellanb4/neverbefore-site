@@ -566,6 +566,8 @@ section.ex{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:
 .sc-i{position:sticky;top:calc(var(--nav-h) + 24px);flex:none;width:clamp(220px,22vw,320px)}
 .sc-c{aspect-ratio:2/3;display:flex;flex-direction:column;justify-content:space-between;gap:24px;padding:clamp(20px,2vw,32px);border-radius:22px;background:var(--c);color:var(--ink);box-shadow:0 10px 40px rgba(5,5,5,.08);will-change:transform}
 .sc-c.dk{background:var(--dark);color:#fff}
+.sc-i:first-child .sc-c{translate:0 100svh;transition:translate 1.2s var(--energy)} /* la prima card sta sotto il titolo: entra dal fondo dello schermo quando arriva il titolo, come le altre che salgono con lo scroll */
+.sc.in .sc-i:first-child .sc-c{translate:none}
 .sc-n{font-family:var(--display);font-size:clamp(64px,6vw,104px);letter-spacing:-.06em;line-height:.9}
 .sc-c h3{font-size:clamp(28px,2.4vw,40px);line-height:1}
 .sc-c p{margin-top:12px;font-size:15px;line-height:1.4}
@@ -623,7 +625,10 @@ PAGES_JS = r'''
     its.forEach((it,i)=>{const c=it.firstElementChild,p=still?1:clamp((vh*.75-it.getBoundingClientRect().top)/(vh*.75-top)),e=p*p,done=p>.999;
       c.style.transform=`translate(${((i-(n-1)/2)*sp*e).toFixed(1)}px,${(Y[i%6]*fs*e).toFixed(1)}px) rotate(${(R[i%6]*e).toFixed(2)}deg)`;
       if(done&&!it._d&&!still){c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump')}it._d=done})};
-  addEventListener('scroll',go,{passive:true});addEventListener('resize',go);go()})}
+  addEventListener('scroll',go,{passive:true});addEventListener('resize',go);go()})
+  // prima card: sale quando il titolo entra nello schermo; torna giù se si risale sopra la sezione, così rientra ogni volta
+  const sio=new IntersectionObserver(es=>es.forEach(e=>{const s=e.target.closest('.sc');if(e.isIntersecting)s.classList.add('in');else if(e.boundingClientRect.top>0)s.classList.remove('in')}),{rootMargin:'0px 0px -15% 0px'});
+  document.querySelectorAll('.sc').forEach(s=>sio.observe(s.querySelector('.sc-h')||s.querySelector('.sc-list')))}
 // (p con easing morbido per tratto: la frase si ferma un attimo al centro; nel passaggio quella che esce resta visibile fino a fine giro; ferme, le vicine non si vedono)
 // rolodex: p va da 0 al numero di frasi-1 lungo la sezione; ogni frase sta su un tamburo (ruota attorno a un asse dietro lo schermo)
 {const r=document.querySelector('.rdx'),mob=matchMedia('(max-width:720px)');if(r){const it=[...r.querySelectorAll('.rdx-i')],N=it.length,STEP=55,SM=matchMedia('(pointer:coarse)').matches?.08:.2;let sd=null,raf=0;
