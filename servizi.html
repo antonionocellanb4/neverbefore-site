@@ -100,7 +100,8 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .nav-cta{grid-column:2;grid-row:1}
 .nav .mpill{grid-column:3;grid-row:1}
 .nav .btn{height:48px;background:var(--ink);color:var(--btn-w)}
-.nav.on-dark .btn,.menu-open .nav .btn{background:var(--btn-w);color:var(--ink)}
+.nav.on-dark .btn{background:var(--btn-w);color:var(--ink)}
+.menu-open .nav .btn{background:var(--ink);color:var(--btn-w)} /* col menu aperto la CTA sta sulla card bianca */
 .nav .btn .short{display:none}
 /* pillola del menu (da Capsules), stessa altezza della CTA */
 .mpill{display:flex;align-items:center;gap:12px;height:48px;padding:0 5px 0 22px;border:0;border-radius:99px;background:var(--btn-w);color:var(--ink);font:400 16px var(--sans);cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.14)}
@@ -110,56 +111,54 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);letter-spacing:
 .mpill i{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--btn-w)}
 .mpill svg{width:16px;height:16px}
 .mpill .x{display:none}.menu-open .mpill .x{display:block}.menu-open .mpill .bars{display:none}
+.mpill{transition:background .3s,box-shadow .3s}.menu-open .mpill{background:none;box-shadow:none} /* col menu aperto la pillola diventa la testata della card: niente fondo e ombra che la fanno galleggiare */
 
-/* ---------- menu (da Moyra): la pillola resta nell'header; il pannello è una card bianca che nasce dalla pillola e cresce fino alla sua misura,
-   con la pillola nel suo angolo (diventa "Chiudi"); la pagina dietro si scurisce e si sfoca ---------- */
+/* ---------- menu (da Burocratik): la pillola resta nell'header; il pannello è una card bianca che nasce dalla pillola e cresce fino alla sua misura,
+   con la pillola nel suo angolo (diventa "Chiudi") e la CTA accanto; la pagina dietro si scurisce e si sfoca.
+   Dentro una riga per pagina: miniatura e nome, a destra le sottovoci tra filetti; testi, foto e filetti entrano da dietro una maschera, riga dopo riga ---------- */
 .page{position:relative;z-index:2;background:var(--bg)}
 .page-shade{position:fixed;inset:0;z-index:78;background:rgba(5,5,5,.7);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;visibility:hidden;cursor:pointer;transition:opacity .5s,visibility 0s .5s}
 .menu-open .page-shade{opacity:1;visibility:visible;transition:opacity .5s}
 html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento (scrollbar-gutter) mostra il fondo di html: scuro come la pagina velata */
-.nav-cta{transition:opacity .3s,visibility .3s}.menu-open .nav-cta{opacity:0;visibility:hidden}
 /* la card nasce dalla pillola: chiusa è ritagliata esattamente sulla sua forma (--ct/--cr/--cb/--cl/--cr2 dal JS) e sta sotto di lei, aprendosi il ritaglio si allarga fino alla card intera */
-.menu{position:fixed;z-index:79;top:10px;right:calc(var(--pad) - 10px);width:min(940px,calc(100vw - 2*var(--pad) + 20px));height:min(660px,calc(100svh - 20px));
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);grid-template-rows:minmax(0,1fr) auto auto;background:#fff;color:var(--ink);overflow:hidden;border-radius:34px;
+.menu{position:fixed;z-index:79;top:10px;right:calc(var(--pad) - 10px);width:min(640px,calc(100vw - 2*var(--pad) + 20px));max-height:calc(100svh - 20px);
+  display:flex;flex-direction:column;overflow:hidden auto;scrollbar-width:none;border-radius:34px;color:var(--ink);background:#fff;
   clip-path:inset(var(--ct,0) var(--cr,0) var(--cb,100%) var(--cl,100%) round var(--cr2,24px));visibility:hidden;transition:clip-path .6s cubic-bezier(.65,0,.35,1),visibility 0s .6s}
 .menu.open{clip-path:inset(0 round 34px);visibility:visible;transition:clip-path .6s cubic-bezier(.65,0,.35,1)}
-.menu-main,.menu-meta,.menu-act{opacity:0;transform:translateY(-20px);transition:opacity .2s,transform .2s}
-.menu.open .menu-main,.menu.open .menu-meta,.menu.open .menu-act{opacity:1;transform:none;transition:opacity .5s calc(.3s + var(--i,0)*.06s),transform .8s var(--energy) calc(.3s + var(--i,0)*.06s)}
-.menu-main{grid-column:1;grid-row:1;list-style:none;align-self:start;padding:56px 0 0 56px}
-/* voci grandi; in hover il testo sale e lascia il posto alla copia sotto (lo span contiene due righe: si sposta di metà) */
-.menu-main li a{display:block;width:max-content;overflow:hidden;height:1.12em;font-family:var(--display);font-weight:var(--display-w);font-size:clamp(36px,3.7vw,58px);letter-spacing:-.065em;line-height:1.12;color:var(--ink);text-decoration:none}
-.menu-main li a span{display:block;transition:transform .55s var(--ease)}
-.menu-main li a span::after{content:attr(data-t);display:block}
-.menu-main li a:hover span,.menu-main li a:focus-visible span{transform:translateY(-50%)}
-.menu-meta{grid-column:1/-1;grid-row:2;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding:24px 56px 0;font-size:16px;line-height:1.45}
-.menu-meta p{display:flex;flex-direction:column}
-.mm-soc a{color:var(--ink-2);text-decoration:none}.mm-soc a:hover{color:var(--ink)}
-.mm-ct{align-items:flex-end;text-align:right}
-.mm-ct a{color:var(--ink);text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
-.mm-ct b{font-weight:inherit;font-variant-numeric:tabular-nums}
-.menu-act{grid-column:1/-1;grid-row:3;display:flex;justify-content:center;gap:8px;padding:28px 24px 32px}
-.menu-act .reel-btn{position:static;transform:none;box-shadow:inset 0 0 0 1.5px var(--line)}
-.menu-act .btn{height:48px;background:var(--ink);color:var(--btn-w)}
-.menu-act .btn .short{display:none}
-/* in alto a destra i progetti che scendono, in due colonne a velocità diverse: arrivano al bordo della card e in basso sfumano nel bianco prima dei contatti (come il render di Moyra) */
-.menu-proj{grid-column:2;grid-row:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;min-height:0;overflow:hidden;padding:0 10px 0 0;mask:linear-gradient(#000 50%,transparent 96%)}
-.menu-proj{opacity:0;transition:opacity .3s}.menu.open .menu-proj{opacity:1;transition:opacity .8s .25s}
-.mp-col{overflow:hidden;min-height:0}
-/* margine sotto ogni foto, non gap: metà colonna è esattamente un giro */
-.mp-track{display:flex;flex-direction:column;animation:mpdown 46s linear infinite;animation-play-state:paused}
-.mp-col + .mp-col .mp-track{animation-duration:60s;animation-delay:-22s}
-.menu.open .mp-track{animation-play-state:running}
-.menu.open .mp-col:hover .mp-track{animation-play-state:paused}
-@keyframes mpdown{from{transform:translateY(-50%)}to{transform:translateY(0)}}
-.mp-item{position:relative;display:block;margin-bottom:10px;aspect-ratio:4/5;border-radius:10px;overflow:hidden;background:var(--dark-2)}
-.mp-item img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
-.mp-item:hover img{transform:scale(1.05)}
-.mp-item span{position:absolute;left:10px;bottom:10px;background:var(--dark);color:var(--on-dark);font-size:13px;font-weight:400;padding:5px 10px;border-radius:4px}
+/* maschere: ogni testo e ogni foto sale da sotto il suo bordo, i filetti si allungano da sinistra; --i = riga (JS) */
+.menu .mk,.mn-f img{display:inline-block;transform:translateY(105%);transition:transform .25s}
+.mn-d{transform:scaleX(0);transition:transform .25s}.mn-c li::before{transform:scaleY(0);transition:transform .25s}
+.menu.open .mk,.menu.open .mn-f img,.menu.open .mn-d,.menu.open .mn-c li::before{transform:none;transition:transform .9s var(--energy) calc(.28s + var(--i,0)*.05s)}
+.mn-top{flex:none;height:calc(var(--nav-h) - 20px)} /* spazio vuoto per pillola e CTA, che stanno sopra la card */
+.mn-pages{list-style:none;margin:0;padding:0}
+.mr{position:relative;display:flex;align-items:center}
+.mn-d{position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line);transform-origin:0 50%}
+.mn-d.top{top:0;bottom:auto}
+.mn-p{position:relative;flex:1;min-width:0;display:flex;align-items:center;gap:16px;padding:12px 24px;color:inherit;text-decoration:none;transition:opacity .2s}
+/* in hover una luce entra da sinistra, la foto si allarga e il nome si sposta di poco */
+.mn-p::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--bg),transparent 90%);transform:translateX(-100%);transition:transform .2s cubic-bezier(.215,.61,.355,1);pointer-events:none}
+.mn-p:hover::before{transform:none}
+.mn-f{position:relative;flex:none;width:84px;height:64px;border-radius:4px;overflow:hidden;transition:width .3s cubic-bezier(.2,0,0,1)}
+.mn-f img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mn-p:hover .mn-f{width:100px}
+.mn-l{display:block;overflow:hidden;padding:0 .1em .08em 0;font-family:var(--display);font-weight:var(--display-w);font-size:28px;letter-spacing:var(--display-ls);line-height:1.1;white-space:nowrap;transition:transform .2s cubic-bezier(.77,0,.175,1)}
+.mn-p:hover .mn-l{transform:translateX(8px)}
+.mn-p[aria-current]{opacity:.4;pointer-events:none} /* la pagina in cui sei: spenta */
+.mn-p[aria-current]::before{transform:none}
+/* sottovoci: due colonne fisse a destra (una voce sola sta nella prima), ognuna col suo filetto verticale */
+.mn-c{flex:0 0 45%;display:grid;grid-template-columns:1fr 1fr;list-style:none;margin:0;padding:0}
+.mn-c li{display:flex;align-items:center;min-width:0}
+.mn-c li::before{content:"";flex:none;width:1px;height:64px;background:var(--line);transform-origin:50% 100%}
+.mn-c a,.mn-c button{flex:1;min-width:0;height:64px;display:flex;align-items:center;justify-content:center;padding:0 8px;overflow:hidden;border:0;background:none;color:inherit;font:400 16px var(--sans);text-align:center;text-decoration:none;cursor:pointer;transition:opacity .3s}
+.mn-c a:hover,.mn-c button:hover{opacity:.66}
+.mn-soc{list-style:none;margin:auto 0 0;padding:28px 0 22px}
+.mn-soc li{overflow:hidden}
+.mn-soc a{display:inline-block;padding:2px 24px;font-size:15px;color:inherit;text-decoration:none}
+.mn-soc a span{display:inline-block;transition:transform .175s}
+.mn-soc a:hover span{transform:translateX(.5em)}
 .reel-btn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;height:48px;padding:0 5px 0 22px;border:0;border-radius:99px;background:var(--btn-w);color:var(--ink);font:400 16px var(--sans);cursor:pointer;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,.3)}
 .reel-btn i{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--btn-w)}
 .reel-btn svg{width:14px;height:14px;margin-left:2px}
-@media (prefers-reduced-motion:reduce){
-  .mp-track{animation:none}}
 
 /* reel: il video verticale del sito attuale, si apre sopra a tutto */
 .reel{position:fixed;inset:0;z-index:95;background:rgba(5,5,5,.88);display:grid;place-items:center;opacity:0;transition:opacity .4s var(--ease)}
@@ -343,8 +342,9 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
 .ve-cur em{position:absolute;bottom:calc(100% + 4px);right:calc(100% - 10px);font:400 14px var(--sans);font-style:normal;letter-spacing:-.02em;background:var(--ink);color:#fff;padding:4px 10px;border-radius:99px;white-space:nowrap}
 
 /* manifesto: le parole non ci sono, salgono dalla loro maschera una alla volta man mano che scorri */
-.manif{text-align:center;position:relative;margin-top:-2px;background:var(--bg)} /* copre la riga di 1px tra il riquadro aperto e questa sezione */
-.manif p{font-family:var(--display);font-weight:var(--display-w);letter-spacing:-.06em;font-size:clamp(30px,3.6vw,58px);line-height:1.12;max-width:31ch;margin:0 auto 44px;text-wrap:pretty} /* pretty: niente parola sola sull ultima riga */
+.manif{--mf:clamp(34px,5.6vw,140px);position:relative;margin-top:-2px;background:var(--bg)} /* copre la riga di 1px tra il riquadro aperto e questa sezione */
+.manif p{font-family:var(--display);font-weight:var(--display-w);letter-spacing:-.06em;font-size:var(--mf);line-height:1.06;max-width:88vw;margin:0;text-indent:calc(25vw - var(--pad));text-wrap:pretty} /* come il paragrafo grande di Burocratik: a sinistra, prima riga rientrata a un quarto di pagina; in vw, così le righe vanno a capo uguali a ogni larghezza; pretty: niente parola sola sull ultima riga */
+.manif .wb,.manif .mvp{text-indent:0} /* il rientro è solo della prima riga: le parole inline-block lo erediterebbero */
 .manif .wb{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
 .manif .wi{display:inline-block;transform:translateY(110%);transition:transform .7s var(--energy)}
 .manif .wb.on .wi{transform:none}
@@ -618,14 +618,19 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
 .gl-nav svg{width:16px;height:16px}
 
 .manif{height:250svh} /* come la sezione di Creative Website Manual: il blocco resta fermo per circa un'altezza e mezza */
-.manif-pin{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center}
-.manif .wrap{position:relative;z-index:1}
-/* pillole animate tra le parole del manifesto: il posto è già tenuto (le parole non si spostano), spuntano quando la parola prima è salita */
-.manif .mvp{display:inline-block;transition:opacity .4s,scale .7s var(--energy)}
+.manif-pin{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center stretch}
+.manif .wrap{position:relative;z-index:1;width:100%;padding:0 var(--pad)}
+/* icone animate tra le parole del manifesto, grandi come una parola e senza fondo (come le icone a linea di Burocratik): si vede il centro del disegno della pillola, ingrandito.
+   Il posto è già tenuto (le parole non si spostano), spuntano quando la parola prima è salita */
+.manif .mvp{display:inline-block;width:1.3em;height:1em;margin:0 .04em;border-radius:0;background:none;vertical-align:-.12em;transition:opacity .4s,scale .7s var(--energy)}
+.manif .mvp svg{width:3.12em;height:1.16em;margin:-.08em 0 0 -.91em}
+.manif .hp-pulse{width:2.3em}.manif .hp-pulse svg{margin-left:-.41em} /* il battito è lungo: finestra più larga */
 .manif .mvp:not(.on){opacity:0;scale:.4}
-/* "Chi siamo" compare solo a frase finita */
-.manif .go{opacity:0;transform:translateY(16px);transition:opacity .5s,transform .7s var(--energy)}
-.manif.done .go{opacity:1;transform:none}
+/* sotto, a frase finita: un filetto a tutta larghezza che si disegna e una riga con tre voci (come "7.472 days · Every Büro · Apply now") */
+.mf-row{position:relative;display:grid;grid-template-columns:50% 1fr auto;align-items:center;margin-top:clamp(28px,3vw,48px);padding-top:14px;font-size:18px;opacity:0;transition:opacity .6s .2s}
+.mf-row::before{content:"";position:absolute;inset:0 0 auto;height:1px;background:var(--ink);transform:scaleX(0);transform-origin:0 50%;transition:transform 1.2s var(--energy)}
+.manif.done .mf-row{opacity:1}.manif.done .mf-row::before{transform:none}
+.mf-row a{color:inherit}.mf-row>a:last-child{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1.5px}
 .mvp svg *{fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .hp-pulse{background:#FFDCCB}.hp-pulse .bg{stroke:rgba(5,5,5,.15)}.hp-pulse path:not(.bg){stroke-dasharray:.32 .68;animation:hpRun 1.8s linear infinite}
 @keyframes hpRun{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
@@ -667,8 +672,8 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
 }
 @media (max-width:720px){
   .labs{--R:1400px;--cw:68vw} /* card più strette e arco più curvo: si vedono le card accanto a destra e a sinistra */
-  /* menu: niente colonne di progetti che scorrono, resta il bottone del reel */
   /* "24 premi" + "Mediastar": più vicini */
+  .manif p{text-indent:0}.mf-row{grid-template-columns:1fr auto;row-gap:12px}.mf-row>span{grid-column:1/-1} /* manifesto: niente rientro, il numero sopra i due link */
   .echo{height:min(56svh,480px)}
   /* vetro dell'header: un solo strato (cinque backdrop-filter durante lo scroll pesano troppo sui telefoni) */
   .nav-blur i:not(:nth-child(4)){display:none}
@@ -684,15 +689,17 @@ html:has(.menu-open){background:#1E1C1B} /* la fascia della barra di scorrimento
   .logo svg{height:24px}
   .mpill{height:44px;padding-left:18px}.mpill i{width:34px;height:34px}
   .gc{flex-basis:82vw}
-  /* menu: la card prende tutta la larghezza, senza progetti; il logo sta sopra la card bianca e torna scuro */
-  .menu{top:6px;right:6px;width:calc(100vw - 12px);height:auto;max-height:calc(100svh - 12px);overflow-y:auto;scrollbar-width:none;grid-template-columns:1fr;grid-template-rows:auto auto auto}
-  .menu-proj{display:none}
-  .menu-main{padding:calc(var(--nav-h) - 4px) 0 0 16px} /* stessa linea del logo */
-  .menu-main li a{font-size:12vw}
-  .menu-meta{padding:32px 16px 0;font-size:15px}
-  .menu-act{padding:24px 16px 20px}
-  .menu-act .btn .long{display:none}.menu-act .btn .short{display:inline}
-  .menu-open .nav .logo{color:var(--ink)}
+  /* menu: la card prende tutta la larghezza; in alto ci stanno logo e pillola, l'ora si toglie */
+  .menu{top:6px;right:6px;width:calc(100vw - 12px);max-height:calc(100svh - 12px)}
+  .menu-open .nav .logo{color:var(--ink)} /* il logo sta sopra la card bianca */
+  .mn-top{height:calc(var(--nav-h) - 4px)}
+  .mn-p{gap:12px;padding:10px 16px}
+  .mn-f,.mn-p:hover .mn-f{width:60px;height:46px}
+  .mn-l{font-size:24px}
+  .mn-c{flex-basis:46%}
+  .mn-c li::before{height:46px}
+  .mn-c a,.mn-c button{height:46px;padding:0 6px;font-size:14px;line-height:1.15}
+  .mn-soc a{padding:2px 16px}
   .menu-open .nav{padding:0 22px;transform:translateY(4px)} /* logo e pillola staccati dai bordi della card: 16px ai lati, 12px sopra (raggio 34 = 22 della pillola + 12) */
   .nav .btn{height:40px;padding:0 16px;font-size:15px}
   .nav .btn .long{display:none}.nav .btn .short{display:inline}
@@ -1032,26 +1039,18 @@ html:has(.pj-dome),body:has(.pj-dome){overflow:hidden;height:100%}
 </header>
 <span class="nav-blur" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span> <!-- fuori dall'header: con view-transition-name l'header non vede sotto di sé e il backdrop-filter non sfocava nulla -->
 <nav class="menu" id="menu" data-lenis-prevent aria-label="Menu principale">
-  <ul class="menu-main">
-    <li><a href="chi-siamo.html" aria-label="Chi siamo"><span data-t="Chi siamo" aria-hidden="true">Chi siamo</span></a></li>
-    <li><a href="servizi.html" aria-label="Servizi"><span data-t="Servizi" aria-hidden="true">Servizi</span></a></li>
-    <li><a href="progetti.html" aria-label="Progetti"><span data-t="Progetti" aria-hidden="true">Progetti</span></a></li>
-    <li><a href="index.html#clienti" aria-label="Clienti"><span data-t="Clienti" aria-hidden="true">Clienti</span></a></li>
-    <li><a href="https://www.neverbeforeitalia.it/jobs" aria-label="Lavora con noi"><span data-t="Lavora con noi" aria-hidden="true">Lavora con noi</span></a></li>
-    <li><a href="index.html#contatti" aria-label="Contatti"><span data-t="Contatti" aria-hidden="true">Contatti</span></a></li>
+  <div class="mn-top"></div>
+  <ul class="mn-pages">
+    <li class="mr"><i class="mn-d top"></i><a class="mn-p" href="index.html"><span class="mn-f"><img src="assets/img/menu/home.jpg" alt="" loading="lazy"></span><span class="mn-l"><span class="mk">Home</span></span></a><ul class="mn-c"><li><a href="index.html#clienti"><span class="mk">Clienti</span></a></li><li><button type="button" id="reelOpen"><span class="mk">Guarda il reel</span></button></li></ul><i class="mn-d"></i></li>
+    <li class="mr"><a class="mn-p" href="chi-siamo.html"><span class="mn-f"><img src="assets/img/menu/chi-siamo.jpg" alt="" loading="lazy"></span><span class="mn-l"><span class="mk">Chi siamo</span></span></a><ul class="mn-c"><li><a href="https://www.neverbeforeitalia.it/jobs"><span class="mk">Lavora con noi</span></a></li></ul><i class="mn-d"></i></li>
+    <li class="mr"><a class="mn-p" href="servizi.html"><span class="mn-f"><img src="assets/img/menu/servizi.jpg" alt="" loading="lazy"></span><span class="mn-l"><span class="mk">Servizi</span></span></a><i class="mn-d"></i></li>
+    <li class="mr"><a class="mn-p" href="progetti.html"><span class="mn-f"><img src="assets/img/menu/progetti.jpg" alt="" loading="lazy"></span><span class="mn-l"><span class="mk">Progetti</span></span></a><i class="mn-d"></i></li>
+    <li class="mr"><a class="mn-p" href="index.html#contatti"><span class="mn-f"><img src="assets/img/menu/contatti.jpg" alt="" loading="lazy"></span><span class="mn-l"><span class="mk">Contatti</span></span></a><ul class="mn-c"><li><a href="mailto:info@neverbeforeitalia.it"><span class="mk">Scrivici</span></a></li><li><a href="tel:+390804964221"><span class="mk">Chiamaci</span></a></li></ul><i class="mn-d"></i></li>
   </ul>
-  <div class="menu-proj">
-    <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/le-carose"><img src="assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg" alt="Le Carose" loading="lazy"><span>Le Carose</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica"><img src="assets/img/never_before_italia_borgo_canonica_branding.png" alt="Borgo Canonica" loading="lazy"><span>Borgo Canonica</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/lum"><img src="assets/img/never_before_italia_video_lum.jpg" alt="Università LUM" loading="lazy"><span>Università LUM</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="Amaro Mediterraneo" loading="lazy"><span>Amaro Mediterraneo</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/cortina-express"><img src="assets/img/cortina-express-006.jpg" alt="Cortina Express" loading="lazy"><span>Cortina Express</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/hula-bari"><img src="assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg" alt="Hula Hawaiian Poke" loading="lazy"><span>Hula Hawaiian Poke</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/le-carose" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_cliente_carose_born_to_be_pompon_08.jpg" alt="" loading="lazy"><span>Le Carose</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/borgo-canonica" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_borgo_canonica_branding.png" alt="" loading="lazy"><span>Borgo Canonica</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/lum" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_video_lum.jpg" alt="" loading="lazy"><span>Università LUM</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/amaro-mediterraneo" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_website_amaro_mediterraneo.jpg" alt="" loading="lazy"><span>Amaro Mediterraneo</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/cortina-express" aria-hidden="true" tabindex="-1"><img src="assets/img/cortina-express-006.jpg" alt="" loading="lazy"><span>Cortina Express</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/hula-bari" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_cliente_hula_poke_bari_1.jpg" alt="" loading="lazy"><span>Hula Hawaiian Poke</span></a></div></div>
-    <div class="mp-col"><div class="mp-track"><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="Tenuta Giustini" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru"><img src="assets/img/immagine_home_viru.jpg" alt="Viru" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="Master Italy" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="progetto-marinobus.html"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="MarinoBus" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="Sneakers Room" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="Produttori di Manduria" loading="lazy"><span>Produttori di Manduria</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/tenuta-giustini" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_architecture_tenuta_giustini.jpg" alt="" loading="lazy"><span>Tenuta Giustini</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/viru" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine_home_viru.jpg" alt="" loading="lazy"><span>Viru</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/master-italy" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_graphics_master_1.jpg" alt="" loading="lazy"><span>Master Italy</span></a><a class="mp-item" href="progetto-marinobus.html" aria-hidden="true" tabindex="-1"><img src="assets/img/never_before_italia_branding_marinobus_restyling_logo1.jpg" alt="" loading="lazy"><span>MarinoBus</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/sneakers-room" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-sneaker-room.jpg" alt="" loading="lazy"><span>Sneakers Room</span></a><a class="mp-item" href="https://www.neverbeforeitalia.it/portfolio/produttori-di-manduria" aria-hidden="true" tabindex="-1"><img src="assets/img/immagine-home-produttori-manduria.jpg" alt="" loading="lazy"><span>Produttori di Manduria</span></a></div></div>
-  </div>
-  <div class="menu-meta">
-    <p class="mm-soc"><a href="https://www.instagram.com/neverbeforeitalia/">Instagram</a><a href="https://it.linkedin.com/company/never-before-italia">LinkedIn</a></p>
-    <p class="mm-ct"><span>Bari · Padova, <b id="mmTime"></b></span><a href="mailto:info@neverbeforeitalia.it">info@neverbeforeitalia.it</a><a href="tel:+390804964221">+39 080 496 4221</a></p>
-  </div>
-  <div class="menu-act">
-    <button class="reel-btn" id="reelOpen" type="button">Guarda il reel <i><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg></i></button>
-    <a class="btn" href="index.html#contatti"><span class="long">Richiedi una consulenza</span><span class="short">Contatti</span></a>
-  </div>
+  <ul class="mn-soc">
+    <li><a class="mk" href="https://www.instagram.com/neverbeforeitalia/"><span>Instagram</span></a></li>
+    <li><a class="mk" href="https://it.linkedin.com/company/never-before-italia"><span>LinkedIn</span></a></li>
+  </ul>
 </nav>
 
 <div class="reel" id="reel" role="dialog" aria-modal="true" aria-label="Reel Never Before Italia 2026" hidden>
@@ -1145,7 +1144,8 @@ const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 // menu: la pillola apre e chiude il pannello
 const menu=$('menu'),mpill=$('mpill');
 let lenis=null; // lenis: scroll morbido, acceso al load
-[...menu.querySelectorAll('.menu-main,.menu-meta,.menu-act')].forEach((el,i)=>el.style.setProperty('--i',i));
+menu.querySelectorAll('.mr,.mn-soc li').forEach((el,i)=>el.style.setProperty('--i',i)); // ritardo dell'entrata: una riga dopo l'altra
+{const p=s=>s.replace(/(index)?(\.html)?$/,'');menu.querySelectorAll('.mn-p').forEach(a=>{if((!a.hash||a.hash==='#top')&&p(a.pathname)===p(location.pathname))a.setAttribute('aria-current','page')})} // la pagina in cui sei (anche con gli url senza .html)
 // ritaglio della card chiusa = rettangolo della pillola, misurato rispetto alla card; pronto già al caricamento, così anche la prima apertura parte dalla pillola
 const menuClip=()=>{const r=mpill.getBoundingClientRect(),L=menu.offsetLeft,T=menu.offsetTop,s=menu.style;
   s.setProperty('--ct',r.top-T+'px');s.setProperty('--cl',r.left-L+'px');s.setProperty('--cr',L+menu.offsetWidth-r.right+'px');s.setProperty('--cb',T+menu.offsetHeight-r.bottom+'px');s.setProperty('--cr2',r.height/2+'px')};
@@ -1156,8 +1156,6 @@ const setMenu=open=>{
   if(open){menuClip();void menu.offsetWidth}
   menu.classList.toggle('open',open);mpill.setAttribute('aria-expanded',open);document.documentElement.style.overflow=open?'hidden':'';lenis&&(open?lenis.stop():lenis.start());
 };
-// ora di Bari nella card
-{const t=$('mmTime'),tick=()=>t.textContent=new Date().toLocaleTimeString('it-IT',{timeZone:'Europe/Rome',hour:'2-digit',minute:'2-digit'});tick();setInterval(tick,30000)}
 mpill.onclick=()=>setMenu(!menu.classList.contains('open'));
 document.querySelector('.nav .logo').addEventListener('click',e=>{if(menu.classList.contains('open')){e.preventDefault();e.stopPropagation();setMenu(false)}}); // a menu aperto il logo chiude il menu
 $('pageShade').onclick=()=>setMenu(false);
